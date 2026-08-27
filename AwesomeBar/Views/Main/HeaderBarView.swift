@@ -125,7 +125,15 @@ public struct HeaderBarView: View {
                 onTriggerClearHistory()
             }
             
-            // 4. 打开偏好设置圆形玻璃按钮
+            // 4. 便签模式圆形玻璃按钮
+            CircularGlassButton(
+                iconName: "note.text",
+                helpText: "便签模式（小便签独立浮窗）"
+            ) {
+                StickyNoteWindowController.shared.toggle()
+            }
+            
+            // 5. 打开偏好设置圆形玻璃按钮
             CircularGlassButton(
                 iconName: "gearshape.fill",
                 helpText: "偏好设置"

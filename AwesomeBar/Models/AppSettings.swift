@@ -23,9 +23,12 @@ public final class AppSettings: ObservableObject {
         static let rememberLastPosition = "AwesomeBar.rememberLastPosition"
         static let lastWindowOriginX = "AwesomeBar.lastWindowOriginX"
         static let lastWindowOriginY = "AwesomeBar.lastWindowOriginY"
+        static let isStickyNotePinned = "AwesomeBar.isStickyNotePinned"
+        static let stickyNoteOriginX = "AwesomeBar.stickyNoteOriginX"
+        static let stickyNoteOriginY = "AwesomeBar.stickyNoteOriginY"
     }
     
-    /// 是否开启窗口置顶钉在最上层
+    /// 是否开启主窗口置顶钉在最上层
     @Published public var isPinnedToTop: Bool {
         didSet {
             userDefaults.set(isPinnedToTop, forKey: StorageKeys.isPinnedToTop)
@@ -81,14 +84,14 @@ public final class AppSettings: ObservableObject {
         }
     }
     
-    /// 是否记住上次窗口停留位置开关
+    /// 是否记住主窗口上次停留位置开关
     @Published public var rememberLastPosition: Bool {
         didSet {
             userDefaults.set(rememberLastPosition, forKey: StorageKeys.rememberLastPosition)
         }
     }
     
-    /// 上次窗口所在的 X 轴坐标
+    /// 上次主窗口所在的 X 轴坐标
     @Published public var lastWindowOriginX: Double? {
         didSet {
             if let x = lastWindowOriginX {
@@ -99,13 +102,42 @@ public final class AppSettings: ObservableObject {
         }
     }
     
-    /// 上次窗口所在的 Y 轴坐标
+    /// 上次主窗口所在的 Y 轴坐标
     @Published public var lastWindowOriginY: Double? {
         didSet {
             if let y = lastWindowOriginY {
                 userDefaults.set(y, forKey: StorageKeys.lastWindowOriginY)
             } else {
                 userDefaults.removeObject(forKey: StorageKeys.lastWindowOriginY)
+            }
+        }
+    }
+    
+    /// 便签模式浮窗是否置顶钉在最上层
+    @Published public var isStickyNotePinned: Bool {
+        didSet {
+            userDefaults.set(isStickyNotePinned, forKey: StorageKeys.isStickyNotePinned)
+        }
+    }
+    
+    /// 便签模式浮窗上次停留的 X 轴坐标
+    @Published public var stickyNoteOriginX: Double? {
+        didSet {
+            if let x = stickyNoteOriginX {
+                userDefaults.set(x, forKey: StorageKeys.stickyNoteOriginX)
+            } else {
+                userDefaults.removeObject(forKey: StorageKeys.stickyNoteOriginX)
+            }
+        }
+    }
+    
+    /// 便签模式浮窗上次停留的 Y 轴坐标
+    @Published public var stickyNoteOriginY: Double? {
+        didSet {
+            if let y = stickyNoteOriginY {
+                userDefaults.set(y, forKey: StorageKeys.stickyNoteOriginY)
+            } else {
+                userDefaults.removeObject(forKey: StorageKeys.stickyNoteOriginY)
             }
         }
     }
@@ -140,6 +172,20 @@ public final class AppSettings: ObservableObject {
             self.lastWindowOriginY = userDefaults.double(forKey: StorageKeys.lastWindowOriginY)
         } else {
             self.lastWindowOriginY = nil
+        }
+        
+        self.isStickyNotePinned = userDefaults.object(forKey: StorageKeys.isStickyNotePinned) == nil ? true : userDefaults.bool(forKey: StorageKeys.isStickyNotePinned)
+        
+        if userDefaults.object(forKey: StorageKeys.stickyNoteOriginX) != nil {
+            self.stickyNoteOriginX = userDefaults.double(forKey: StorageKeys.stickyNoteOriginX)
+        } else {
+            self.stickyNoteOriginX = nil
+        }
+        
+        if userDefaults.object(forKey: StorageKeys.stickyNoteOriginY) != nil {
+            self.stickyNoteOriginY = userDefaults.double(forKey: StorageKeys.stickyNoteOriginY)
+        } else {
+            self.stickyNoteOriginY = nil
         }
     }
 }
