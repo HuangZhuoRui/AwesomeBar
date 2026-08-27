@@ -1,9 +1,11 @@
 import Foundation
 import AppKit
 
-/// 历史记录条目数字直选快捷键修饰键模式（支持 ⇧⌘1-9、⌘1-9、⌥1-9、⌃1-9 等自定义配置）
+/// 历史记录条目数字直选快捷键修饰键模式（支持 ⌃⌘1-9、⇧⌘1-9、⌘1-9、⌥1-9 等自定义配置）
 public enum QuickSelectModifier: String, Codable, CaseIterable, Identifiable {
-    /// 默认: Command + Shift (⇧⌘ 1~9)
+    /// 默认: Control + Command (⌃⌘ 1~9)
+    case controlCommand = "controlCommand"
+    /// Command + Shift (⇧⌘ 1~9)
     case commandShift = "commandShift"
     /// 传统: Command (⌘ 1~9)
     case command = "command"
@@ -21,8 +23,10 @@ public enum QuickSelectModifier: String, Codable, CaseIterable, Identifiable {
     /// 设置界面的完整标题展示
     public var title: String {
         switch self {
+        case .controlCommand:
+            return "Control + Command (⌃⌘ 1~9，推荐)"
         case .commandShift:
-            return "Command + Shift (⇧⌘ 1~9，推荐)"
+            return "Command + Shift (⇧⌘ 1~9)"
         case .command:
             return "Command (⌘ 1~9)"
         case .option:
@@ -36,9 +40,11 @@ public enum QuickSelectModifier: String, Codable, CaseIterable, Identifiable {
         }
     }
     
-    /// 前缀快捷键符号组合（如 "⇧⌘"、"⌘" 等）
+    /// 前缀快捷键符号组合（如 "⌃⌘"、"⇧⌘"、"⌘" 等）
     public var symbolPrefix: String {
         switch self {
+        case .controlCommand:
+            return "⌃⌘"
         case .commandShift:
             return "⇧⌘"
         case .command:
@@ -54,7 +60,7 @@ public enum QuickSelectModifier: String, Codable, CaseIterable, Identifiable {
         }
     }
     
-    /// 格式化指定数字序号的显示文本（如 "⇧⌘1"、"⌘2"）
+    /// 格式化指定数字序号的显示文本（如 "⌃⌘1"、"⇧⌘1"）
     public func badgeText(for index: Int) -> String? {
         guard self != .none else { return nil }
         return "\(symbolPrefix)\(index)"
@@ -64,6 +70,8 @@ public enum QuickSelectModifier: String, Codable, CaseIterable, Identifiable {
     public func matches(flags: NSEvent.ModifierFlags) -> Bool {
         let cleanFlags = flags.intersection([.command, .option, .shift, .control])
         switch self {
+        case .controlCommand:
+            return cleanFlags == [.control, .command]
         case .commandShift:
             return cleanFlags == [.command, .shift]
         case .command:

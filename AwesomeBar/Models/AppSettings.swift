@@ -246,7 +246,7 @@ public final class AppSettings: ObservableObject {
            let modifier = QuickSelectModifier(rawValue: raw) {
             self.quickSelectModifier = modifier
         } else {
-            self.quickSelectModifier = .commandShift
+            self.quickSelectModifier = .controlCommand
         }
     }
 }
