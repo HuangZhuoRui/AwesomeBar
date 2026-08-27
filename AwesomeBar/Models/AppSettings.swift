@@ -26,6 +26,7 @@ public final class AppSettings: ObservableObject {
         static let isStickyNotePinned = "AwesomeBar.isStickyNotePinned"
         static let stickyNoteOriginX = "AwesomeBar.stickyNoteOriginX"
         static let stickyNoteOriginY = "AwesomeBar.stickyNoteOriginY"
+        static let stickyNoteDockState = "AwesomeBar.stickyNoteDockState"
         static let mainAppHotkey = "AwesomeBar.mainAppHotkey"
         static let stickyNoteHotkey = "AwesomeBar.stickyNoteHotkey"
     }
@@ -162,6 +163,13 @@ public final class AppSettings: ObservableObject {
         }
     }
     
+    /// 快捷粘贴板当前边缘吸附状态（"floating" / "dockedLeft" / "dockedRight"）
+    @Published public var stickyNoteDockState: String {
+        didSet {
+            userDefaults.set(stickyNoteDockState, forKey: StorageKeys.stickyNoteDockState)
+        }
+    }
+    
     /// 私有初始化方法，从 UserDefaults 中加载初始数据
     private init() {
         self.isPinnedToTop = userDefaults.bool(forKey: StorageKeys.isPinnedToTop)
@@ -223,5 +231,7 @@ public final class AppSettings: ObservableObject {
         } else {
             self.stickyNoteOriginY = nil
         }
+        
+        self.stickyNoteDockState = userDefaults.string(forKey: StorageKeys.stickyNoteDockState) ?? "floating"
     }
 }

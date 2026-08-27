@@ -1,10 +1,12 @@
 import Foundation
 import AppKit
 
-/// 自定义透明液态玻璃 NSPanel 浮动面板子类（支持中文输入法 IME 组合态智能放行、原生安全窗口拖拽移动、高优先全局键盘拦截、ProMotion 120Hz 硬件加速与异步图层绘制）
+/// 自定义透明液态玻璃 NSPanel 浮动面板子类（支持中文输入法 IME 组合态智能放行、原生安全窗口拖拽移动、拖拽释放回调、高优先全局键盘拦截、ProMotion 120Hz 硬件加速与异步图层绘制）
 public final class CustomGlassPanel: NSPanel {
     /// 键盘按键事件前置拦截器（返回 true 表示已消费事件，阻断向下传递）
     public var onKeyDownInterceptor: ((NSEvent) -> Bool)?
+    /// 窗口拖拽释放完成后的回调处理闭包（用于屏幕边缘吸附判定）
+    public var onDragFinished: ((CustomGlassPanel) -> Void)?
     
     public override init(
         contentRect: NSRect,
@@ -54,6 +56,8 @@ public final class CustomGlassPanel: NSPanel {
         
         // 在背景与非输入区域触发窗口原生拖动
         self.performDrag(with: event)
+        // 拖拽释放后执行回调（甩到屏幕边缘判定）
+        self.onDragFinished?(self)
     }
     
     /// 全局事件分发总入口：优先判定输入法状态，非组合态时执行前置键盘事件拦截

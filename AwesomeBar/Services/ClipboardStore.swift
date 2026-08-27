@@ -164,6 +164,9 @@ public final class ClipboardStore: ObservableObject {
                 DatabaseManager.shared.saveItem(newItem)
                 DatabaseManager.shared.cleanupOldItems(maxCount: maxCount)
             }
+            
+            // 8. 广播新条目捕获通知（用于驱动小号粘贴板在边缘吸附态无焦点瞬时冒出）
+            NotificationCenter.default.post(name: .clipboardItemDidCapture, object: newItem)
         }
         
         if Thread.isMainThread {
@@ -341,4 +344,9 @@ public final class ClipboardStore: ObservableObject {
         
         return counts
     }
+}
+
+extension Notification.Name {
+    /// 新剪贴板条目捕获通知
+    public static let clipboardItemDidCapture = Notification.Name("AwesomeBar.clipboardItemDidCapture")
 }

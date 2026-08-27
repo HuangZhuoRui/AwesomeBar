@@ -8,18 +8,20 @@ public struct StickyRowFramePreference: PreferenceKey {
     }
 }
 
-/// 粘贴板模式主视图（纯净轻量独立粘贴板浮窗，无分类全量滚动展示，支持 ⌘1-9 动态可见性映射快捷键与常驻置顶）
+/// 粘贴板模式主视图（纯净轻量独立粘贴板浮窗，支持屏幕边缘甩动吸附露角、复制无焦点弹出冒泡、无分类全量滚动展示与 ⌘1-9 快捷键）
 public struct StickyNoteView: View {
     /// 绑定的剪贴板数据流中心
     @ObservedObject private var store = ClipboardStore.shared
     /// 绑定的偏好设置单例
     @ObservedObject private var settings = AppSettings.shared
-    /// 显式注入的窗口控制器引用（彻底避免在 init 期间重入访问单例造成 Deadlock Crash）
+    /// 显式注入的窗口控制器引用
     @ObservedObject public var controller: StickyNoteWindowController
     /// 当前计算得到的条目与 ⌘1-9 快捷键映射（仅分配给可见比例大于 2/3 的条目）
     @State private var itemShortcuts: [UUID: Int] = [:]
     /// 滚动视口实际高度
     @State private var scrollViewportHeight: CGFloat = 330
+    /// 是否正处于鼠标悬浮在边角手柄上
+    @State private var isHandleHovered: Bool = false
     /// 关闭/隐藏粘贴板浮窗的回调
     public let onClose: () -> Void
     
@@ -31,27 +33,100 @@ public struct StickyNoteView: View {
         self.onClose = onClose
     }
     
+    /// 当前是否处于边缘吸附只露小角收缩状态
+    private var isPeekingDocked: Bool {
+        return (controller.dockState == .dockedLeft || controller.dockState == .dockedRight) && !controller.isDockedExpanded
+    }
+    
     public var body: some View {
-        VStack(spacing: 0) {
-            // 1. 粘贴板顶部操作标题栏（支持拖拽、置顶与关闭）
-            headerBarView
-                .padding(.horizontal, 14)
-                .padding(.top, 12)
-                .padding(.bottom, 8)
+        ZStack {
+            // 主内容视图
+            VStack(spacing: 0) {
+                // 1. 粘贴板顶部操作标题栏（支持拖拽、置顶与关闭）
+                headerBarView
+                    .padding(.horizontal, 14)
+                    .padding(.top, 12)
+                    .padding(.bottom, 8)
+                
+                Divider()
+                    .opacity(0.3)
+                
+                // 2. 剪贴板历史记录滚动区域（无分类，默认展示全部记录）
+                if store.allItems.isEmpty {
+                    emptyStateView
+                } else {
+                    itemsScrollView
+                }
+            }
+            .opacity(isPeekingDocked ? 0.0 : 1.0)
             
-            Divider()
-                .opacity(0.3)
-            
-            // 2. 剪贴板历史记录滚动区域（无分类，默认展示全部记录）
-            if store.allItems.isEmpty {
-                emptyStateView
-            } else {
-                itemsScrollView
+            // 边缘吸附露小角时的手柄视觉覆盖层
+            if isPeekingDocked {
+                peekingHandleOverlay
             }
         }
-        .frame(width: 270, height: 390)
+        .frame(width: controller.panelWidth, height: controller.panelHeight)
         .background(LiquidGlassBackground(cornerRadius: 20))
         .clipShape(RoundedRectangle(cornerRadius: 20, style: .continuous))
+    }
+    
+    // MARK: - 辅助子视图：边缘吸附手柄
+    
+    private var peekingHandleOverlay: some View {
+        HStack {
+            if controller.dockState == .dockedRight {
+                // 吸附在右边缘时，露在屏幕上的是窗口最左侧 24px
+                VStack(spacing: 8) {
+                    Image(systemName: "chevron.left")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(.primary.opacity(isHandleHovered ? 1.0 : 0.6))
+                    
+                    Image(systemName: "doc.on.clipboard")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor(.primary.opacity(isHandleHovered ? 1.0 : 0.7))
+                }
+                .frame(width: controller.peekWidth)
+                .frame(maxHeight: .infinity)
+                .background(Color.primary.opacity(isHandleHovered ? 0.08 : 0.02))
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    controller.expandFromDock()
+                }
+                .onHover { hovering in
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        self.isHandleHovered = hovering
+                    }
+                }
+                
+                Spacer()
+            } else if controller.dockState == .dockedLeft {
+                // 吸附在左边缘时，露在屏幕上的是窗口最右侧 24px
+                Spacer()
+                
+                VStack(spacing: 8) {
+                    Image(systemName: "chevron.right")
+                        .font(.system(size: 10, weight: .bold))
+                        .foregroundColor(.primary.opacity(isHandleHovered ? 1.0 : 0.6))
+                    
+                    Image(systemName: "doc.on.clipboard")
+                        .font(.system(size: 11, weight: .semibold))
+                        .foregroundColor(.primary.opacity(isHandleHovered ? 1.0 : 0.7))
+                }
+                .frame(width: controller.peekWidth)
+                .frame(maxHeight: .infinity)
+                .background(Color.primary.opacity(isHandleHovered ? 0.08 : 0.02))
+                .contentShape(Rectangle())
+                .onTapGesture {
+                    controller.expandFromDock()
+                }
+                .onHover { hovering in
+                    withAnimation(.easeInOut(duration: 0.15)) {
+                        self.isHandleHovered = hovering
+                    }
+                }
+            }
+        }
+        .help("点击或按下快捷键即可完全展开粘贴板")
     }
     
     // MARK: - 辅助子视图：顶部操作标题栏
@@ -67,6 +142,17 @@ public struct StickyNoteView: View {
                 .font(.system(size: 13, weight: .bold, design: .rounded))
                 .foregroundColor(.primary)
                 .allowsHitTesting(false)
+            
+            // 吸附状态徽标提示
+            if controller.dockState == .dockedLeft || controller.dockState == .dockedRight {
+                Text("已吸附")
+                    .font(.system(size: 9.5, weight: .medium))
+                    .foregroundColor(.secondary)
+                    .padding(.horizontal, 5)
+                    .padding(.vertical, 1.5)
+                    .background(Color.primary.opacity(0.05))
+                    .clipShape(Capsule())
+            }
             
             Spacer()
             
@@ -165,26 +251,22 @@ public struct StickyNoteView: View {
         for item in store.allItems {
             guard let frame = frames[item.id], frame.height > 0 else { continue }
             
-            // 计算条目与可视视口区域 [0, viewportHeight] 的交集高度
             let visibleTop = max(0, frame.minY)
             let visibleBottom = min(viewportHeight, frame.maxY)
             let visibleHeight = max(0, visibleBottom - visibleTop)
             
             let visibleRatio = visibleHeight / frame.height
             
-            // 关键业务要求：显示内容必须大于 2/3 (即 visibleRatio >= 0.666)
             if visibleRatio >= 0.666 {
                 qualifiedVisibleItems.append((item: item, minY: frame.minY))
             }
         }
         
-        // 按照在视口中的物理 Y 坐标从上至下严格排序
         qualifiedVisibleItems.sort { $0.minY < $1.minY }
         
         var newShortcuts: [UUID: Int] = [:]
         var newShortcutMap: [Int: ClipboardItem] = [:]
         
-        // 为前 9 个有效可见条目动态授予 ⌘1 ~ ⌘9
         for (index, entry) in qualifiedVisibleItems.prefix(9).enumerated() {
             let shortcutNumber = index + 1
             newShortcuts[entry.item.id] = shortcutNumber
