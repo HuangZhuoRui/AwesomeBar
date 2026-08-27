@@ -41,10 +41,10 @@ public final class ClipboardMonitor {
         backgroundTimerSource = nil
     }
     
-    /// 立即同步强制检查剪贴板最新状态（用于窗口呼出瞬间 0 延迟刷新）
+    /// 立即强制异步检查剪贴板最新状态（用于窗口呼出瞬间无阻塞即时刷新）
     public func checkNow() {
-        monitoringQueue.sync {
-            self.inspectPasteboardChanges()
+        monitoringQueue.async { [weak self] in
+            self?.inspectPasteboardChanges()
         }
     }
     

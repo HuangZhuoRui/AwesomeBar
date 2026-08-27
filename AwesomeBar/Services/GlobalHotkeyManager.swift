@@ -1,7 +1,7 @@
 import Foundation
 import AppKit
 
-/// 全局快捷键与修饰键事件监听管理器（支持左右 Option、修饰单键与组合键全局分发）
+/// 全局快捷键与修饰键事件监听管理器（支持左右 Option、修饰单键与组合键 0 延迟极速分发）
 public final class GlobalHotkeyManager {
     /// 全局共享单例
     public static let shared = GlobalHotkeyManager()
@@ -51,7 +51,7 @@ public final class GlobalHotkeyManager {
             return event
         }
         
-        // 3. 监听普通组合键按下事件
+        // 3. 监听普通组合键按下事件（0 毫秒瞬时触发）
         globalKeyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
             self?.handleKeyDown(event: event)
         }
@@ -70,7 +70,7 @@ public final class GlobalHotkeyManager {
         if let monitor = localKeyMonitor { NSEvent.removeMonitor(monitor); localKeyMonitor = nil }
     }
     
-    /// 处理普通组合键按下事件
+    /// 处理普通组合键按下事件（0 延迟即时响应）
     private func handleKeyDown(event: NSEvent) {
         keyComboInterrupted = true
         
@@ -109,7 +109,7 @@ public final class GlobalHotkeyManager {
         return eventModifiers == targetModifiers
     }
     
-    /// 处理修饰键状态变化事件（物理左 Option 键、右 Option 键等特殊触发）
+    /// 处理修饰键状态变化事件（智能区分是否需要双击等待，无双击时 0 毫秒即刻呼出）
     private func handleFlagsChanged(event: NSEvent) {
         let keyCode = event.keyCode
         let isOptionKeyDown = event.modifierFlags.contains(.option)
@@ -128,28 +128,38 @@ public final class GlobalHotkeyManager {
                 guard !keyComboInterrupted && holdDuration < 0.45 else { return }
                 
                 let settings = AppSettings.shared
+                let requiresDoubleTap = settings.mainAppHotkey.kind == .doubleOption || settings.stickyNoteHotkey.kind == .doubleOption
                 
-                // 双击左 Option 判定
-                if let previousTap = leftOptionLastTapTimestamp, currentTime.timeIntervalSince(previousTap) < 0.35 {
-                    leftOptionLastTapTimestamp = nil
-                    
-                    if settings.mainAppHotkey.kind == .doubleOption {
-                        DispatchQueue.main.async { FloatingPanelController.shared.toggle() }
-                    } else if settings.stickyNoteHotkey.kind == .doubleOption {
-                        DispatchQueue.main.async { StickyNoteWindowController.shared.toggle() }
+                if requiresDoubleTap {
+                    // 若用户设置了连按两下模式，才进入微小等待窗口
+                    if let previousTap = leftOptionLastTapTimestamp, currentTime.timeIntervalSince(previousTap) < 0.25 {
+                        leftOptionLastTapTimestamp = nil
+                        
+                        if settings.mainAppHotkey.kind == .doubleOption {
+                            DispatchQueue.main.async { FloatingPanelController.shared.toggle() }
+                        } else if settings.stickyNoteHotkey.kind == .doubleOption {
+                            DispatchQueue.main.async { StickyNoteWindowController.shared.toggle() }
+                        }
+                    } else {
+                        leftOptionLastTapTimestamp = currentTime
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+                            guard let self = self, self.leftOptionLastTapTimestamp == currentTime else { return }
+                            self.leftOptionLastTapTimestamp = nil
+                            
+                            if settings.mainAppHotkey.kind == .singleOption {
+                                FloatingPanelController.shared.toggle()
+                            } else if settings.stickyNoteHotkey.kind == .singleOption {
+                                StickyNoteWindowController.shared.toggle()
+                            }
+                        }
                     }
                 } else {
-                    leftOptionLastTapTimestamp = currentTime
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.36) { [weak self] in
-                        guard let self = self, self.leftOptionLastTapTimestamp == currentTime else { return }
-                        self.leftOptionLastTapTimestamp = nil
-                        
-                        if settings.mainAppHotkey.kind == .singleOption {
-                            FloatingPanelController.shared.toggle()
-                        } else if settings.stickyNoteHotkey.kind == .singleOption {
-                            StickyNoteWindowController.shared.toggle()
-                        }
+                    // 无双击模式需求时，按键释放瞬间 0 毫秒即刻唤起！
+                    if settings.mainAppHotkey.kind == .singleOption {
+                        DispatchQueue.main.async { FloatingPanelController.shared.toggle() }
+                    } else if settings.stickyNoteHotkey.kind == .singleOption {
+                        DispatchQueue.main.async { StickyNoteWindowController.shared.toggle() }
                     }
                 }
             }
@@ -168,28 +178,37 @@ public final class GlobalHotkeyManager {
                 guard !keyComboInterrupted && holdDuration < 0.45 else { return }
                 
                 let settings = AppSettings.shared
+                let requiresDoubleTap = settings.mainAppHotkey.kind == .doubleRightOption || settings.stickyNoteHotkey.kind == .doubleRightOption
                 
-                // 双击右 Option 判定
-                if let previousTap = rightOptionLastTapTimestamp, currentTime.timeIntervalSince(previousTap) < 0.35 {
-                    rightOptionLastTapTimestamp = nil
-                    
-                    if settings.mainAppHotkey.kind == .doubleRightOption {
-                        DispatchQueue.main.async { FloatingPanelController.shared.toggle() }
-                    } else if settings.stickyNoteHotkey.kind == .doubleRightOption {
-                        DispatchQueue.main.async { StickyNoteWindowController.shared.toggle() }
+                if requiresDoubleTap {
+                    if let previousTap = rightOptionLastTapTimestamp, currentTime.timeIntervalSince(previousTap) < 0.25 {
+                        rightOptionLastTapTimestamp = nil
+                        
+                        if settings.mainAppHotkey.kind == .doubleRightOption {
+                            DispatchQueue.main.async { FloatingPanelController.shared.toggle() }
+                        } else if settings.stickyNoteHotkey.kind == .doubleRightOption {
+                            DispatchQueue.main.async { StickyNoteWindowController.shared.toggle() }
+                        }
+                    } else {
+                        rightOptionLastTapTimestamp = currentTime
+                        
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.25) { [weak self] in
+                            guard let self = self, self.rightOptionLastTapTimestamp == currentTime else { return }
+                            self.rightOptionLastTapTimestamp = nil
+                            
+                            if settings.mainAppHotkey.kind == .singleRightOption {
+                                FloatingPanelController.shared.toggle()
+                            } else if settings.stickyNoteHotkey.kind == .singleRightOption {
+                                StickyNoteWindowController.shared.toggle()
+                            }
+                        }
                     }
                 } else {
-                    rightOptionLastTapTimestamp = currentTime
-                    
-                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.36) { [weak self] in
-                        guard let self = self, self.rightOptionLastTapTimestamp == currentTime else { return }
-                        self.rightOptionLastTapTimestamp = nil
-                        
-                        if settings.mainAppHotkey.kind == .singleRightOption {
-                            FloatingPanelController.shared.toggle()
-                        } else if settings.stickyNoteHotkey.kind == .singleRightOption {
-                            StickyNoteWindowController.shared.toggle()
-                        }
+                    // 无双击模式需求时，按键释放瞬间 0 毫秒即刻唤起！
+                    if settings.mainAppHotkey.kind == .singleRightOption {
+                        DispatchQueue.main.async { FloatingPanelController.shared.toggle() }
+                    } else if settings.stickyNoteHotkey.kind == .singleRightOption {
+                        DispatchQueue.main.async { StickyNoteWindowController.shared.toggle() }
                     }
                 }
             }

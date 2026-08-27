@@ -121,15 +121,9 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
             }
         }
         
-        panel.alphaValue = 0.0
+        panel.alphaValue = 1.0
         panel.invalidateShadow()
         panel.makeKeyAndOrderFront(nil)
-        
-        NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.2
-            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
-            panel.animator().alphaValue = 1.0
-        }
         
         isVisible = true
         startLocalKeyMonitor()
