@@ -1,7 +1,7 @@
 import Foundation
 import AppKit
 
-/// 全局快捷键与修饰键事件监听管理器（支持主面板与快捷粘贴板独立自定义快捷键分发）
+/// 全局快捷键与修饰键事件监听管理器（支持左右 Option、修饰单键与组合键全局分发）
 public final class GlobalHotkeyManager {
     /// 全局共享单例
     public static let shared = GlobalHotkeyManager()
@@ -17,13 +17,21 @@ public final class GlobalHotkeyManager {
     
     /// 记录左 Option 键按下时的时间戳
     private var leftOptionPressedTimestamp: Date?
-    /// 记录上一次完成单击释放的时间戳（用于双击判定）
-    private var lastTapTimestamp: Date?
+    /// 记录左 Option 上一次完成单击释放的时间戳
+    private var leftOptionLastTapTimestamp: Date?
+    
+    /// 记录右 Option 键按下时的时间戳
+    private var rightOptionPressedTimestamp: Date?
+    /// 记录右 Option 上一次完成单击释放的时间戳
+    private var rightOptionLastTapTimestamp: Date?
+    
     /// 在 Option 键按压期间是否有其他普通按键被按下（组合键防误触标记）
     private var keyComboInterrupted: Bool = false
     
     /// macOS 物理左侧 Option 键的虚拟键码 (KeyCode: 58 / 0x3A)
     private let leftOptionKeyCode: UInt16 = 58
+    /// macOS 物理右侧 Option 键的虚拟键码 (KeyCode: 61 / 0x3D)
+    private let rightOptionKeyCode: UInt16 = 61
     
     /// 私有初始化方法
     private init() {}
@@ -101,51 +109,87 @@ public final class GlobalHotkeyManager {
         return eventModifiers == targetModifiers
     }
     
-    /// 处理修饰键状态变化事件（物理左 Option 键等特殊触发）
+    /// 处理修饰键状态变化事件（物理左 Option 键、右 Option 键等特殊触发）
     private func handleFlagsChanged(event: NSEvent) {
-        // 仅处理物理左侧 Option 键 (KeyCode: 58)
-        guard event.keyCode == leftOptionKeyCode else { return }
-        
+        let keyCode = event.keyCode
         let isOptionKeyDown = event.modifierFlags.contains(.option)
         let currentTime = Date()
         
-        if isOptionKeyDown {
-            // 左 Option 键按下
-            leftOptionPressedTimestamp = currentTime
-            keyComboInterrupted = false
-        } else {
-            // 左 Option 键抬起释放
-            guard let pressTimestamp = leftOptionPressedTimestamp else { return }
-            leftOptionPressedTimestamp = nil
-            
-            let holdDuration = currentTime.timeIntervalSince(pressTimestamp)
-            
-            // 如果按压时间过长（> 0.45s）或在此期间按下了其他键，则判定为非呼出意图，予以忽略
-            guard !keyComboInterrupted && holdDuration < 0.45 else { return }
-            
-            let settings = AppSettings.shared
-            
-            // 判定是否触发双击
-            if let previousTap = lastTapTimestamp, currentTime.timeIntervalSince(previousTap) < 0.35 {
-                lastTapTimestamp = nil
-                
-                if settings.mainAppHotkey.kind == .doubleOption {
-                    DispatchQueue.main.async { FloatingPanelController.shared.toggle() }
-                } else if settings.stickyNoteHotkey.kind == .doubleOption {
-                    DispatchQueue.main.async { StickyNoteWindowController.shared.toggle() }
-                }
+        // MARK: - 1. 处理左 Option 键 (KeyCode: 58)
+        if keyCode == leftOptionKeyCode {
+            if isOptionKeyDown {
+                leftOptionPressedTimestamp = currentTime
+                keyComboInterrupted = false
             } else {
-                lastTapTimestamp = currentTime
+                guard let pressTimestamp = leftOptionPressedTimestamp else { return }
+                leftOptionPressedTimestamp = nil
                 
-                // 延迟微小片刻等待可能存在的连击判定
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.36) { [weak self] in
-                    guard let self = self, self.lastTapTimestamp == currentTime else { return }
-                    self.lastTapTimestamp = nil
+                let holdDuration = currentTime.timeIntervalSince(pressTimestamp)
+                guard !keyComboInterrupted && holdDuration < 0.45 else { return }
+                
+                let settings = AppSettings.shared
+                
+                // 双击左 Option 判定
+                if let previousTap = leftOptionLastTapTimestamp, currentTime.timeIntervalSince(previousTap) < 0.35 {
+                    leftOptionLastTapTimestamp = nil
                     
-                    if settings.mainAppHotkey.kind == .singleOption {
-                        FloatingPanelController.shared.toggle()
-                    } else if settings.stickyNoteHotkey.kind == .singleOption {
-                        StickyNoteWindowController.shared.toggle()
+                    if settings.mainAppHotkey.kind == .doubleOption {
+                        DispatchQueue.main.async { FloatingPanelController.shared.toggle() }
+                    } else if settings.stickyNoteHotkey.kind == .doubleOption {
+                        DispatchQueue.main.async { StickyNoteWindowController.shared.toggle() }
+                    }
+                } else {
+                    leftOptionLastTapTimestamp = currentTime
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.36) { [weak self] in
+                        guard let self = self, self.leftOptionLastTapTimestamp == currentTime else { return }
+                        self.leftOptionLastTapTimestamp = nil
+                        
+                        if settings.mainAppHotkey.kind == .singleOption {
+                            FloatingPanelController.shared.toggle()
+                        } else if settings.stickyNoteHotkey.kind == .singleOption {
+                            StickyNoteWindowController.shared.toggle()
+                        }
+                    }
+                }
+            }
+        }
+        
+        // MARK: - 2. 处理右 Option 键 (KeyCode: 61)
+        if keyCode == rightOptionKeyCode {
+            if isOptionKeyDown {
+                rightOptionPressedTimestamp = currentTime
+                keyComboInterrupted = false
+            } else {
+                guard let pressTimestamp = rightOptionPressedTimestamp else { return }
+                rightOptionPressedTimestamp = nil
+                
+                let holdDuration = currentTime.timeIntervalSince(pressTimestamp)
+                guard !keyComboInterrupted && holdDuration < 0.45 else { return }
+                
+                let settings = AppSettings.shared
+                
+                // 双击右 Option 判定
+                if let previousTap = rightOptionLastTapTimestamp, currentTime.timeIntervalSince(previousTap) < 0.35 {
+                    rightOptionLastTapTimestamp = nil
+                    
+                    if settings.mainAppHotkey.kind == .doubleRightOption {
+                        DispatchQueue.main.async { FloatingPanelController.shared.toggle() }
+                    } else if settings.stickyNoteHotkey.kind == .doubleRightOption {
+                        DispatchQueue.main.async { StickyNoteWindowController.shared.toggle() }
+                    }
+                } else {
+                    rightOptionLastTapTimestamp = currentTime
+                    
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.36) { [weak self] in
+                        guard let self = self, self.rightOptionLastTapTimestamp == currentTime else { return }
+                        self.rightOptionLastTapTimestamp = nil
+                        
+                        if settings.mainAppHotkey.kind == .singleRightOption {
+                            FloatingPanelController.shared.toggle()
+                        } else if settings.stickyNoteHotkey.kind == .singleRightOption {
+                            StickyNoteWindowController.shared.toggle()
+                        }
                     }
                 }
             }

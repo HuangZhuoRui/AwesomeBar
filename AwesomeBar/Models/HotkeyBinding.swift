@@ -9,6 +9,14 @@ public struct HotkeyBinding: Codable, Equatable, Hashable {
         case singleOption = "singleOption"
         /// 连按两下物理左侧 Option 键
         case doubleOption = "doubleOption"
+        /// 单击物理右侧 Option 键
+        case singleRightOption = "singleRightOption"
+        /// 连按两下物理右侧 Option 键
+        case doubleRightOption = "doubleRightOption"
+        /// 单击 Control 键
+        case singleControl = "singleControl"
+        /// 连按两下 Control 键
+        case doubleControl = "doubleControl"
         /// 组合键（如 Option+V、Cmd+Shift+V、Option+Space 等）
         case keyCombination = "keyCombination"
         /// 禁用唤起
@@ -17,7 +25,7 @@ public struct HotkeyBinding: Codable, Equatable, Hashable {
     
     /// 触发类型
     public var kind: TriggerKind
-    /// 虚拟按键码（KeyCode，仅在 keyCombination 时生效）
+    /// 虚拟按键码（KeyCode，在 keyCombination 或修饰键时生效）
     public var keyCode: UInt16?
     /// 修饰键标志位整数值（NSEvent.ModifierFlags rawValue）
     public var modifierRawValue: UInt?
@@ -41,13 +49,29 @@ public struct HotkeyBinding: Codable, Equatable, Hashable {
     /// 预设：按一下左 Option (⌥)
     public static let singleOption = HotkeyBinding(
         kind: .singleOption,
+        keyCode: 58,
         displayTitle: "按一下左 Option (⌥)"
     )
     
     /// 预设：连按两下左 Option (⌥⌥)
     public static let doubleOption = HotkeyBinding(
         kind: .doubleOption,
+        keyCode: 58,
         displayTitle: "连按两下左 Option (⌥⌥)"
+    )
+    
+    /// 预设：按一下右 Option (⌥)
+    public static let singleRightOption = HotkeyBinding(
+        kind: .singleRightOption,
+        keyCode: 61,
+        displayTitle: "按一下右 Option (⌥)"
+    )
+    
+    /// 预设：连按两下右 Option (⌥⌥)
+    public static let doubleRightOption = HotkeyBinding(
+        kind: .doubleRightOption,
+        keyCode: 61,
+        displayTitle: "连按两下右 Option (⌥⌥)"
     )
     
     /// 预设：Option + Space (⌥ Space)
@@ -96,14 +120,30 @@ public struct HotkeyBinding: Codable, Equatable, Hashable {
         displayTitle: "未设置 / 禁用"
     )
     
-    // MARK: - 按键码与符号格式化转换辅助
+    // MARK: - 事件解析生成方法
     
-    /// 将键盘事件解析为 HotkeyBinding
-    public static func fromEvent(_ event: NSEvent) -> HotkeyBinding? {
+    /// 解析 flagsChanged 事件（针对单独按下左 Option、右 Option、Control 等修饰键）
+    public static func fromFlagsChangedEvent(_ event: NSEvent) -> HotkeyBinding? {
+        let keyCode = event.keyCode
+        
+        switch keyCode {
+        case 58:
+            return .singleOption
+        case 61:
+            return .singleRightOption
+        case 59, 62:
+            return HotkeyBinding(kind: .singleControl, keyCode: keyCode, displayTitle: "按一下 Control (⌃)")
+        default:
+            return nil
+        }
+    }
+    
+    /// 解析 keyDown 事件（普通按键及各种组合快捷键）
+    public static func fromKeyDownEvent(_ event: NSEvent) -> HotkeyBinding? {
         let rawModifiers = event.modifierFlags.intersection([.command, .option, .shift, .control])
         let keyCode = event.keyCode
         
-        // 忽略纯修饰键按压
+        // 忽略纯修饰键
         if [54, 55, 56, 57, 58, 59, 60, 61, 62, 63].contains(keyCode) {
             return nil
         }

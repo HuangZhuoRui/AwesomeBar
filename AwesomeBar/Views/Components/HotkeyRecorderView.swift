@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-/// 自定义快捷键录制与预设快速切换组件
+/// 自定义快捷键录制与预设快速切换组件（支持普通组合键与左右 Option 独立单键录制）
 public struct HotkeyRecorderView: View {
     /// 绑定的快捷键实体
     @Binding public var binding: HotkeyBinding
@@ -17,6 +17,8 @@ public struct HotkeyRecorderView: View {
         presets: [HotkeyBinding] = [
             .singleOption,
             .doubleOption,
+            .singleRightOption,
+            .doubleRightOption,
             .optionSpace,
             .optionV,
             .optionB,
@@ -70,7 +72,7 @@ public struct HotkeyRecorderView: View {
                 )
             }
             .buttonStyle(.plain)
-            .help(isRecording ? "按 Esc 取消录制" : "点击即可直接按下键盘录制自定义快捷键")
+            .help(isRecording ? "按 Esc 取消录制" : "点击即可直接按下键盘录制自定义快捷键（支持组合键或单击/连按左右 Option）")
             
             // 2. 常用预设快捷切换下拉菜单
             Menu {
@@ -109,8 +111,10 @@ public struct HotkeyRecorderView: View {
     
     private var iconForBinding: String {
         switch binding.kind {
-        case .singleOption, .doubleOption:
+        case .singleOption, .doubleOption, .singleRightOption, .doubleRightOption:
             return "option"
+        case .singleControl, .doubleControl:
+            return "control"
         case .keyCombination:
             return "command"
         case .none:
@@ -131,9 +135,19 @@ public struct HotkeyRecorderView: View {
                 return nil
             }
             
-            // 解析录制的按键组合
+            // 1. 处理单独修饰键（如按一下右 Option、按一下左 Option 等 flagsChanged 事件）
+            if event.type == .flagsChanged {
+                if let recorded = HotkeyBinding.fromFlagsChangedEvent(event) {
+                    self.binding = recorded
+                    self.stopRecording()
+                    SoundManager.shared.playCopySound()
+                    return nil
+                }
+            }
+            
+            // 2. 处理普通按键及组合快捷键按下（如 ⌥Space、⌘⇧V、⌥V 等）
             if event.type == .keyDown {
-                if let recorded = HotkeyBinding.fromEvent(event) {
+                if let recorded = HotkeyBinding.fromKeyDownEvent(event) {
                     self.binding = recorded
                     self.stopRecording()
                     SoundManager.shared.playCopySound()
