@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-/// 便签模式下专属的紧凑型剪贴板历史卡片行组件（支持一键点击复制与已复制状态反馈）
+/// 粘贴板模式下专属的紧凑型剪贴板历史卡片行组件（支持一键点击复制与已复制状态反馈）
 public struct StickyNoteRowView: View {
     /// 当前呈现的剪贴板数据实体
     public let item: ClipboardItem
@@ -60,7 +60,7 @@ public struct StickyNoteRowView: View {
                     .padding(.vertical, 2)
                     .background(Color.green.opacity(0.12))
                     .clipShape(Capsule())
-                    .transition(.scale.combined(with: .opacity))
+                    .transition(.scale.combined(with: .scale))
                 } else if isHovered {
                     Image(systemName: "doc.on.doc")
                         .font(.system(size: 10, weight: .medium))

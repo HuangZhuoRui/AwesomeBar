@@ -1,12 +1,12 @@
 import SwiftUI
 
-/// 便签模式主视图（纯净轻量小便签浮窗，无分类全量滚动展示，支持一键复制与常驻置顶）
+/// 粘贴板模式主视图（纯净轻量独立粘贴板浮窗，无分类全量滚动展示，支持一键点击复制与常驻置顶）
 public struct StickyNoteView: View {
     /// 绑定的剪贴板数据流中心
     @ObservedObject private var store = ClipboardStore.shared
     /// 绑定的偏好设置单例
     @ObservedObject private var settings = AppSettings.shared
-    /// 关闭/隐藏便签的回调
+    /// 关闭/隐藏粘贴板浮窗的回调
     public let onClose: () -> Void
     
     public init(onClose: @escaping () -> Void = { StickyNoteWindowController.shared.hide() }) {
@@ -15,7 +15,7 @@ public struct StickyNoteView: View {
     
     public var body: some View {
         VStack(spacing: 0) {
-            // 1. 便签顶部操作标题栏（支持拖拽、置顶与关闭）
+            // 1. 粘贴板顶部操作标题栏（支持拖拽、置顶与关闭）
             headerBarView
                 .padding(.horizontal, 14)
                 .padding(.top, 12)
@@ -40,12 +40,12 @@ public struct StickyNoteView: View {
     
     private var headerBarView: some View {
         HStack(spacing: 6) {
-            Image(systemName: "note.text")
+            Image(systemName: "doc.on.clipboard")
                 .font(.system(size: 13, weight: .semibold))
                 .foregroundColor(.secondary)
                 .allowsHitTesting(false)
             
-            Text("便签")
+            Text("粘贴板")
                 .font(.system(size: 13, weight: .bold, design: .rounded))
                 .foregroundColor(.primary)
                 .allowsHitTesting(false)
@@ -69,7 +69,7 @@ public struct StickyNoteView: View {
             .buttonStyle(.plain)
             .help(settings.isStickyNotePinned ? "取消置顶" : "置顶悬浮在屏幕最上层")
             
-            // 2. 关闭便签按钮
+            // 2. 关闭粘贴板按钮
             Button(action: onClose) {
                 Image(systemName: "xmark")
                     .font(.system(size: 10, weight: .bold))
@@ -79,7 +79,7 @@ public struct StickyNoteView: View {
                     .clipShape(Circle())
             }
             .buttonStyle(.plain)
-            .help("关闭便签浮窗")
+            .help("关闭粘贴板浮窗")
         }
     }
     

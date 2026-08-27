@@ -3,17 +3,17 @@ import AppKit
 import SwiftUI
 import Combine
 
-/// 便签模式专属独立浮动小窗口控制器（生命周期、置顶层级、位置记忆与平滑动画管理）
+/// 粘贴板模式专属独立浮动小窗口控制器（生命周期、置顶层级、位置记忆与平滑动画管理）
 public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
     /// 全局共享单例
     public static let shared = StickyNoteWindowController()
     
-    /// 便签浮动 NSPanel 实例
+    /// 粘贴板浮动 NSPanel 实例
     private var stickyPanel: CustomGlassPanel?
     /// Combine 响应式订阅集合
     private var cancellables = Set<AnyCancellable>()
     
-    /// 便签当前是否处于可见状态
+    /// 粘贴板浮窗当前是否处于可见状态
     @Published public var isVisible: Bool = false
     
     private override init() {
@@ -22,7 +22,7 @@ public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
         bindSettingsObservers()
     }
     
-    /// 构建并配置轻量无边框透明便签 NSPanel
+    /// 构建并配置轻量无边框透明粘贴板 NSPanel
     private func buildStickyPanel() {
         let panel = CustomGlassPanel(
             contentRect: NSRect(x: 0, y: 0, width: 270, height: 390),
@@ -53,7 +53,7 @@ public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
         self.stickyPanel = panel
     }
     
-    /// 监听用户便签置顶设置变更，实时同步窗口层级
+    /// 监听用户粘贴板置顶设置变更，实时同步窗口层级
     private func bindSettingsObservers() {
         AppSettings.shared.$isStickyNotePinned
             .sink { [weak self] isPinned in
@@ -62,7 +62,7 @@ public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
             .store(in: &cancellables)
     }
     
-    /// 切换便签窗口的显示与隐藏
+    /// 切换粘贴板窗口的显示与隐藏
     public func toggle() {
         if isVisible {
             hide()
@@ -71,7 +71,7 @@ public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
         }
     }
     
-    /// 灵动呼出便签浮窗（优先恢复上次停靠位置或智能停靠在屏幕右上角）
+    /// 灵动呼出粘贴板浮窗（优先恢复上次停靠位置或智能停靠在屏幕右上角）
     public func show() {
         guard let panel = stickyPanel else { return }
         
@@ -95,7 +95,7 @@ public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
             }
         }
         
-        // 2. 若无历史坐标，默认停靠在主屏幕右上角（优雅小便签挂载位）
+        // 2. 若无历史坐标，默认停靠在主屏幕右上角（优雅小便签/浮窗挂载位）
         if !positionRestored {
             let activeScreen = NSScreen.main ?? NSScreen.screens.first
             if let screen = activeScreen {
@@ -119,7 +119,7 @@ public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
         isVisible = true
     }
     
-    /// 优雅缩放淡出隐藏便签浮窗
+    /// 优雅缩放淡出隐藏粘贴板浮窗
     public func hide() {
         guard let panel = stickyPanel, isVisible else { return }
         
@@ -135,7 +135,7 @@ public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
         })
     }
     
-    /// 记录并保存便签浮窗当前的坐标
+    /// 记录并保存粘贴板浮窗当前的坐标
     private func saveStickyNotePosition() {
         guard let panel = stickyPanel else { return }
         AppSettings.shared.stickyNoteOriginX = panel.frame.origin.x
