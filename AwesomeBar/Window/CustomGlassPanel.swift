@@ -1,11 +1,27 @@
 import Foundation
 import AppKit
 
-/// 自定义透明液态玻璃 NSPanel 浮动面板子类（支持中文输入法 IME 组合态智能放行、原生安全窗口拖拽移动、拖拽释放回调、高优先全局键盘拦截、ProMotion 120Hz 硬件加速与异步图层绘制）
+/// 物理拖拽释放运动信息结构体（包含速度与加速度）
+public struct DragPhysicsReleaseInfo {
+    /// 释放时的最终窗口几何外框
+    public let finalFrame: NSRect
+    /// 释放瞬间的横向速度（像素/秒，> 0 表示向右甩，< 0 表示向左甩）
+    public let velocityX: CGFloat
+    /// 释放瞬间的纵向速度（像素/秒）
+    public let velocityY: CGFloat
+    /// 释放瞬间的横向加速度（像素/秒²）
+    public let accelerationX: CGFloat
+}
+
+/// 自定义透明液态玻璃 NSPanel 浮动面板子类（支持物理运动学加速度与速度追踪、中文输入法 IME 组合态智能放行、原生安全窗口拖拽移动、高优先全局键盘拦截、ProMotion 120Hz 硬件加速与异步图层绘制）
 public final class CustomGlassPanel: NSPanel {
     /// 键盘按键事件前置拦截器（返回 true 表示已消费事件，阻断向下传递）
     public var onKeyDownInterceptor: ((NSEvent) -> Bool)?
-    /// 窗口拖拽释放完成后的回调处理闭包（用于屏幕边缘吸附判定）
+    /// 拖拽开始回调
+    public var onDragStarted: ((CustomGlassPanel) -> Void)?
+    /// 窗口拖拽释放完成后的物理运动学回调处理闭包（用于物理加速度吸附判定）
+    public var onDragEndedWithPhysics: ((CustomGlassPanel, DragPhysicsReleaseInfo) -> Void)?
+    /// 常规拖拽结束回调
     public var onDragFinished: ((CustomGlassPanel) -> Void)?
     
     public override init(
@@ -41,7 +57,7 @@ public final class CustomGlassPanel: NSPanel {
         return false
     }
     
-    /// 支持在非文字输入和非按钮等空白背景区域按住鼠标进行窗口拖拽移动（100% 不破坏输入光标）
+    /// 支持在非文字输入和非按钮等空白背景区域按住鼠标进行带物理运动学计算的窗口拖拽移动
     public override func mouseDown(with event: NSEvent) {
         if let contentView = self.contentView {
             let locationInWindow = event.locationInWindow
@@ -54,9 +70,73 @@ public final class CustomGlassPanel: NSPanel {
             }
         }
         
-        // 在背景与非输入区域触发窗口原生拖动
-        self.performDrag(with: event)
-        // 拖拽释放后执行回调（甩到屏幕边缘判定）
+        // 1. 触发拖拽开始回调
+        self.onDragStarted?(self)
+        
+        let initialWindowOrigin = self.frame.origin
+        let initialMouseLocation = NSEvent.mouseLocation
+        
+        struct MotionSample {
+            let point: NSPoint
+            let time: Date
+        }
+        
+        var samples: [MotionSample] = [MotionSample(point: initialMouseLocation, time: Date())]
+        var hasMoved = false
+        
+        // 2. 连续跟踪鼠标拖拽轨迹并计算实时物理运动参数
+        while true {
+            guard let nextEvent = self.nextEvent(matching: [.leftMouseDragged, .leftMouseUp]) else { break }
+            
+            if nextEvent.type == .leftMouseDragged {
+                let currentMouseLocation = NSEvent.mouseLocation
+                let deltaX = currentMouseLocation.x - initialMouseLocation.x
+                let deltaY = currentMouseLocation.y - initialMouseLocation.y
+                
+                if abs(deltaX) > 2 || abs(deltaY) > 2 {
+                    hasMoved = true
+                }
+                
+                let newOrigin = NSPoint(x: initialWindowOrigin.x + deltaX, y: initialWindowOrigin.y + deltaY)
+                self.setFrameOrigin(newOrigin)
+                
+                let now = Date()
+                samples.append(MotionSample(point: currentMouseLocation, time: now))
+                // 仅保留最近 120ms 内的运动采样，以便精准计算释放瞬间的真实速度与加速度
+                samples.removeAll { now.timeIntervalSince($0.time) > 0.12 }
+            } else if nextEvent.type == .leftMouseUp {
+                break
+            }
+        }
+        
+        // 3. 计算松手瞬间的横向速度 (Velocity) 与横向加速度 (Acceleration)
+        var velocityX: CGFloat = 0
+        var velocityY: CGFloat = 0
+        var accelerationX: CGFloat = 0
+        
+        if hasMoved && samples.count >= 2, let first = samples.first, let last = samples.last {
+            let dt = CGFloat(max(0.008, last.time.timeIntervalSince(first.time)))
+            velocityX = (last.point.x - first.point.x) / dt
+            velocityY = (last.point.y - first.point.y) / dt
+            
+            if samples.count >= 3 {
+                let mid = samples[samples.count / 2]
+                let dt1 = CGFloat(max(0.005, mid.time.timeIntervalSince(first.time)))
+                let dt2 = CGFloat(max(0.005, last.time.timeIntervalSince(mid.time)))
+                let v1 = (mid.point.x - first.point.x) / dt1
+                let v2 = (last.point.x - mid.point.x) / dt2
+                accelerationX = (v2 - v1) / dt2
+            }
+        }
+        
+        let releaseInfo = DragPhysicsReleaseInfo(
+            finalFrame: self.frame,
+            velocityX: velocityX,
+            velocityY: velocityY,
+            accelerationX: accelerationX
+        )
+        
+        self.onDragEndedWithPhysics?(self, releaseInfo)
         self.onDragFinished?(self)
     }
     

@@ -3,7 +3,7 @@ import AppKit
 import SwiftUI
 import Combine
 
-/// 粘贴板模式专属独立浮动小窗口控制器（生命周期、屏幕边缘甩动吸附、复制冒出不抢焦点、置顶层级、⌘1-9 快捷键分发与平滑动画管理）
+/// 粘贴板模式专属独立浮动小窗口控制器（生命周期、物理运动学加速度边缘甩动吸附、拖拽解除吸附、复制冒出不抢焦点、置顶层级、⌘1-9 快捷键分发与平滑动画管理）
 public final class StickyNoteWindowController: NSObject, ObservableObject, NSWindowDelegate {
     /// 全局共享单例
     public static let shared = StickyNoteWindowController()
@@ -73,15 +73,26 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         panel.titlebarAppearsTransparent = true
         panel.delegate = self
         
-        // 配置窗口级别前置键盘拦截器（支持 ⌘1-9 与 Esc）
+        // 1. 配置窗口级别前置键盘拦截器（支持 ⌘1-9 与 Esc）
         panel.onKeyDownInterceptor = { [weak self] event in
             guard let self = self else { return false }
             return self.handleKeyDownEvent(event)
         }
         
-        // 配置拖拽释放监听（甩到屏幕边缘自动吸附）
-        panel.onDragFinished = { [weak self] customPanel in
-            self?.handlePanelDragFinished(customPanel)
+        // 2. 配置拖拽开始监听：一旦被拖拽，立即解除吸附状态，随光标自由平移
+        panel.onDragStarted = { [weak self] _ in
+            guard let self = self else { return }
+            if self.dockState != .floating {
+                self.autoCollapseWorkItem?.cancel()
+                self.dockState = .floating
+                self.isDockedExpanded = false
+                AppSettings.shared.stickyNoteDockState = DockState.floating.rawValue
+            }
+        }
+        
+        // 3. 配置带物理运动学参数的拖拽释放监听（严格按加速度与速度判定甩动吸附）
+        panel.onDragEndedWithPhysics = { [weak self] customPanel, info in
+            self?.handlePhysicsDragFinished(customPanel, info: info)
         }
         
         let hostingView = NSHostingView(rootView: StickyNoteView(
@@ -117,10 +128,10 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
             .store(in: &cancellables)
     }
     
-    // MARK: - 屏幕边缘甩动吸附算法
+    // MARK: - 物理运动学加速度边缘甩动吸附算法
     
-    /// 拖拽结束时根据最终位置与屏幕边缘距离决定是否吸附
-    private func handlePanelDragFinished(_ panel: CustomGlassPanel) {
+    /// 拖拽结束时根据运动物理加速度、速度与边缘距离严格判定
+    private func handlePhysicsDragFinished(_ panel: CustomGlassPanel, info: DragPhysicsReleaseInfo) {
         let frame = panel.frame
         guard let screen = panel.screen ?? NSScreen.main ?? NSScreen.screens.first else { return }
         let screenFrame = screen.visibleFrame
@@ -128,13 +139,20 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         let distToLeft = frame.minX - screenFrame.minX
         let distToRight = screenFrame.maxX - frame.maxX
         
-        // 判定阈值：拖拽或快速甩动至距离屏幕边缘 75px 内即刻吸附
-        if distToRight < 75 {
+        // 核心物理判定指标：
+        // 绝不因慢速移动或靠近边缘而吸附，必须满足物理运动的加速度与冲量速度！
+        // 1. 向右甩动吸附要求：靠近右边缘 (<= 140px) 且 拥有强劲的向右物理速度 (> 380 px/s) 或加速度 (> 550 px/s²)
+        let isFlingingRight = (distToRight < 140) && (info.velocityX > 380 || info.accelerationX > 550)
+        
+        // 2. 向左甩动吸附要求：靠近左边缘 (<= 140px) 且 拥有强劲的向左物理速度 (< -380 px/s) 或加速度 (< -550 px/s²)
+        let isFlingingLeft = (distToLeft < 140) && (info.velocityX < -380 || info.accelerationX < -550)
+        
+        if isFlingingRight {
             dockTo(side: .dockedRight, screen: screen, currentY: frame.minY)
-        } else if distToLeft < 75 {
+        } else if isFlingingLeft {
             dockTo(side: .dockedLeft, screen: screen, currentY: frame.minY)
         } else {
-            // 自由停留在屏幕内部悬浮
+            // 未达到物理加速度阈值或常规慢速拖拽：保持自由悬浮，绝不误吸附！
             self.dockState = .floating
             self.isDockedExpanded = false
             AppSettings.shared.stickyNoteDockState = DockState.floating.rawValue
