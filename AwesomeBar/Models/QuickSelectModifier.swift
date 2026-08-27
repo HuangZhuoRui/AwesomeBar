@@ -1,5 +1,6 @@
 import Foundation
 import AppKit
+import Carbon
 
 /// 历史记录条目数字直选快捷键修饰键模式（支持 ⌃⌘1-9、⇧⌘1-9、⌘1-9、⌥1-9 等自定义配置）
 public enum QuickSelectModifier: String, Codable, CaseIterable, Identifiable {
@@ -64,6 +65,26 @@ public enum QuickSelectModifier: String, Codable, CaseIterable, Identifiable {
     public func badgeText(for index: Int) -> String? {
         guard self != .none else { return nil }
         return "\(symbolPrefix)\(index)"
+    }
+    
+    /// 转换为系统 Carbon 原生修饰键标志位掩码
+    public var carbonModifiers: UInt32? {
+        switch self {
+        case .controlCommand:
+            return UInt32(controlKey | cmdKey)
+        case .commandShift:
+            return UInt32(cmdKey | shiftKey)
+        case .command:
+            return UInt32(cmdKey)
+        case .option:
+            return UInt32(optionKey)
+        case .control:
+            return UInt32(controlKey)
+        case .controlOption:
+            return UInt32(controlKey | optionKey)
+        case .none:
+            return nil
+        }
     }
     
     /// 校验按键事件中的修饰键是否精准匹配本模式
