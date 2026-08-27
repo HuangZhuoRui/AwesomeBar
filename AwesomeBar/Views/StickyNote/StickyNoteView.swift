@@ -14,8 +14,8 @@ public struct StickyNoteView: View {
     @ObservedObject private var store = ClipboardStore.shared
     /// 绑定的偏好设置单例
     @ObservedObject private var settings = AppSettings.shared
-    /// 绑定的窗口控制器单例（获取快捷键映射与复制动效）
-    @ObservedObject private var controller = StickyNoteWindowController.shared
+    /// 显式注入的窗口控制器引用（彻底避免在 init 期间重入访问单例造成 Deadlock Crash）
+    @ObservedObject public var controller: StickyNoteWindowController
     /// 当前计算得到的条目与 ⌘1-9 快捷键映射（仅分配给可见比例大于 2/3 的条目）
     @State private var itemShortcuts: [UUID: Int] = [:]
     /// 滚动视口实际高度
@@ -23,7 +23,11 @@ public struct StickyNoteView: View {
     /// 关闭/隐藏粘贴板浮窗的回调
     public let onClose: () -> Void
     
-    public init(onClose: @escaping () -> Void = { StickyNoteWindowController.shared.hide() }) {
+    public init(
+        controller: StickyNoteWindowController,
+        onClose: @escaping () -> Void
+    ) {
+        self.controller = controller
         self.onClose = onClose
     }
     
@@ -132,7 +136,9 @@ public struct StickyNoteView: View {
                 self.scrollViewportHeight = newHeight
             }
             .onPreferenceChange(StickyRowFramePreference.self) { frames in
-                recalculateVisibleItemShortcuts(frames: frames, viewportHeight: scrollViewportHeight)
+                DispatchQueue.main.async {
+                    recalculateVisibleItemShortcuts(frames: frames, viewportHeight: scrollViewportHeight)
+                }
             }
         }
         .mask(
@@ -186,7 +192,7 @@ public struct StickyNoteView: View {
         }
         
         self.itemShortcuts = newShortcuts
-        StickyNoteWindowController.shared.currentVisibleShortcutMap = newShortcutMap
+        self.controller.currentVisibleShortcutMap = newShortcutMap
     }
     
     // MARK: - 辅助子视图：空状态占位

@@ -53,9 +53,12 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
             return self.handleKeyDownEvent(event)
         }
         
-        let hostingView = NSHostingView(rootView: StickyNoteView(onClose: { [weak self] in
-            self?.hide()
-        }))
+        let hostingView = NSHostingView(rootView: StickyNoteView(
+            controller: self,
+            onClose: { [weak self] in
+                self?.hide()
+            }
+        ))
         hostingView.wantsLayer = true
         hostingView.layer?.cornerRadius = 20
         hostingView.layer?.cornerCurve = .continuous
