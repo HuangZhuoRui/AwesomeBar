@@ -1,0 +1,41 @@
+# Xcode & Swift Build Artifacts
+.build/
+build/
+DerivedData/
+*.moved-aside
+*.xcuserstate
+
+# Xcode User Data & Schemes
+xcuserdata/
+*.xcuserdatad/
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+*.xcodeproj/project.xcworkspace/xcuserdata/
+
+# Swift Package Manager
+Packages/
+Package.pins
+Package.resolved
+.swiftpm/
+
+# macOS System Files
+.DS_Store
+.AppleDouble
+.LSOverride
+._*
+.Spotlight-V100
+.Trashes
+
+# Local runtime databases and image caches
+*.sqlite
+*.sqlite3
+*.db
+*.sqlite-wal
+*.sqlite-shm
+
+# Editor & Backup Temp Files
+*.swp
+*.swo
+*~
+*.orig
+*.bak
