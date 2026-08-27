@@ -441,11 +441,21 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         return false
     }
     
-    /// 触发指定序号的快捷复制
+    /// 触发指定序号的快捷复制（优先根据视口分配，回退取全局列表）
     public func triggerShortcut(index: Int) -> Bool {
-        guard let targetItem = currentVisibleShortcutMap[index] else { return false }
-        triggerItemCopy(item: targetItem)
-        return true
+        if let targetItem = currentVisibleShortcutMap[index] {
+            triggerItemCopy(item: targetItem)
+            return true
+        }
+        
+        let allItems = ClipboardStore.shared.allItems
+        let targetIndex = index - 1
+        if targetIndex >= 0 && targetIndex < allItems.count {
+            triggerItemCopy(item: allItems[targetIndex])
+            return true
+        }
+        
+        return false
     }
     
     /// 执行条目复制与反馈

@@ -91,6 +91,29 @@ public final class GlobalHotkeyManager {
             }
             return
         }
+        
+        // 3. 检测是否命中全局数字序号直选快捷键（如 ⌃⌘1 ~ ⌃⌘9，即使焦点在其他第三方 App 也全局生效）
+        let quickModifier = settings.quickSelectModifier
+        if quickModifier != .none && quickModifier.matches(flags: event.modifierFlags) {
+            let keyMapping: [UInt16: Int] = [
+                18: 1, 19: 2, 20: 3, 21: 4, 23: 5,
+                22: 6, 26: 7, 28: 8, 25: 9
+            ]
+            if let number = keyMapping[event.keyCode] {
+                DispatchQueue.main.async {
+                    if StickyNoteWindowController.shared.isVisible {
+                        _ = StickyNoteWindowController.shared.triggerShortcut(index: number)
+                    } else if FloatingPanelController.shared.isVisible {
+                        let allItems = ClipboardStore.shared.allItems
+                        let targetIndex = number - 1
+                        if targetIndex >= 0 && targetIndex < allItems.count {
+                            PasteSimulator.shared.pasteItem(item: allItems[targetIndex])
+                        }
+                    }
+                }
+                return
+            }
+        }
     }
     
     /// 校验事件是否精确匹配某个 HotkeyBinding 组合键
