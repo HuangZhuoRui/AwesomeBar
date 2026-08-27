@@ -1,0 +1,23 @@
+{
+  "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Window/KeyEventHandlerView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView.swiftdeps"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Window/MenuBarManager.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager.swiftdeps"
+  }
+}

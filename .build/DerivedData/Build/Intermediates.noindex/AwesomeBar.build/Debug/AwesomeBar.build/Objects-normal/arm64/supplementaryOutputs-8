@@ -1,0 +1,30 @@
+{
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/VisualEffectView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView.swiftdeps"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Main/FooterBarView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView.swiftdeps"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Main/HeaderBarView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView.swiftdeps"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Main/MainView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView.swiftdeps"
+  }
+}

@@ -1,0 +1,16 @@
+{
+  "source": "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/SearchBarView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "搜索剪贴历史、代码、链接、应用...",
+        "location": {
+          "startingColumn": 23,
+          "startingLine": 33
+        }
+      }
+    ]
+  },
+  "version": 1
+}

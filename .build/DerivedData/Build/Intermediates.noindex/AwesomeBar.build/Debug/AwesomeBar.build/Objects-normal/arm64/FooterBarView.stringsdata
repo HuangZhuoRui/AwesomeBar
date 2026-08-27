@@ -1,0 +1,16 @@
+{
+  "source": "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Main/FooterBarView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "共 %lld 条历史",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 15
+        }
+      }
+    ]
+  },
+  "version": 1
+}

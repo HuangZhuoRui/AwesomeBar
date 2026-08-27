@@ -1,0 +1,30 @@
+{
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/LiquidGlassCard.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard.swiftdeps"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/SearchBarView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView.swiftdeps"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/ShortcutHintView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView.swiftdeps"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/TypeBadgeView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView.swiftdeps"
+  }
+}

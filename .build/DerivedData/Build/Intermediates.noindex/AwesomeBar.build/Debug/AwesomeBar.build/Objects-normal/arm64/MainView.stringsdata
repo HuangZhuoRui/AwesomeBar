@@ -1,0 +1,56 @@
+{
+  "source": "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Main/MainView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "偏好设置",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 509
+        }
+      },
+      {
+        "comment": "",
+        "key": "清空剪贴板历史记录",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 540
+        }
+      },
+      {
+        "comment": "",
+        "key": "请选择清空范围。保留置顶将继续保留所有已固定与星标的重要记录。",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 543
+        }
+      },
+      {
+        "comment": "",
+        "key": "取消",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 550
+        }
+      },
+      {
+        "comment": "",
+        "key": "清除普通记录 (保留置顶)",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 555
+        }
+      },
+      {
+        "comment": "",
+        "key": "全部清空 (彻底删除)",
+        "location": {
+          "startingColumn": 24,
+          "startingLine": 562
+        }
+      }
+    ]
+  },
+  "version": 1
+}

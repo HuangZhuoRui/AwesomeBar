@@ -1,0 +1,429 @@
+{
+  "" : {
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AwesomeBar-primary.dia",
+    "emit-module-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AwesomeBar-primary-emit-module.d",
+    "emit-module-diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AwesomeBar-primary-emit-module.dia",
+    "pch" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AwesomeBar-primary-Bridging-header.pch",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AwesomeBar-primary.swiftdeps"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/DerivedSources/GeneratedAssetSymbols.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GeneratedAssetSymbols~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/App/AppDelegate.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppDelegate.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppDelegate.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppDelegate.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppDelegate.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppDelegate.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppDelegate.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppDelegate.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppDelegate~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/App/ContentView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/App/MyApp.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MyApp.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MyApp.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MyApp.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MyApp.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MyApp.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MyApp.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MyApp.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MyApp~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Database/DatabaseManager.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseManager.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseManager.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseManager.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseManager.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseManager.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseManager.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseManager.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseManager~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Database/DatabaseSchema.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseSchema.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseSchema.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseSchema.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseSchema.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseSchema.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseSchema.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseSchema.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DatabaseSchema~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Database/ImageStorageManager.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ImageStorageManager.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ImageStorageManager.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ImageStorageManager.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ImageStorageManager.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ImageStorageManager.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ImageStorageManager.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ImageStorageManager.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ImageStorageManager~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Models/AppSettings.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppSettings.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppSettings.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppSettings.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppSettings.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppSettings.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppSettings.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppSettings.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/AppSettings~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Models/ClipboardContentType.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardContentType.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardContentType.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardContentType.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardContentType.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardContentType.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardContentType.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardContentType.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardContentType~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Models/ClipboardFilter.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardFilter.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardFilter.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardFilter.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardFilter.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardFilter.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardFilter.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardFilter.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardFilter~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Models/ClipboardItem.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardItem.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardItem.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardItem.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardItem.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardItem.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardItem.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardItem.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardItem~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Models/ColorHexExtension.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ColorHexExtension.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ColorHexExtension.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ColorHexExtension.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ColorHexExtension.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ColorHexExtension.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ColorHexExtension.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ColorHexExtension.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ColorHexExtension~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Models/HotkeyTriggerMode.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HotkeyTriggerMode.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HotkeyTriggerMode.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HotkeyTriggerMode.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HotkeyTriggerMode.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HotkeyTriggerMode.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HotkeyTriggerMode.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HotkeyTriggerMode.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HotkeyTriggerMode~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Services/ClipboardMonitor.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardMonitor.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardMonitor.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardMonitor.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardMonitor.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardMonitor.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardMonitor.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardMonitor.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardMonitor~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Services/ClipboardStore.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardStore.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardStore.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardStore.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardStore.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardStore.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardStore.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardStore.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardStore~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Services/ContentClassifier.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentClassifier.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentClassifier.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentClassifier.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentClassifier.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentClassifier.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentClassifier.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentClassifier.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentClassifier~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Services/GlobalHotkeyManager.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GlobalHotkeyManager.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GlobalHotkeyManager.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GlobalHotkeyManager.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GlobalHotkeyManager.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GlobalHotkeyManager.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GlobalHotkeyManager.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GlobalHotkeyManager.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/GlobalHotkeyManager~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Services/PasteSimulator.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/PasteSimulator.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/PasteSimulator.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/PasteSimulator.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/PasteSimulator.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/PasteSimulator.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/PasteSimulator.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/PasteSimulator.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/PasteSimulator~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Services/QuickLookManager.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/QuickLookManager.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/QuickLookManager.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/QuickLookManager.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/QuickLookManager.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/QuickLookManager.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/QuickLookManager.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/QuickLookManager.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/QuickLookManager~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Services/SoundManager.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SoundManager.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SoundManager.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SoundManager.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SoundManager.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SoundManager.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SoundManager.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SoundManager.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SoundManager~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Services/TextFormatter.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TextFormatter.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TextFormatter.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TextFormatter.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TextFormatter.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TextFormatter.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TextFormatter.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TextFormatter.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TextFormatter~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/CircularGlassButton.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CircularGlassButton.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CircularGlassButton.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CircularGlassButton.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CircularGlassButton.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CircularGlassButton.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CircularGlassButton.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CircularGlassButton.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CircularGlassButton~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/ClipboardRowView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardRowView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardRowView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardRowView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardRowView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardRowView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardRowView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardRowView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ClipboardRowView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/ContentPreviewView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentPreviewView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentPreviewView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentPreviewView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentPreviewView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentPreviewView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentPreviewView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentPreviewView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ContentPreviewView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/DetailPreviewSheet.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DetailPreviewSheet.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DetailPreviewSheet.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DetailPreviewSheet.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DetailPreviewSheet.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DetailPreviewSheet.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DetailPreviewSheet.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DetailPreviewSheet.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/DetailPreviewSheet~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/EmptyStateView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/EmptyStateView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/EmptyStateView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/EmptyStateView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/EmptyStateView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/EmptyStateView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/EmptyStateView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/EmptyStateView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/EmptyStateView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/FilterPillView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FilterPillView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FilterPillView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FilterPillView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FilterPillView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FilterPillView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FilterPillView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FilterPillView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FilterPillView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/ItemActionButtonsView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ItemActionButtonsView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ItemActionButtonsView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ItemActionButtonsView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ItemActionButtonsView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ItemActionButtonsView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ItemActionButtonsView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ItemActionButtonsView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ItemActionButtonsView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/LiquidGlassBackground.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassBackground.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassBackground.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassBackground.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassBackground.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassBackground.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassBackground.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassBackground.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassBackground~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/LiquidGlassCard.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/LiquidGlassCard~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/SearchBarView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SearchBarView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/ShortcutHintView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/ShortcutHintView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/TypeBadgeView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/TypeBadgeView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/VisualEffectView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/VisualEffectView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Main/FooterBarView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FooterBarView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Main/HeaderBarView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/HeaderBarView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Main/MainView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MainView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Settings/SettingsView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Window/CustomGlassPanel.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Window/FloatingPanelController.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Window/KeyEventHandlerView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/KeyEventHandlerView~partial.swiftmodule"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Window/MenuBarManager.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager.dia",
+    "index-unit-output-path" : "/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager.o",
+    "llvm-bc" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager.bc",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager.swiftdeps",
+    "swiftmodule" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/MenuBarManager~partial.swiftmodule"
+  }
+}

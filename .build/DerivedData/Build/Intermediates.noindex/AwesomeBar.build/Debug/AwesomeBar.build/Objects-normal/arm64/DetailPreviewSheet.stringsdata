@@ -1,0 +1,72 @@
+{
+  "source": "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Components/DetailPreviewSheet.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "关闭详情 (Esc)",
+        "location": {
+          "startingColumn": 19,
+          "startingLine": 82
+        }
+      },
+      {
+        "comment": "",
+        "key": "创建于 %@ • %@",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 69
+        }
+      },
+      {
+        "comment": "",
+        "key": "可点击下方工具快速转换色值与文本",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 114
+        }
+      },
+      {
+        "comment": "",
+        "key": "文本快速转换与排版工具箱",
+        "location": {
+          "startingColumn": 18,
+          "startingLine": 141
+        }
+      },
+      {
+        "comment": "",
+        "key": "仅复制内容 (保持打开)",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 229
+        }
+      },
+      {
+        "comment": "",
+        "key": "仅写入系统剪贴板，不粘贴、不收起窗口",
+        "location": {
+          "startingColumn": 19,
+          "startingLine": 236
+        }
+      },
+      {
+        "comment": "",
+        "key": "粘贴并收起 (↵)",
+        "location": {
+          "startingColumn": 20,
+          "startingLine": 238
+        }
+      },
+      {
+        "comment": "",
+        "key": "写回系统剪贴板，并自动粘贴至活动窗口并收起",
+        "location": {
+          "startingColumn": 19,
+          "startingLine": 244
+        }
+      }
+    ]
+  },
+  "version": 1
+}

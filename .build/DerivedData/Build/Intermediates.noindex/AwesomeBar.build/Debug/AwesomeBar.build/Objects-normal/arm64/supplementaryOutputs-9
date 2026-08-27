@@ -1,0 +1,23 @@
+{
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Settings/SettingsView.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/SettingsView.swiftdeps"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Window/CustomGlassPanel.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/CustomGlassPanel.swiftdeps"
+  },
+  "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Window/FloatingPanelController.swift" : {
+    "const-values" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController.swiftconstvalues",
+    "dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController.d",
+    "diagnostics" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController.dia",
+    "object" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController.o",
+    "swift-dependencies" : "/Users/vincent/Desktop/AwesomeBar/.build/DerivedData/Build/Intermediates.noindex/AwesomeBar.build/Debug/AwesomeBar.build/Objects-normal/arm64/FloatingPanelController.swiftdeps"
+  }
+}

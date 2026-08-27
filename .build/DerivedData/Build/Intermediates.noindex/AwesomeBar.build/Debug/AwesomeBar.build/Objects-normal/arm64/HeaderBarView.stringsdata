@@ -1,0 +1,24 @@
+{
+  "source": "/Users/vincent/Desktop/AwesomeBar/AwesomeBar/Views/Main/HeaderBarView.swift",
+  "tables": {
+    "Localizable": [
+      {
+        "comment": "",
+        "key": "AwesomeBar",
+        "location": {
+          "startingColumn": 22,
+          "startingLine": 41
+        }
+      },
+      {
+        "comment": "",
+        "key": "AwesomeBar",
+        "location": {
+          "startingColumn": 26,
+          "startingLine": 52
+        }
+      }
+    ]
+  },
+  "version": 1
+}

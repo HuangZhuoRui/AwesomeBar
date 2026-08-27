@@ -1,0 +1,27 @@
+import Foundation
+import AppKit
+
+/// 应用程序生命周期与系统服务代理类
+public final class AppDelegate: NSObject, NSApplicationDelegate {
+    /// 应用启动完成回调
+    public func applicationDidFinishLaunching(_ notification: Notification) {
+        // 配置为 Accessory 模式（常驻顶部菜单栏与浮动面板，不占用 Dock 栏图标）
+        NSApp.setActivationPolicy(.accessory)
+        
+        // 初始化核心后台服务
+        MenuBarManager.shared.setup()
+        ClipboardMonitor.shared.startMonitoring()
+        GlobalHotkeyManager.shared.start()
+        
+        // 首次启动时轻度延迟自动展示浮动面板，便于用户直观体验
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
+            FloatingPanelController.shared.show()
+        }
+    }
+    
+    /// 应用即将退出回调
+    public func applicationWillTerminate(_ notification: Notification) {
+        ClipboardMonitor.shared.stopMonitoring()
+        GlobalHotkeyManager.shared.stop()
+    }
+}
