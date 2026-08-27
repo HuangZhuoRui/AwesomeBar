@@ -8,6 +8,11 @@ public final class AppDelegate: NSObject, NSApplicationDelegate {
         // 配置为 Accessory 模式（常驻顶部菜单栏与浮动面板，不占用 Dock 栏图标）
         NSApp.setActivationPolicy(.accessory)
         
+        // 显式加载并配置应用主图标（用于关于面板、系统通知与窗口标识）
+        if let appIcon = NSImage(named: "AppIcon") {
+            NSApplication.shared.applicationIconImage = appIcon
+        }
+        
         // 初始化核心后台服务
         MenuBarManager.shared.setup()
         ClipboardMonitor.shared.startMonitoring()
