@@ -3,8 +3,8 @@ import AppKit
 import SwiftUI
 import Combine
 
-/// 粘贴板模式专属独立浮动小窗口控制器（生命周期、置顶层级、位置记忆与平滑动画管理）
-public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
+/// 粘贴板模式专属独立浮动小窗口控制器（生命周期、置顶层级、位置记忆、⌘1-9 快捷键分发与平滑动画管理）
+public final class StickyNoteWindowController: NSObject, ObservableObject, NSWindowDelegate {
     /// 全局共享单例
     public static let shared = StickyNoteWindowController()
     
@@ -12,9 +12,15 @@ public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
     private var stickyPanel: CustomGlassPanel?
     /// Combine 响应式订阅集合
     private var cancellables = Set<AnyCancellable>()
+    /// 本地键盘事件监听器
+    private var localKeyDownMonitor: Any?
     
     /// 粘贴板浮窗当前是否处于可见状态
     @Published public var isVisible: Bool = false
+    /// 当前视口内 > 2/3 可见的条目与 ⌘1-9 快捷键序号映射表
+    @Published public var currentVisibleShortcutMap: [Int: ClipboardItem] = [:]
+    /// 最近一次被复制的条目 ID（用于驱动列表行触发「已复制」高亮动效）
+    @Published public var lastCopiedItemId: UUID? = nil
     
     private override init() {
         super.init()
@@ -40,6 +46,12 @@ public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
         panel.titleVisibility = .hidden
         panel.titlebarAppearsTransparent = true
         panel.delegate = self
+        
+        // 配置窗口级别前置键盘拦截器（支持 ⌘1-9 与 Esc）
+        panel.onKeyDownInterceptor = { [weak self] event in
+            guard let self = self else { return false }
+            return self.handleKeyDownEvent(event)
+        }
         
         let hostingView = NSHostingView(rootView: StickyNoteView(onClose: { [weak self] in
             self?.hide()
@@ -117,12 +129,14 @@ public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
         }
         
         isVisible = true
+        startLocalKeyMonitor()
     }
     
     /// 优雅缩放淡出隐藏粘贴板浮窗
     public func hide() {
         guard let panel = stickyPanel, isVisible else { return }
         
+        stopLocalKeyMonitor()
         saveStickyNotePosition()
         
         NSAnimationContext.runAnimationGroup({ context in
@@ -140,6 +154,68 @@ public final class StickyNoteWindowController: NSObject, NSWindowDelegate {
         guard let panel = stickyPanel else { return }
         AppSettings.shared.stickyNoteOriginX = panel.frame.origin.x
         AppSettings.shared.stickyNoteOriginY = panel.frame.origin.y
+    }
+    
+    // MARK: - 快捷键事件处理与分发
+    
+    /// 启动本地键盘快捷键监听
+    private func startLocalKeyMonitor() {
+        stopLocalKeyMonitor()
+        
+        localKeyDownMonitor = NSEvent.addLocalMonitorForEvents(matching: .keyDown) { [weak self] event in
+            guard let self = self, self.isVisible else { return event }
+            if self.handleKeyDownEvent(event) {
+                return nil // 已消费事件，阻断后续派发
+            }
+            return event
+        }
+    }
+    
+    /// 停止本地键盘快捷键监听
+    private func stopLocalKeyMonitor() {
+        if let monitor = localKeyDownMonitor {
+            NSEvent.removeMonitor(monitor)
+            localKeyDownMonitor = nil
+        }
+    }
+    
+    /// 统一按键事件判断与处理
+    private func handleKeyDownEvent(_ event: NSEvent) -> Bool {
+        // 1. Esc 快捷关闭
+        if event.keyCode == 53 {
+            self.hide()
+            return true
+        }
+        
+        // 2. Command + 1..9 快捷复制当前视口动态编号项
+        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
+        if flags.contains(.command),
+           let characters = event.charactersIgnoringModifiers,
+           let number = Int(characters),
+           (1...9).contains(number) {
+            return self.triggerShortcut(index: number)
+        }
+        
+        return false
+    }
+    
+    /// 触发指定序号的快捷复制
+    public func triggerShortcut(index: Int) -> Bool {
+        guard let targetItem = currentVisibleShortcutMap[index] else { return false }
+        triggerItemCopy(item: targetItem)
+        return true
+    }
+    
+    /// 执行条目复制与反馈
+    public func triggerItemCopy(item: ClipboardItem) {
+        PasteSimulator.shared.copyToClipboard(item: item)
+        
+        self.lastCopiedItemId = item.id
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
+            if self?.lastCopiedItemId == item.id {
+                self?.lastCopiedItemId = nil
+            }
+        }
     }
     
     // MARK: - NSWindowDelegate 委托

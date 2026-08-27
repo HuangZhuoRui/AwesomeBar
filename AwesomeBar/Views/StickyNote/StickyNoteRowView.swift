@@ -1,20 +1,35 @@
 import SwiftUI
 import AppKit
 
-/// 粘贴板模式下专属的紧凑型剪贴板历史卡片行组件（支持一键点击复制与已复制状态反馈）
+/// 粘贴板模式下专属的紧凑型剪贴板历史卡片行组件（支持一键点击复制、动态 ⌘1-9 快捷键显示与已复制状态反馈）
 public struct StickyNoteRowView: View {
     /// 当前呈现的剪贴板数据实体
     public let item: ClipboardItem
+    /// 动态分配的 ⌘1-9 快捷键序号（如果可见区域大于 2/3 则分配）
+    public let shortcutIndex: Int?
+    /// 是否由外部快捷键触发了已复制高亮
+    public let isCopiedExternal: Bool
     /// 点击复制触发的回调
     public let onCopy: () -> Void
     
     @State private var isHovered: Bool = false
-    @State private var isCopied: Bool = false
+    @State private var isCopiedInternal: Bool = false
     @Environment(\.colorScheme) private var colorScheme
     
-    public init(item: ClipboardItem, onCopy: @escaping () -> Void) {
+    public init(
+        item: ClipboardItem,
+        shortcutIndex: Int? = nil,
+        isCopiedExternal: Bool = false,
+        onCopy: @escaping () -> Void
+    ) {
         self.item = item
+        self.shortcutIndex = shortcutIndex
+        self.isCopiedExternal = isCopiedExternal
         self.onCopy = onCopy
+    }
+    
+    private var isCopied: Bool {
+        isCopiedInternal || isCopiedExternal
     }
     
     public var body: some View {
@@ -47,7 +62,7 @@ public struct StickyNoteRowView: View {
                 
                 Spacer(minLength: 4)
                 
-                // 3. 悬停提示或已复制微提示徽标
+                // 3. 右侧状态：已复制高亮 / 动态 ⌘1-9 快捷键序号 / 悬停复制提示
                 if isCopied {
                     HStack(spacing: 2) {
                         Image(systemName: "checkmark")
@@ -58,9 +73,17 @@ public struct StickyNoteRowView: View {
                     .foregroundColor(.green)
                     .padding(.horizontal, 6)
                     .padding(.vertical, 2)
-                    .background(Color.green.opacity(0.12))
+                    .background(Color.green.opacity(0.14))
                     .clipShape(Capsule())
-                    .transition(.scale.combined(with: .scale))
+                    .transition(.scale.combined(with: .opacity))
+                } else if let shortcut = shortcutIndex {
+                    Text("⌘\(shortcut)")
+                        .font(.system(size: 10, weight: .semibold, design: .monospaced))
+                        .foregroundColor(.secondary)
+                        .padding(.horizontal, 5)
+                        .padding(.vertical, 2)
+                        .background(colorScheme == .dark ? Color.white.opacity(0.09) : Color.black.opacity(0.06))
+                        .clipShape(RoundedRectangle(cornerRadius: 4, style: .continuous))
                 } else if isHovered {
                     Image(systemName: "doc.on.doc")
                         .font(.system(size: 10, weight: .medium))
@@ -80,7 +103,7 @@ public struct StickyNoteRowView: View {
                 self.isHovered = hovering
             }
         }
-        .help("点击立即复制到剪贴板")
+        .help(shortcutIndex != nil ? "点击或按 ⌘\(shortcutIndex!) 复制" : "点击立即复制到剪贴板")
     }
     
     // MARK: - 辅助子视图：前置图标或缩略图
@@ -164,13 +187,13 @@ public struct StickyNoteRowView: View {
     private func handleCopyAction() {
         onCopy()
         withAnimation(.spring(response: 0.25, dampingFraction: 0.75)) {
-            isCopied = true
+            isCopiedInternal = true
         }
         
         // 0.8 秒后恢复常规状态
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
             withAnimation(.easeOut(duration: 0.2)) {
-                self.isCopied = false
+                self.isCopiedInternal = false
             }
         }
     }
