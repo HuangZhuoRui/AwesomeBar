@@ -33,14 +33,14 @@ public struct StickyNoteView: View {
         self.onClose = onClose
     }
     
-    /// 当前是否处于边缘吸附只露小角收缩状态
+    /// 当前是否处于边缘吸附只露小角收缩形态（只有收缩贴边时才为 true；复制冒出或完全展开时为 false）
     private var isPeekingDocked: Bool {
-        return (controller.dockState == .dockedLeft || controller.dockState == .dockedRight) && !controller.isDockedExpanded
+        return (controller.dockState == .dockedLeft || controller.dockState == .dockedRight) && controller.isPeekingCollapsed
     }
     
     public var body: some View {
         ZStack {
-            // 主内容视图
+            // 完整主内容视图（包含顶部栏与全部剪贴板滚动条目）
             VStack(spacing: 0) {
                 // 1. 粘贴板顶部操作标题栏（支持拖拽、置顶与关闭）
                 headerBarView
@@ -59,10 +59,12 @@ public struct StickyNoteView: View {
                 }
             }
             .opacity(isPeekingDocked ? 0.0 : 1.0)
+            .animation(.easeInOut(duration: 0.15), value: isPeekingDocked)
             
-            // 边缘吸附露小角时的手柄视觉覆盖层
+            // 边缘吸附露小角时的手柄视觉覆盖层（仅在收缩贴边时展示）
             if isPeekingDocked {
                 peekingHandleOverlay
+                    .transition(.opacity)
             }
         }
         .frame(width: controller.panelWidth, height: controller.panelHeight)
@@ -126,7 +128,7 @@ public struct StickyNoteView: View {
                 }
             }
         }
-        .help("点击或按下快捷键即可完全展开粘贴板")
+        .help("点击展开或直接按住拖动小角拉回屏幕")
     }
     
     // MARK: - 辅助子视图：顶部操作标题栏

@@ -37,6 +37,8 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
     @Published public var isVisible: Bool = false
     /// 当前屏幕边缘吸附状态
     @Published public var dockState: DockState = .floating
+    /// 是否正处于吸附只露小角收缩形态（false 表示已滑出展开显示完整剪贴板列表内容）
+    @Published public var isPeekingCollapsed: Bool = false
     /// 在吸附状态下是否处于手动/快捷键完全展开状态
     @Published public var isDockedExpanded: Bool = false
     /// 当前视口内 > 2/3 可见的条目与 ⌘1-9 快捷键序号映射表
@@ -48,6 +50,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         super.init()
         if let savedDock = DockState(rawValue: AppSettings.shared.stickyNoteDockState) {
             self.dockState = savedDock
+            self.isPeekingCollapsed = (savedDock != .floating)
         }
         buildStickyPanel()
         bindSettingsObservers()
@@ -79,15 +82,14 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
             return self.handleKeyDownEvent(event)
         }
         
-        // 2. 配置拖拽开始监听：一旦被拖拽，立即解除吸附状态，随光标自由平移
+        // 2. 配置拖拽开始监听：一旦被拖拽，立即解除吸附状态，全量展示为正常浮窗跟随鼠标
         panel.onDragStarted = { [weak self] _ in
             guard let self = self else { return }
-            if self.dockState != .floating {
-                self.autoCollapseWorkItem?.cancel()
-                self.dockState = .floating
-                self.isDockedExpanded = false
-                AppSettings.shared.stickyNoteDockState = DockState.floating.rawValue
-            }
+            self.autoCollapseWorkItem?.cancel()
+            self.dockState = .floating
+            self.isPeekingCollapsed = false
+            self.isDockedExpanded = false
+            AppSettings.shared.stickyNoteDockState = DockState.floating.rawValue
         }
         
         // 3. 配置带物理运动学参数的拖拽释放监听（严格按加速度与速度判定甩动吸附）
@@ -154,6 +156,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         } else {
             // 未达到物理加速度阈值或常规慢速拖拽：保持自由悬浮，绝不误吸附！
             self.dockState = .floating
+            self.isPeekingCollapsed = false
             self.isDockedExpanded = false
             AppSettings.shared.stickyNoteDockState = DockState.floating.rawValue
             saveStickyNotePosition()
@@ -166,6 +169,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         let screenFrame = screen.visibleFrame
         
         self.dockState = side
+        self.isPeekingCollapsed = true
         self.isDockedExpanded = false
         AppSettings.shared.stickyNoteDockState = side.rawValue
         
@@ -188,7 +192,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         saveStickyNotePosition()
     }
     
-    // MARK: - 外部复制触发：冒出但不抢占焦点
+    // MARK: - 外部复制触发：冒出显示内容且不抢占焦点
     
     /// 外部应用触发了复制事件时的处理
     public func handleExternalItemCaptured() {
@@ -202,13 +206,16 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         }
     }
     
-    /// 平滑冒出且绝对不抢占输入焦点（不调用 makeKey，不调用 NSApp.activate）
+    /// 平滑冒出且绝对不抢占输入焦点（不调用 makeKey，不调用 NSApp.activate，完整呈现内容列表）
     public func popOutTemporarily(duration: Double = 3.2) {
         guard let panel = stickyPanel else { return }
         guard let screen = panel.screen ?? NSScreen.main ?? NSScreen.screens.first else { return }
         let screenFrame = screen.visibleFrame
         
         autoCollapseWorkItem?.cancel()
+        
+        // 关键状态切换：解除收缩状态，让完整剪贴板列表内容 100% 显式呈现！
+        self.isPeekingCollapsed = false
         
         let targetX: CGFloat
         if dockState == .dockedRight {
@@ -244,6 +251,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         let screenFrame = screen.visibleFrame
         
         autoCollapseWorkItem?.cancel()
+        self.isPeekingCollapsed = true
         self.isDockedExpanded = false
         
         let targetX: CGFloat
@@ -269,6 +277,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         let screenFrame = screen.visibleFrame
         
         autoCollapseWorkItem?.cancel()
+        self.isPeekingCollapsed = false
         self.isDockedExpanded = true
         
         let targetX: CGFloat
@@ -300,7 +309,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         
         // 核心交互：如果在吸附状态，按下唤起和收起快捷键在吸附与唤起完全展开状态流畅切换
         if dockState == .dockedLeft || dockState == .dockedRight {
-            if isDockedExpanded {
+            if isDockedExpanded || !isPeekingCollapsed {
                 collapseToDock()
             } else {
                 expandFromDock()
@@ -319,6 +328,9 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         if dockState == .dockedLeft || dockState == .dockedRight {
             expandFromDock()
         } else {
+            self.isPeekingCollapsed = false
+            self.isDockedExpanded = false
+            
             // 自由浮动位置恢复
             var positionRestored = false
             if let savedX = AppSettings.shared.stickyNoteOriginX,
