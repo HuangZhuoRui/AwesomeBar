@@ -19,16 +19,67 @@ public struct SettingsView: View {
             VStack(alignment: .leading, spacing: 18) {
                 // 1. 快捷键与唤起配置
                 settingsSectionContainer(title: "唤起与快捷键", icon: "keyboard") {
-                    VStack(alignment: .leading, spacing: 10) {
-                        Picker("唤起方式", selection: $applicationSettings.hotkeyMode) {
-                            ForEach(HotkeyTriggerMode.allCases) { mode in
-                                Text(mode.title).tag(mode)
+                    VStack(alignment: .leading, spacing: 14) {
+                        // 1.1 主窗口本体唤起快捷键
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("本体唤起快捷键（主面板）")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(.primary)
+                                Text("用于呼出主剪贴板面板，搜索与全功能浏览")
+                                    .font(.system(size: 10.5))
+                                    .foregroundColor(.secondary)
                             }
+                            
+                            Spacer()
+                            
+                            HotkeyRecorderView(
+                                binding: $applicationSettings.mainAppHotkey,
+                                presets: [
+                                    .singleOption,
+                                    .doubleOption,
+                                    .optionSpace,
+                                    .optionV,
+                                    .cmdShiftV,
+                                    .none
+                                ]
+                            )
                         }
-                        .pickerStyle(.radioGroup)
                         
-                        Text("提示：推荐使用「按一下左 Option」，灵敏快速；若在某些 IDE 输入特殊符号需长按 Option，可选择「连按两下左 Option」。")
-                            .font(.system(size: 11))
+                        Divider()
+                            .opacity(0.3)
+                        
+                        // 1.2 快捷粘贴板浮窗唤起快捷键
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("快捷粘贴板唤起快捷键（小浮窗）")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(.primary)
+                                Text("用于呼出轻量独立小悬浮窗，支持 ⌘1-9 直选复制")
+                                    .font(.system(size: 10.5))
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            HotkeyRecorderView(
+                                binding: $applicationSettings.stickyNoteHotkey,
+                                presets: [
+                                    .optionSpace,
+                                    .doubleOption,
+                                    .optionB,
+                                    .cmdShiftB,
+                                    .singleOption,
+                                    .none
+                                ]
+                            )
+                        }
+                        
+                        Divider()
+                            .opacity(0.3)
+                        
+                        Text("💡 提示：点击按键胶囊可直接在键盘上按下任意组合键进行自定义录制；点击右侧箭头可快速选用推荐预设。")
+                            .font(.system(size: 10.5))
                             .foregroundColor(.secondary)
                             .lineSpacing(2)
                     }

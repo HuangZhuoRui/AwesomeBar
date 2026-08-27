@@ -1,7 +1,7 @@
 import Foundation
 import AppKit
 
-/// 全局快捷键与物理左 Option 键（KeyCode 58）事件监听器
+/// 全局快捷键与修饰键事件监听管理器（支持主面板与快捷粘贴板独立自定义快捷键分发）
 public final class GlobalHotkeyManager {
     /// 全局共享单例
     public static let shared = GlobalHotkeyManager()
@@ -43,7 +43,7 @@ public final class GlobalHotkeyManager {
             return event
         }
         
-        // 3. 监听按键按下事件，用于判断是否是在输入组合快捷键（如 Option+C / Option+V）
+        // 3. 监听普通组合键按下事件
         globalKeyMonitor = NSEvent.addGlobalMonitorForEvents(matching: .keyDown) { [weak self] event in
             self?.handleKeyDown(event: event)
         }
@@ -62,22 +62,46 @@ public final class GlobalHotkeyManager {
         if let monitor = localKeyMonitor { NSEvent.removeMonitor(monitor); localKeyMonitor = nil }
     }
     
-    /// 处理普通按键按下事件
+    /// 处理普通组合键按下事件
     private func handleKeyDown(event: NSEvent) {
-        // 在 Option 按下期间触发了其他字符键，标记为组合键打断
         keyComboInterrupted = true
         
-        // 如果用户选择了 Option + V 快捷键模式
-        if AppSettings.shared.hotkeyMode == .optionV {
-            if event.keyCode == 9 && event.modifierFlags.contains(.option) {
-                DispatchQueue.main.async {
-                    FloatingPanelController.shared.toggle()
-                }
+        let settings = AppSettings.shared
+        
+        // 1. 检测是否命中主面板本体自定义快捷键
+        if matchesBinding(event: event, binding: settings.mainAppHotkey) {
+            DispatchQueue.main.async {
+                FloatingPanelController.shared.toggle()
             }
+            return
+        }
+        
+        // 2. 检测是否命中快捷粘贴板自定义快捷键
+        if matchesBinding(event: event, binding: settings.stickyNoteHotkey) {
+            DispatchQueue.main.async {
+                StickyNoteWindowController.shared.toggle()
+            }
+            return
         }
     }
     
-    /// 处理修饰键状态变化事件
+    /// 校验事件是否精确匹配某个 HotkeyBinding 组合键
+    private func matchesBinding(event: NSEvent, binding: HotkeyBinding) -> Bool {
+        guard binding.kind == .keyCombination,
+              let targetKeyCode = binding.keyCode,
+              let targetModifierRaw = binding.modifierRawValue else {
+            return false
+        }
+        
+        guard event.keyCode == targetKeyCode else { return false }
+        
+        let eventModifiers = event.modifierFlags.intersection([.command, .option, .shift, .control])
+        let targetModifiers = NSEvent.ModifierFlags(rawValue: targetModifierRaw).intersection([.command, .option, .shift, .control])
+        
+        return eventModifiers == targetModifiers
+    }
+    
+    /// 处理修饰键状态变化事件（物理左 Option 键等特殊触发）
     private func handleFlagsChanged(event: NSEvent) {
         // 仅处理物理左侧 Option 键 (KeyCode: 58)
         guard event.keyCode == leftOptionKeyCode else { return }
@@ -99,24 +123,31 @@ public final class GlobalHotkeyManager {
             // 如果按压时间过长（> 0.45s）或在此期间按下了其他键，则判定为非呼出意图，予以忽略
             guard !keyComboInterrupted && holdDuration < 0.45 else { return }
             
-            switch AppSettings.shared.hotkeyMode {
-            case .singleOption:
-                DispatchQueue.main.async {
-                    FloatingPanelController.shared.toggle()
-                }
+            let settings = AppSettings.shared
+            
+            // 判定是否触发双击
+            if let previousTap = lastTapTimestamp, currentTime.timeIntervalSince(previousTap) < 0.35 {
+                lastTapTimestamp = nil
                 
-            case .doubleOption:
-                if let previousTap = lastTapTimestamp, currentTime.timeIntervalSince(previousTap) < 0.35 {
-                    lastTapTimestamp = nil
-                    DispatchQueue.main.async {
+                if settings.mainAppHotkey.kind == .doubleOption {
+                    DispatchQueue.main.async { FloatingPanelController.shared.toggle() }
+                } else if settings.stickyNoteHotkey.kind == .doubleOption {
+                    DispatchQueue.main.async { StickyNoteWindowController.shared.toggle() }
+                }
+            } else {
+                lastTapTimestamp = currentTime
+                
+                // 延迟微小片刻等待可能存在的连击判定
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.36) { [weak self] in
+                    guard let self = self, self.lastTapTimestamp == currentTime else { return }
+                    self.lastTapTimestamp = nil
+                    
+                    if settings.mainAppHotkey.kind == .singleOption {
                         FloatingPanelController.shared.toggle()
+                    } else if settings.stickyNoteHotkey.kind == .singleOption {
+                        StickyNoteWindowController.shared.toggle()
                     }
-                } else {
-                    lastTapTimestamp = currentTime
                 }
-                
-            case .optionV:
-                break
             }
         }
     }

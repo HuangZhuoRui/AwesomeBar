@@ -26,6 +26,8 @@ public final class AppSettings: ObservableObject {
         static let isStickyNotePinned = "AwesomeBar.isStickyNotePinned"
         static let stickyNoteOriginX = "AwesomeBar.stickyNoteOriginX"
         static let stickyNoteOriginY = "AwesomeBar.stickyNoteOriginY"
+        static let mainAppHotkey = "AwesomeBar.mainAppHotkey"
+        static let stickyNoteHotkey = "AwesomeBar.stickyNoteHotkey"
     }
     
     /// 是否开启主窗口置顶钉在最上层
@@ -35,7 +37,25 @@ public final class AppSettings: ObservableObject {
         }
     }
     
-    /// 全局快捷唤起触发模式
+    /// 主窗口本体自定义唤起快捷键
+    @Published public var mainAppHotkey: HotkeyBinding {
+        didSet {
+            if let data = try? JSONEncoder().encode(mainAppHotkey) {
+                userDefaults.set(data, forKey: StorageKeys.mainAppHotkey)
+            }
+        }
+    }
+    
+    /// 快捷粘贴板浮窗自定义唤起快捷键
+    @Published public var stickyNoteHotkey: HotkeyBinding {
+        didSet {
+            if let data = try? JSONEncoder().encode(stickyNoteHotkey) {
+                userDefaults.set(data, forKey: StorageKeys.stickyNoteHotkey)
+            }
+        }
+    }
+    
+    /// 全局快捷唤起触发模式（兼容保留）
     @Published public var hotkeyMode: HotkeyTriggerMode {
         didSet {
             userDefaults.set(hotkeyMode.rawValue, forKey: StorageKeys.hotkeyMode)
@@ -113,14 +133,14 @@ public final class AppSettings: ObservableObject {
         }
     }
     
-    /// 便签模式浮窗是否置顶钉在最上层
+    /// 便签/粘贴板模式浮窗是否置顶钉在最上层
     @Published public var isStickyNotePinned: Bool {
         didSet {
             userDefaults.set(isStickyNotePinned, forKey: StorageKeys.isStickyNotePinned)
         }
     }
     
-    /// 便签模式浮窗上次停留的 X 轴坐标
+    /// 便签/粘贴板模式浮窗上次停留的 X 轴坐标
     @Published public var stickyNoteOriginX: Double? {
         didSet {
             if let x = stickyNoteOriginX {
@@ -131,7 +151,7 @@ public final class AppSettings: ObservableObject {
         }
     }
     
-    /// 便签模式浮窗上次停留的 Y 轴坐标
+    /// 便签/粘贴板模式浮窗上次停留的 Y 轴坐标
     @Published public var stickyNoteOriginY: Double? {
         didSet {
             if let y = stickyNoteOriginY {
@@ -151,6 +171,22 @@ public final class AppSettings: ObservableObject {
             self.hotkeyMode = mode
         } else {
             self.hotkeyMode = .singleOption
+        }
+        
+        // 1. 加载主窗口本体快捷键绑定（默认按一下左 Option）
+        if let data = userDefaults.data(forKey: StorageKeys.mainAppHotkey),
+           let binding = try? JSONDecoder().decode(HotkeyBinding.self, from: data) {
+            self.mainAppHotkey = binding
+        } else {
+            self.mainAppHotkey = .singleOption
+        }
+        
+        // 2. 加载快捷粘贴板浮窗快捷键绑定（默认 Option + Space）
+        if let data = userDefaults.data(forKey: StorageKeys.stickyNoteHotkey),
+           let binding = try? JSONDecoder().decode(HotkeyBinding.self, from: data) {
+            self.stickyNoteHotkey = binding
+        } else {
+            self.stickyNoteHotkey = .optionSpace
         }
         
         self.autoPasteOnSelect = userDefaults.object(forKey: StorageKeys.autoPasteOnSelect) == nil ? true : userDefaults.bool(forKey: StorageKeys.autoPasteOnSelect)
