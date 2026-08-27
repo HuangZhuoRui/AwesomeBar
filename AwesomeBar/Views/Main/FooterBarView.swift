@@ -23,8 +23,9 @@ public struct FooterBarView: View {
                 ShortcutHintView(keyText: "←→", labelText: "分类")
                 ShortcutHintView(keyText: "↑↓", labelText: "浏览")
                 ShortcutHintView(keyText: "Space", labelText: "预览")
-                ShortcutHintView(keyText: "↵", labelText: "粘贴")
-                ShortcutHintView(keyText: "⌘1-9", labelText: "直选")
+                if AppSettings.shared.quickSelectModifier != .none {
+                    ShortcutHintView(keyText: "\(AppSettings.shared.quickSelectModifier.symbolPrefix)1-9", labelText: "直选")
+                }
                 ShortcutHintView(keyText: "Esc", labelText: "关闭")
             }
         }

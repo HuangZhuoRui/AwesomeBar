@@ -29,12 +29,20 @@ public final class AppSettings: ObservableObject {
         static let stickyNoteDockState = "AwesomeBar.stickyNoteDockState"
         static let mainAppHotkey = "AwesomeBar.mainAppHotkey"
         static let stickyNoteHotkey = "AwesomeBar.stickyNoteHotkey"
+        static let quickSelectModifier = "AwesomeBar.quickSelectModifier"
     }
     
     /// 是否开启主窗口置顶钉在最上层
     @Published public var isPinnedToTop: Bool {
         didSet {
             userDefaults.set(isPinnedToTop, forKey: StorageKeys.isPinnedToTop)
+        }
+    }
+    
+    /// 历史记录数字直选快捷键修饰键模式（默认 Command+Shift）
+    @Published public var quickSelectModifier: QuickSelectModifier {
+        didSet {
+            userDefaults.set(quickSelectModifier.rawValue, forKey: StorageKeys.quickSelectModifier)
         }
     }
     
@@ -233,5 +241,12 @@ public final class AppSettings: ObservableObject {
         }
         
         self.stickyNoteDockState = userDefaults.string(forKey: StorageKeys.stickyNoteDockState) ?? "floating"
+        
+        if let raw = userDefaults.string(forKey: StorageKeys.quickSelectModifier),
+           let modifier = QuickSelectModifier(rawValue: raw) {
+            self.quickSelectModifier = modifier
+        } else {
+            self.quickSelectModifier = .commandShift
+        }
     }
 }

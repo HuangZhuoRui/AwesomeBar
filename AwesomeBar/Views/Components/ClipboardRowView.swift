@@ -147,8 +147,8 @@ public struct ClipboardRowView: View {
                         .help("已收藏，点击取消收藏")
                     }
                     
-                    if index < 9 {
-                        Text("⌘\(index + 1)")
+                    if index < 9, let badge = AppSettings.shared.quickSelectModifier.badgeText(for: index + 1) {
+                        Text(badge)
                             .font(.system(size: 10, weight: .semibold, design: .monospaced))
                             .foregroundColor(.secondary.opacity(0.7))
                             .padding(.horizontal, 6)

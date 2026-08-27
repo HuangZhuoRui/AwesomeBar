@@ -428,9 +428,10 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
             return true
         }
         
-        // 2. Command + 1..9 快捷复制当前视口动态编号项
-        let flags = event.modifierFlags.intersection(.deviceIndependentFlagsMask)
-        if flags.contains(.command),
+        // 2. 动态数字直选快捷键（支持 ⇧⌘1-9、⌘1-9、⌥1-9 等自定义修饰键）
+        let modifier = AppSettings.shared.quickSelectModifier
+        if modifier != .none,
+           modifier.matches(flags: event.modifierFlags),
            let characters = event.charactersIgnoringModifiers,
            let number = Int(characters),
            (1...9).contains(number) {

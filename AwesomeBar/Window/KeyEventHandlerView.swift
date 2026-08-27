@@ -81,8 +81,9 @@ public struct KeyEventHandlerView: NSViewRepresentable {
                 }
             case 53: // Esc 退出键
                 onEscape?()
-            case 18...21, 23, 22, 26, 28, 25: // ⌘+1 至 ⌘+9 直选快捷键
-                if event.modifierFlags.contains(.command) {
+            case 18...21, 23, 22, 26, 28, 25: // 动态数字直选快捷键 (1-9)
+                let modifier = AppSettings.shared.quickSelectModifier
+                if modifier != .none && modifier.matches(flags: event.modifierFlags) {
                     let keyMapping: [UInt16: Int] = [
                         18: 1, 19: 2, 20: 3, 21: 4, 23: 5,
                         22: 6, 26: 7, 28: 8, 25: 9

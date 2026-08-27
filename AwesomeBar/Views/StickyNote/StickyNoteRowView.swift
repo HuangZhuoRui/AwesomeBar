@@ -76,8 +76,9 @@ public struct StickyNoteRowView: View {
                     .background(Color.green.opacity(0.14))
                     .clipShape(Capsule())
                     .transition(.scale.combined(with: .opacity))
-                } else if let shortcut = shortcutIndex {
-                    Text("⌘\(shortcut)")
+                } else if let shortcut = shortcutIndex,
+                          let badgeText = AppSettings.shared.quickSelectModifier.badgeText(for: shortcut) {
+                    Text(badgeText)
                         .font(.system(size: 10, weight: .semibold, design: .monospaced))
                         .foregroundColor(.secondary)
                         .padding(.horizontal, 5)
@@ -103,7 +104,7 @@ public struct StickyNoteRowView: View {
                 self.isHovered = hovering
             }
         }
-        .help(shortcutIndex != nil ? "点击或按 ⌘\(shortcutIndex!) 复制" : "点击立即复制到剪贴板")
+        .help(shortcutIndex != nil && AppSettings.shared.quickSelectModifier != .none ? "点击或按 \(AppSettings.shared.quickSelectModifier.badgeText(for: shortcutIndex!) ?? "") 复制" : "点击立即复制到剪贴板")
     }
     
     // MARK: - 辅助子视图：前置图标或缩略图

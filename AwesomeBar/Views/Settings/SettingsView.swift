@@ -78,6 +78,31 @@ public struct SettingsView: View {
                         Divider()
                             .opacity(0.3)
                         
+                        // 1.3 历史记录数字直选快捷键修饰键
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("条目数字直选修饰键（1~9）")
+                                    .font(.system(size: 12, weight: .medium))
+                                    .foregroundColor(.primary)
+                                Text("在主面板或小粘贴板中按下 [修饰键]+数字 快速复制前 1~9 项")
+                                    .font(.system(size: 10.5))
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            Picker("", selection: $applicationSettings.quickSelectModifier) {
+                                ForEach(QuickSelectModifier.allCases) { modifier in
+                                    Text(modifier.title).tag(modifier)
+                                }
+                            }
+                            .pickerStyle(.menu)
+                            .frame(width: 230)
+                        }
+                        
+                        Divider()
+                            .opacity(0.3)
+                        
                         Text("💡 提示：点击按键胶囊可直接在键盘上按下任意组合键进行自定义录制；点击右侧箭头可快速选用推荐预设。")
                             .font(.system(size: 10.5))
                             .foregroundColor(.secondary)

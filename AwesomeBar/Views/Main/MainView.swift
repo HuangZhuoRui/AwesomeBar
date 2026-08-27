@@ -354,9 +354,10 @@ public struct MainView: View {
             }
             return false
             
-        // 9. ⌘1 ~ ⌘9 直选快捷键
+        // 9. 动态数字直选快捷键 (1~9)
         case 18...21, 23, 22, 26, 28, 25:
-            if event.modifierFlags.contains(.command) {
+            let modifier = applicationSettings.quickSelectModifier
+            if modifier != .none && modifier.matches(flags: event.modifierFlags) {
                 let keyMapping: [UInt16: Int] = [
                     18: 1, 19: 2, 20: 3, 21: 4, 23: 5,
                     22: 6, 26: 7, 28: 8, 25: 9
