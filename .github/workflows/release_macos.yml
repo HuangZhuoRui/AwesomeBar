@@ -1,0 +1,118 @@
+name: Release macOS
+
+on:
+  push:
+    branches:
+      - main
+      - master
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    runs-on: macos-15
+    env:
+      DEVELOPER_DIR: /Applications/Xcode.app/Contents/Developer
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if Version Changed
+        id: check_version
+        run: |
+          RAW_VERSION=$(grep 'MARKETING_VERSION = ' AwesomeBar.xcodeproj/project.pbxproj | head -n 1 | sed 's/.*MARKETING_VERSION = \(.*\);/\1/')
+          VERSION=$(echo "$RAW_VERSION" | tr -d ' ' | tr -d '"' | tr -d ';')
+          echo "App Version: $VERSION (Raw: $RAW_VERSION)"
+
+          TAG_NAME="v$VERSION"
+
+          if git ls-remote --tags origin | grep -q "refs/tags/$TAG_NAME"; then
+            echo "Tag $TAG_NAME already exists, version has not changed. Skipping build."
+            echo "changed=false" >> $GITHUB_OUTPUT
+            exit 0
+          fi
+
+          echo "New version detected: $TAG_NAME"
+          echo "changed=true" >> $GITHUB_OUTPUT
+          echo "tag=$TAG_NAME" >> $GITHUB_OUTPUT
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Generate Changelog
+        if: steps.check_version.outputs.changed == 'true'
+        id: changelog
+        run: |
+          PREV_TAG=$(git describe --tags --abbrev=0 2>/dev/null || echo "")
+
+          if [ -z "$PREV_TAG" ]; then
+            LOGS=$(git log --no-merges --pretty=format:"- %s" | grep -v -i -E '^- *(tmp:|tmp：|tmp |temp:|temp )' || echo "")
+          else
+            LOGS=$(git log $PREV_TAG..HEAD --no-merges --pretty=format:"- %s" | grep -v -i -E '^- *(tmp:|tmp：|tmp |temp:|temp )' || echo "")
+          fi
+
+          echo "### AwesomeBar ${{ steps.check_version.outputs.tag }} 更新内容" > changelog.txt
+          echo "" >> changelog.txt
+          echo "$LOGS" >> changelog.txt
+          cat changelog.txt
+
+      - name: Build macOS Release App
+        if: steps.check_version.outputs.changed == 'true'
+        run: |
+          VERSION="${{ steps.check_version.outputs.version }}"
+          mkdir -p build/dist
+
+          echo "=== 正在执行 xcodebuild 编译 Release 产物 ==="
+          xcodebuild -project AwesomeBar.xcodeproj \
+            -scheme AwesomeBar \
+            -configuration Release \
+            -destination "platform=macOS" \
+            -derivedDataPath build/DerivedData \
+            CODE_SIGN_IDENTITY="-" \
+            CODE_SIGNING_REQUIRED=NO \
+            CODE_SIGNING_ALLOWED=NO \
+            build
+
+          APP_PATH="build/DerivedData/Build/Products/Release/AwesomeBar.app"
+          if [ ! -d "$APP_PATH" ]; then
+            # 兼容 Debug 目录回退检索
+            APP_PATH=$(find build/DerivedData -name "AwesomeBar.app" -type d | head -n 1)
+          fi
+
+          echo "App Path: $APP_PATH"
+
+          # 1. 打包 Zip 格式产物
+          ZIP_NAME="AwesomeBar $VERSION.zip"
+          cd "$(dirname "$APP_PATH")"
+          zip -r -y -q "$GITHUB_WORKSPACE/build/dist/$ZIP_NAME" "AwesomeBar.app"
+          cd "$GITHUB_WORKSPACE"
+
+          # 2. 打包 DMG 格式产物
+          DMG_NAME="AwesomeBar $VERSION.dmg"
+          hdiutil create -volname "AwesomeBar $VERSION" \
+            -srcfolder "$APP_PATH" \
+            -ov -format UDZO \
+            "build/dist/$DMG_NAME"
+
+          echo "=== 检查生成的发布产物 ==="
+          ls -lh build/dist/
+
+      - name: Tag Repository
+        if: steps.check_version.outputs.changed == 'true'
+        run: |
+          git config --global user.name "github-actions[bot]"
+          git config --global user.email "github-actions[bot]@users.noreply.github.com"
+          git tag ${{ steps.check_version.outputs.tag }}
+          git push origin ${{ steps.check_version.outputs.tag }}
+
+      - name: Publish GitHub Release
+        if: steps.check_version.outputs.changed == 'true'
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ steps.check_version.outputs.tag }}
+          name: AwesomeBar ${{ steps.check_version.outputs.tag }}
+          body_path: changelog.txt
+          files: |
+            build/dist/AwesomeBar *.dmg
+            build/dist/AwesomeBar *.zip

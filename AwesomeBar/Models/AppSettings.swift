@@ -30,6 +30,14 @@ public final class AppSettings: ObservableObject {
         static let mainAppHotkey = "AwesomeBar.mainAppHotkey"
         static let stickyNoteHotkey = "AwesomeBar.stickyNoteHotkey"
         static let quickSelectModifier = "AwesomeBar.quickSelectModifier"
+        static let automaticallyCheckForUpdates = "AwesomeBar.automaticallyCheckForUpdates"
+    }
+    
+    /// 是否在启动时自动检查更新
+    @Published public var automaticallyCheckForUpdates: Bool {
+        didSet {
+            userDefaults.set(automaticallyCheckForUpdates, forKey: StorageKeys.automaticallyCheckForUpdates)
+        }
     }
     
     /// 是否开启主窗口置顶钉在最上层
@@ -207,6 +215,7 @@ public final class AppSettings: ObservableObject {
         
         self.autoPasteOnSelect = userDefaults.object(forKey: StorageKeys.autoPasteOnSelect) == nil ? true : userDefaults.bool(forKey: StorageKeys.autoPasteOnSelect)
         self.playSoundEffects = userDefaults.object(forKey: StorageKeys.playSoundEffects) == nil ? true : userDefaults.bool(forKey: StorageKeys.playSoundEffects)
+        self.automaticallyCheckForUpdates = userDefaults.object(forKey: StorageKeys.automaticallyCheckForUpdates) == nil ? true : userDefaults.bool(forKey: StorageKeys.automaticallyCheckForUpdates)
         self.maxHistoryCount = userDefaults.integer(forKey: StorageKeys.maxHistoryCount) == 0 ? 500 : userDefaults.integer(forKey: StorageKeys.maxHistoryCount)
         self.startAtLogin = userDefaults.bool(forKey: StorageKeys.startAtLogin)
         self.showMenuBarIcon = userDefaults.object(forKey: StorageKeys.showMenuBarIcon) == nil ? true : userDefaults.bool(forKey: StorageKeys.showMenuBarIcon)

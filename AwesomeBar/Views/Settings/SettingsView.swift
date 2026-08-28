@@ -6,10 +6,15 @@ public struct SettingsView: View {
     @ObservedObject private var applicationSettings = AppSettings.shared
     /// 绑定的剪贴板数据流中心
     @ObservedObject private var store = ClipboardStore.shared
+    /// 绑定的在线更新服务单例
+    @ObservedObject private var updater = AppUpdaterService.shared
+    
     /// 是否弹出清理普通历史确认警告
     @State private var isShowingClearConfirmAlert: Bool = false
     /// 是否弹出全部清空确认警告
     @State private var isShowingClearAllConfirmAlert: Bool = false
+    /// 是否展示更新详情弹窗
+    @State private var isShowingUpdateSheet: Bool = false
     @Environment(\.colorScheme) private var colorScheme
     
     public init() {}
@@ -201,21 +206,102 @@ public struct SettingsView: View {
                     }
                 }
                 
-                // 4. 关于与版本
-                settingsSectionContainer(title: "关于 AwesomeBar", icon: "info.circle") {
-                    VStack(alignment: .leading, spacing: 6) {
-                        Text("AwesomeBar 原生 macOS 灵动剪贴板")
-                            .font(.system(size: 12.5, weight: .semibold))
-                        Text("纯 Swift 原生开发 • SQLite 本地持久化 • 零冗余原路径直通存储 • Apple 液态玻璃纯色极简美学")
-                            .font(.system(size: 11))
-                            .foregroundColor(.secondary)
-                            .lineSpacing(2)
+                // 4. 版本与在线更新
+                settingsSectionContainer(title: "版本与在线更新", icon: "arrow.triangle.2.circlepath.circle") {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                HStack(spacing: 6) {
+                                    Text("AwesomeBar")
+                                        .font(.system(size: 12.5, weight: .semibold))
+                                    Text("v\(updater.currentAppVersion) (Build \(updater.currentAppBuild))")
+                                        .font(.system(size: 11, weight: .medium, design: .monospaced))
+                                        .foregroundColor(.secondary)
+                                }
+                                Text("纯 Swift 原生开发 • 120Hz ProMotion • 纯本地 SQLite 安全存储")
+                                    .font(.system(size: 10.5))
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            switch updater.checkState {
+                            case .checking:
+                                HStack(spacing: 6) {
+                                    ProgressView()
+                                        .controlSize(.small)
+                                    Text("检查中...")
+                                        .font(.system(size: 11))
+                                        .foregroundColor(.secondary)
+                                }
+                            case .hasUpdate(let release, _, _):
+                                Button(action: {
+                                    isShowingUpdateSheet = true
+                                }) {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "sparkles")
+                                        Text("发现新版本 \(release.tagName)")
+                                    }
+                                    .font(.system(size: 11, weight: .medium))
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .controlSize(.small)
+                            case .alreadyLatest:
+                                HStack(spacing: 4) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.green)
+                                    Text("已是最新版本")
+                                        .font(.system(size: 11, weight: .medium))
+                                        .foregroundColor(.secondary)
+                                }
+                            case .error(let msg):
+                                HStack(spacing: 4) {
+                                    Text(msg)
+                                        .font(.system(size: 10.5))
+                                        .foregroundColor(.red)
+                                    Button("重试") {
+                                        updater.checkForUpdates()
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .controlSize(.mini)
+                                }
+                            case .idle:
+                                Button("检查更新") {
+                                    updater.checkForUpdates()
+                                }
+                                .buttonStyle(.bordered)
+                                .controlSize(.small)
+                            }
+                        }
+                        
+                        Divider()
+                            .opacity(0.3)
+                        
+                        Toggle("启动时自动检查更新", isOn: $applicationSettings.automaticallyCheckForUpdates)
+                            .font(.system(size: 11.5))
                     }
                 }
             }
             .padding(18)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .sheet(isPresented: $isShowingUpdateSheet) {
+            if case .hasUpdate(let release, let current, let acceleratedUrl) = updater.checkState {
+                UpdateSheetView(
+                    release: release,
+                    currentVersion: current,
+                    acceleratedUrl: acceleratedUrl,
+                    onDismiss: {
+                        isShowingUpdateSheet = false
+                    }
+                )
+            }
+        }
+        .onChange(of: updater.checkState) { newState in
+            if case .hasUpdate = newState {
+                isShowingUpdateSheet = true
+            }
+        }
         .alert("确定清除普通历史记录吗？", isPresented: $isShowingClearConfirmAlert) {
             Button("取消", role: .cancel) {}
             Button("确定清除", role: .destructive) {

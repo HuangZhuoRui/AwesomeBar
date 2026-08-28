@@ -34,6 +34,13 @@ public final class AppDelegate: NSObject, NSApplicationDelegate {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             FloatingPanelController.shared.show()
         }
+        
+        // 启动后静默检查更新
+        if AppSettings.shared.automaticallyCheckForUpdates {
+            DispatchQueue.main.asyncAfter(deadline: .now() + 3.0) {
+                AppUpdaterService.shared.checkForUpdates(isUserInitiated: false)
+            }
+        }
     }
     
     /// 应用即将退出回调
