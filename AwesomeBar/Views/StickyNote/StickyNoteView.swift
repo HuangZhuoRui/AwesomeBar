@@ -68,7 +68,7 @@ public struct StickyNoteView: View {
         }
         .frame(
             width: isPeekingDocked ? controller.peekWidth : controller.panelWidth,
-            height: controller.panelHeight
+            height: isPeekingDocked ? controller.peekHeight : controller.panelHeight
         )
         .background(LiquidGlassBackground(cornerRadius: isPeekingDocked ? 12 : 20))
         .clipShape(RoundedRectangle(cornerRadius: isPeekingDocked ? 12 : 20, style: .continuous))
@@ -77,21 +77,20 @@ public struct StickyNoteView: View {
     // MARK: - 辅助子视图：边缘吸附手柄
     
     private var peekingHandleOverlay: some View {
-        VStack(spacing: 10) {
+        VStack(spacing: 6) {
             Spacer()
             
             Image(systemName: controller.dockState == .dockedRight ? "chevron.left" : "chevron.right")
-                .font(.system(size: 10, weight: .bold))
+                .font(.system(size: 9, weight: .bold))
                 .foregroundColor(.primary.opacity(isHandleHovered ? 1.0 : 0.6))
             
             Image(systemName: "doc.on.clipboard")
-                .font(.system(size: 12, weight: .semibold))
+                .font(.system(size: 11, weight: .semibold))
                 .foregroundColor(.primary.opacity(isHandleHovered ? 1.0 : 0.7))
             
             Spacer()
         }
-        .frame(width: controller.peekWidth)
-        .frame(maxHeight: .infinity)
+        .frame(width: controller.peekWidth, height: controller.peekHeight)
         .background(Color.primary.opacity(isHandleHovered ? 0.08 : 0.02))
         .contentShape(Rectangle())
         .onTapGesture {

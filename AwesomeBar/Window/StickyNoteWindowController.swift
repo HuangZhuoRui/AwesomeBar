@@ -3,7 +3,7 @@ import AppKit
 import SwiftUI
 import Combine
 
-/// 粘贴板模式专属独立浮动小窗口控制器（生命周期、物理运动学加速度边缘甩动吸附、动态无溢出物理外框收缩、拖拽解除吸附、复制冒出不抢焦点、置顶层级、⌘1-9 快捷键分发与平滑动画管理）
+/// 粘贴板模式专属独立浮动小窗口控制器（生命周期、物理运动学加速度边缘甩动吸附、迷你胶囊提手动态几何收缩、拖拽解除吸附、复制冒出不抢焦点、置顶层级、⌘1-9 快捷键分发与平滑动画管理）
 public final class StickyNoteWindowController: NSObject, ObservableObject, NSWindowDelegate {
     /// 全局共享单例
     public static let shared = StickyNoteWindowController()
@@ -12,9 +12,9 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
     public enum DockState: String, Codable {
         /// 自由浮动状态
         case floating = "floating"
-        /// 吸附在屏幕左边缘（仅露小角）
+        /// 吸附在屏幕左边缘（仅露精巧小角）
         case dockedLeft = "dockedLeft"
-        /// 吸附在屏幕右边缘（仅露小角）
+        /// 吸附在屏幕右边缘（仅露精巧小角）
         case dockedRight = "dockedRight"
     }
     
@@ -30,8 +30,10 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
     /// 浮窗展开全量尺寸常量
     public let panelWidth: CGFloat = 270.0
     public let panelHeight: CGFloat = 390.0
-    /// 吸附边缘时露出的边角手柄宽度（严格适配真实物理窗口外框，杜绝屏幕外溢出大白块）
-    public let peekWidth: CGFloat = 28.0
+    
+    /// 吸附边缘时露出的精巧迷你胶囊提手尺寸（小巧精致、0 屏幕外溢出）
+    public let peekWidth: CGFloat = 24.0
+    public let peekHeight: CGFloat = 84.0
     
     /// 粘贴板浮窗当前是否处于可见状态
     @Published public var isVisible: Bool = false
@@ -60,8 +62,9 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
     /// 构建并配置轻量无边框透明粘贴板 NSPanel
     private func buildStickyPanel() {
         let initialWidth = isPeekingCollapsed ? peekWidth : panelWidth
+        let initialHeight = isPeekingCollapsed ? peekHeight : panelHeight
         let panel = CustomGlassPanel(
-            contentRect: NSRect(x: 0, y: 0, width: initialWidth, height: panelHeight),
+            contentRect: NSRect(x: 0, y: 0, width: initialWidth, height: initialHeight),
             styleMask: [.borderless, .nonactivatingPanel, .fullSizeContentView],
             backing: .buffered,
             defer: false
@@ -103,7 +106,9 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
                 } else if oldDock == .dockedLeft {
                     newX = screenFrame.minX
                 }
-                p.setFrame(NSRect(x: newX, y: p.frame.minY, width: self.panelWidth, height: self.panelHeight), display: true)
+                let centerY = p.frame.minY + self.peekHeight / 2.0
+                let newY = min(max(centerY - self.panelHeight / 2.0, screenFrame.minY + 20), screenFrame.maxY - self.panelHeight - 20)
+                p.setFrame(NSRect(x: newX, y: newY, width: self.panelWidth, height: self.panelHeight), display: true)
             }
         }
         
@@ -163,9 +168,9 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         let isFlingingLeft = (distToLeft < 140) && (info.velocityX < -380 || info.accelerationX < -550)
         
         if isFlingingRight {
-            dockTo(side: .dockedRight, screen: screen, currentY: frame.minY)
+            dockTo(side: .dockedRight, screen: screen, currentY: frame.minY, currentHeight: frame.height)
         } else if isFlingingLeft {
-            dockTo(side: .dockedLeft, screen: screen, currentY: frame.minY)
+            dockTo(side: .dockedLeft, screen: screen, currentY: frame.minY, currentHeight: frame.height)
         } else {
             // 未达到物理加速度阈值或常规慢速拖拽：保持自由悬浮，绝不误吸附！
             self.dockState = .floating
@@ -176,8 +181,8 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         }
     }
     
-    /// 执行吸附平滑动画（动态将物理窗口收缩为仅 peekWidth 宽，且 100% 贴附在屏幕可见区域内，彻底杜绝切桌面时露后方大白块）
-    public func dockTo(side: DockState, screen: NSScreen, currentY: CGFloat) {
+    /// 执行吸附平滑动画（动态将物理窗口收缩为仅 peekWidth x peekHeight 的小巧迷你胶囊，居中贴边）
+    public func dockTo(side: DockState, screen: NSScreen, currentY: CGFloat, currentHeight: CGFloat = 390.0) {
         guard let panel = stickyPanel else { return }
         let screenFrame = screen.visibleFrame
         
@@ -186,7 +191,10 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         self.isDockedExpanded = false
         AppSettings.shared.stickyNoteDockState = side.rawValue
         
-        let clampedY = min(max(currentY, screenFrame.minY + 20), screenFrame.maxY - panelHeight - 20)
+        // 计算居中对齐的 Y 坐标
+        let centerY = currentY + currentHeight / 2.0
+        let targetY = min(max(centerY - peekHeight / 2.0, screenFrame.minY + 20), screenFrame.maxY - peekHeight - 20)
+        
         let targetX: CGFloat
         if side == .dockedRight {
             targetX = screenFrame.maxX - peekWidth
@@ -194,7 +202,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
             targetX = screenFrame.minX
         }
         
-        let targetFrame = NSRect(x: targetX, y: clampedY, width: peekWidth, height: panelHeight)
+        let targetFrame = NSRect(x: targetX, y: targetY, width: peekWidth, height: peekHeight)
         
         NSAnimationContext.runAnimationGroup { context in
             context.duration = 0.22
@@ -234,7 +242,10 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
             targetX = screenFrame.minX + 12.0
         }
         
-        let targetFrame = NSRect(x: targetX, y: panel.frame.minY, width: panelWidth, height: panelHeight)
+        let centerY = panel.frame.minY + panel.frame.height / 2.0
+        let targetY = min(max(centerY - panelHeight / 2.0, screenFrame.minY + 20), screenFrame.maxY - panelHeight - 20)
+        
+        let targetFrame = NSRect(x: targetX, y: targetY, width: panelWidth, height: panelHeight)
         
         // 仅仅通过 orderFront 呈现窗口，100% 保持其他第三方应用的选择状态与键盘焦点
         panel.orderFront(nil)
@@ -254,7 +265,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         DispatchQueue.main.asyncAfter(deadline: .now() + duration, execute: workItem)
     }
     
-    /// 平滑收回吸附边缘状态（精准缩减窗口物理 frame 至屏幕边界内，0 像素屏幕外溢出）
+    /// 平滑收回吸附边缘状态（精准缩减窗口物理 frame 为迷你小胶囊）
     public func collapseToDock() {
         guard let panel = stickyPanel else { return }
         guard let screen = panel.screen ?? NSScreen.main ?? NSScreen.screens.first else { return }
@@ -264,6 +275,9 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         self.isPeekingCollapsed = true
         self.isDockedExpanded = false
         
+        let centerY = panel.frame.minY + panel.frame.height / 2.0
+        let targetY = min(max(centerY - peekHeight / 2.0, screenFrame.minY + 20), screenFrame.maxY - peekHeight - 20)
+        
         let targetX: CGFloat
         if dockState == .dockedRight {
             targetX = screenFrame.maxX - peekWidth
@@ -271,7 +285,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
             targetX = screenFrame.minX
         }
         
-        let targetFrame = NSRect(x: targetX, y: panel.frame.minY, width: peekWidth, height: panelHeight)
+        let targetFrame = NSRect(x: targetX, y: targetY, width: peekWidth, height: peekHeight)
         
         NSAnimationContext.runAnimationGroup { context in
             context.duration = 0.22
@@ -297,7 +311,10 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
             targetX = screenFrame.minX + 12.0
         }
         
-        let targetFrame = NSRect(x: targetX, y: panel.frame.minY, width: panelWidth, height: panelHeight)
+        let centerY = panel.frame.minY + panel.frame.height / 2.0
+        let targetY = min(max(centerY - panelHeight / 2.0, screenFrame.minY + 20), screenFrame.maxY - panelHeight - 20)
+        
+        let targetFrame = NSRect(x: targetX, y: targetY, width: panelWidth, height: panelHeight)
         
         panel.makeKeyAndOrderFront(nil)
         
