@@ -122,7 +122,95 @@ public struct HotkeyBinding: Codable, Equatable, Hashable {
     
     // MARK: - 事件解析生成方法
     
-    /// 解析 flagsChanged 事件（针对单独按下左 Option、右 Option、Control 等修饰键）
+    /// 根据累积的修饰键集合与物理键码生成完整的 HotkeyBinding（支持多按键序列从按下到全部松开）
+    public static func makeBinding(
+        modifiers: NSEvent.ModifierFlags,
+        keyCode: UInt16?,
+        modifierKeyCode: UInt16?
+    ) -> HotkeyBinding? {
+        let cleanModifiers = modifiers.intersection([.command, .option, .shift, .control])
+        
+        // 1. 如果有普通按键 (keyCode != nil)，生成标准组合键
+        if let key = keyCode {
+            var symbols: [String] = []
+            if cleanModifiers.contains(.control) { symbols.append("⌃") }
+            if cleanModifiers.contains(.option) { symbols.append("⌥") }
+            if cleanModifiers.contains(.shift) { symbols.append("⇧") }
+            if cleanModifiers.contains(.command) { symbols.append("⌘") }
+            
+            let keyStr = keycodeToString(keyCode: key)
+            symbols.append(keyStr)
+            
+            let fullTitle = symbols.joined(separator: " ")
+            return HotkeyBinding(
+                kind: .keyCombination,
+                keyCode: key,
+                modifierRawValue: cleanModifiers.isEmpty ? nil : cleanModifiers.rawValue,
+                displayTitle: fullTitle
+            )
+        }
+        
+        // 2. 如果只有修饰键被按下并松开 (如单独按左 Option、右 Option、Control 等)
+        if let modKey = modifierKeyCode {
+            switch modKey {
+            case 58:
+                return .singleOption
+            case 61:
+                return .singleRightOption
+            case 59, 62:
+                return HotkeyBinding(kind: .singleControl, keyCode: modKey, displayTitle: "按一下 Control (⌃)")
+            default:
+                var symbols: [String] = []
+                if cleanModifiers.contains(.control) { symbols.append("⌃") }
+                if cleanModifiers.contains(.option) { symbols.append("⌥") }
+                if cleanModifiers.contains(.shift) { symbols.append("⇧") }
+                if cleanModifiers.contains(.command) { symbols.append("⌘") }
+                if !symbols.isEmpty {
+                    return HotkeyBinding(
+                        kind: .keyCombination,
+                        keyCode: modKey,
+                        modifierRawValue: cleanModifiers.rawValue,
+                        displayTitle: "按一下 " + symbols.joined(separator: " ")
+                    )
+                }
+            }
+        }
+        
+        return nil
+    }
+    
+    /// 生成录制过程中的实时按键预览文本
+    public static func previewString(
+        modifiers: NSEvent.ModifierFlags,
+        keyCode: UInt16?,
+        modifierKeyCode: UInt16?
+    ) -> String {
+        let cleanModifiers = modifiers.intersection([.command, .option, .shift, .control])
+        var symbols: [String] = []
+        if cleanModifiers.contains(.control) { symbols.append("⌃") }
+        if cleanModifiers.contains(.option) { symbols.append("⌥") }
+        if cleanModifiers.contains(.shift) { symbols.append("⇧") }
+        if cleanModifiers.contains(.command) { symbols.append("⌘") }
+        
+        if let key = keyCode {
+            symbols.append(keycodeToString(keyCode: key))
+            return symbols.joined(separator: " ")
+        } else if let modKey = modifierKeyCode {
+            if modKey == 61 {
+                return "按一下右 Option (⌥)"
+            } else if modKey == 58 {
+                return "按一下左 Option (⌥)"
+            } else if modKey == 59 || modKey == 62 {
+                return "按一下 Control (⌃)"
+            } else {
+                return symbols.isEmpty ? "..." : symbols.joined(separator: " ") + "..."
+            }
+        } else {
+            return symbols.isEmpty ? "请按下快捷键..." : symbols.joined(separator: " ") + "..."
+        }
+    }
+    
+    /// 解析 flagsChanged 事件（兼容旧接口）
     public static func fromFlagsChangedEvent(_ event: NSEvent) -> HotkeyBinding? {
         let keyCode = event.keyCode
         
@@ -138,7 +226,7 @@ public struct HotkeyBinding: Codable, Equatable, Hashable {
         }
     }
     
-    /// 解析 keyDown 事件（普通按键及各种组合快捷键）
+    /// 解析 keyDown 事件（兼容旧接口）
     public static func fromKeyDownEvent(_ event: NSEvent) -> HotkeyBinding? {
         let rawModifiers = event.modifierFlags.intersection([.command, .option, .shift, .control])
         let keyCode = event.keyCode
