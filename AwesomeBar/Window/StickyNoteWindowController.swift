@@ -461,19 +461,23 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
     /// 最近一次触发复制的时间戳（用于连击防抖）
     private var lastCopyTriggerTimestamp: Date = Date.distantPast
     
-    /// 执行条目复制与反馈（内置防抖机制）
+    /// 执行条目复制与反馈（内置防抖机制与自动粘贴联动）
     public func triggerItemCopy(item: ClipboardItem) {
         let now = Date()
         guard now.timeIntervalSince(lastCopyTriggerTimestamp) > 0.3 else { return }
         lastCopyTriggerTimestamp = now
-        
-        PasteSimulator.shared.copyToClipboard(item: item)
         
         self.lastCopiedItemId = item.id
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) { [weak self] in
             if self?.lastCopiedItemId == item.id {
                 self?.lastCopiedItemId = nil
             }
+        }
+        
+        if AppSettings.shared.autoPasteOnSelect {
+            PasteSimulator.shared.pasteItem(item: item)
+        } else {
+            PasteSimulator.shared.copyToClipboard(item: item)
         }
     }
     

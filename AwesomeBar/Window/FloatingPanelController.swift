@@ -134,22 +134,28 @@ public final class FloatingPanelController: NSObject, NSWindowDelegate {
         NotificationCenter.default.post(name: .awesomeBarWindowDidAppear, object: nil)
     }
     
-    /// 优雅缩放并淡出隐藏浮动窗口
-    public func hide() {
+    /// 隐藏浮动窗口（支持动画淡出或快速即刻隐藏以立即让出前台焦点）
+    public func hide(animated: Bool = true) {
         guard let panel = floatingPanel, isVisible else { return }
         
         // 关闭前保存当前最新位置
         saveCurrentWindowPosition()
         stopOutsideClickMonitor()
         
-        NSAnimationContext.runAnimationGroup({ context in
-            context.duration = 0.15
-            context.timingFunction = CAMediaTimingFunction(name: .easeIn)
-            panel.animator().alphaValue = 0.0
-        }, completionHandler: {
+        if animated {
+            NSAnimationContext.runAnimationGroup({ context in
+                context.duration = 0.12
+                context.timingFunction = CAMediaTimingFunction(name: .easeIn)
+                panel.animator().alphaValue = 0.0
+            }, completionHandler: {
+                panel.orderOut(nil)
+                self.isVisible = false
+            })
+        } else {
+            panel.alphaValue = 0.0
             panel.orderOut(nil)
             self.isVisible = false
-        })
+        }
     }
     
     /// 记录并保存当前窗口的实际坐标
