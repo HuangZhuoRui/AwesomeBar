@@ -37,6 +37,9 @@ public final class CustomGlassPanel: NSPanel {
         self.hasShadow = true
         self.contentView?.wantsLayer = true
         self.contentView?.layer?.drawsAsynchronously = true
+        self.contentView?.layer?.masksToBounds = true
+        self.contentView?.layer?.cornerRadius = 18.0
+        self.contentView?.layer?.cornerCurve = .continuous
     }
     
     /// 允许作为 Key 窗口以接收键盘焦点与快捷键

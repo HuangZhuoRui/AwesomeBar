@@ -215,7 +215,8 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         let targetFrame = NSRect(x: targetX, y: targetY, width: peekWidth, height: peekHeight)
         
         NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.28
+            context.duration = 0.30
+            context.allowsImplicitAnimation = true
             context.timingFunction = springCollapseTimingFunction
             panel.animator().setFrame(targetFrame, display: true)
         }
@@ -261,7 +262,8 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         panel.orderFront(nil)
         
         NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.32
+            context.duration = 0.34
+            context.allowsImplicitAnimation = true
             context.timingFunction = springExpandTimingFunction
             panel.animator().setFrame(targetFrame, display: true)
         }
@@ -298,7 +300,8 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         let targetFrame = NSRect(x: targetX, y: targetY, width: peekWidth, height: peekHeight)
         
         NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.28
+            context.duration = 0.30
+            context.allowsImplicitAnimation = true
             context.timingFunction = springCollapseTimingFunction
             panel.animator().setFrame(targetFrame, display: true)
         }
@@ -329,7 +332,8 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         panel.makeKeyAndOrderFront(nil)
         
         NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.32
+            context.duration = 0.34
+            context.allowsImplicitAnimation = true
             context.timingFunction = springExpandTimingFunction
             panel.animator().setFrame(targetFrame, display: true)
         }

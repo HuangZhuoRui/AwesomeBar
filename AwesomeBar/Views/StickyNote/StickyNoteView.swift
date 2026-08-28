@@ -33,26 +33,14 @@ public struct StickyNoteView: View {
         self.onClose = onClose
     }
     
-    /// 当前是否处于边缘吸附只露小角收缩形态（只有收缩贴边时才为 true；复制冒出或完全展开时为 false）
-    private var isPeekingDocked: Bool {
-        return (controller.dockState == .dockedLeft || controller.dockState == .dockedRight) && controller.isPeekingCollapsed
-    }
-    
     public var body: some View {
-        ZStack {
-            if isPeekingDocked {
-                // 边缘吸附露小角时的手柄（精巧 24px 宽贴边手柄，0 屏幕外溢出）
-                peekingHandleOverlay
-                    .scaleEffect(isPeekingDocked ? 1.0 : 0.8)
-                    .opacity(isPeekingDocked ? 1.0 : 0.0)
-                    .transition(.asymmetric(
-                        insertion: .scale(scale: 0.82).combined(with: .opacity),
-                        removal: .scale(scale: 0.82).combined(with: .opacity)
-                    ))
-            } else {
-                // 完整主内容视图（包含顶部栏与全部剪贴板滚动条目）
+        GeometryReader { geometry in
+            let currentWidth = geometry.size.width
+            let isNarrow = currentWidth < 120.0
+            
+            ZStack {
+                // 1. 完整主内容视图（包含顶部栏与全部剪贴板滚动条目，动画期间平滑缩放淡出，绝不突变消失）
                 VStack(spacing: 0) {
-                    // 1. 粘贴板顶部操作标题栏（支持拖拽、置顶与关闭）
                     headerBarView
                         .padding(.horizontal, 14)
                         .padding(.top, 12)
@@ -61,28 +49,29 @@ public struct StickyNoteView: View {
                     Divider()
                         .opacity(0.3)
                     
-                    // 2. 剪贴板历史记录滚动区域（无分类，默认展示全部记录）
                     if store.allItems.isEmpty {
                         emptyStateView
                     } else {
                         itemsScrollView
                     }
                 }
-                .scaleEffect(isPeekingDocked ? 0.92 : 1.0)
-                .opacity(isPeekingDocked ? 0.0 : 1.0)
-                .transition(.asymmetric(
-                    insertion: .scale(scale: 0.94).combined(with: .opacity),
-                    removal: .scale(scale: 0.94).combined(with: .opacity)
-                ))
+                .frame(width: controller.panelWidth, height: controller.panelHeight)
+                .scaleEffect(isNarrow ? 0.90 : 1.0)
+                .opacity(isNarrow ? 0.0 : 1.0)
+                .allowsHitTesting(!isNarrow)
+                
+                // 2. 边缘吸附迷你胶囊手柄（精巧 24px 宽，动画期间平滑放大淡入）
+                peekingHandleOverlay
+                    .frame(maxWidth: .infinity, maxHeight: .infinity)
+                    .scaleEffect(isNarrow ? 1.0 : 0.80)
+                    .opacity(isNarrow ? 1.0 : 0.0)
+                    .allowsHitTesting(isNarrow)
             }
+            .frame(width: geometry.size.width, height: geometry.size.height)
+            .background(LiquidGlassBackground(cornerRadius: isNarrow ? 12 : 20))
+            .clipShape(RoundedRectangle(cornerRadius: isNarrow ? 12 : 20, style: .continuous))
+            .animation(.spring(response: 0.32, dampingFraction: 0.76, blendDuration: 0), value: isNarrow)
         }
-        .frame(
-            width: isPeekingDocked ? controller.peekWidth : controller.panelWidth,
-            height: isPeekingDocked ? controller.peekHeight : controller.panelHeight
-        )
-        .background(LiquidGlassBackground(cornerRadius: isPeekingDocked ? 12 : 20))
-        .clipShape(RoundedRectangle(cornerRadius: isPeekingDocked ? 12 : 20, style: .continuous))
-        .animation(.spring(response: 0.32, dampingFraction: 0.76, blendDuration: 0), value: isPeekingDocked)
     }
     
     // MARK: - 辅助子视图：边缘吸附手柄
@@ -101,7 +90,7 @@ public struct StickyNoteView: View {
             
             Spacer()
         }
-        .frame(width: controller.peekWidth, height: controller.peekHeight)
+        .frame(maxWidth: .infinity, maxHeight: .infinity)
         .background(Color.primary.opacity(isHandleHovered ? 0.08 : 0.02))
         .contentShape(Rectangle())
         .onTapGesture {
