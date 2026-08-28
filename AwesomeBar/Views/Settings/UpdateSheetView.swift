@@ -1,7 +1,7 @@
 import SwiftUI
 import AppKit
 
-/// 液态毛玻璃新版本更新详情弹窗
+/// 液态毛玻璃新版本更新详情弹窗（支持在线下载、解压、自我替换升级与自动重启）
 public struct UpdateSheetView: View {
     @ObservedObject private var updater = AppUpdaterService.shared
     public let release: GitHubRelease
@@ -10,6 +10,11 @@ public struct UpdateSheetView: View {
     public let onDismiss: () -> Void
     
     @Environment(\.colorScheme) private var colorScheme
+    
+    private var isCurrentVersion: Bool {
+        return release.tagName.lowercased() == "v\(currentVersion)".lowercased() ||
+               release.tagName.lowercased() == currentVersion.lowercased()
+    }
     
     public init(
         release: GitHubRelease,
@@ -90,12 +95,12 @@ public struct UpdateSheetView: View {
             Divider()
                 .opacity(0.3)
             
-            // 3. 底部下载进度与操作按钮栏
+            // 3. 底部下载与自我替换安装进度栏
             footerActionView
                 .padding(.horizontal, 20)
                 .padding(.vertical, 16)
         }
-        .frame(width: 440)
+        .frame(width: 450)
         .background(LiquidGlassBackground(cornerRadius: 18))
         .clipShape(RoundedRectangle(cornerRadius: 18, style: .continuous))
         .overlay(
@@ -117,7 +122,7 @@ public struct UpdateSheetView: View {
             
             VStack(alignment: .leading, spacing: 2) {
                 HStack(spacing: 6) {
-                    Text("发现新版本")
+                    Text(isCurrentVersion ? "重新安装应用" : "发现新版本")
                         .font(.system(size: 14, weight: .bold))
                         .foregroundColor(.primary)
                     
@@ -125,8 +130,8 @@ public struct UpdateSheetView: View {
                         .font(.system(size: 11.5, weight: .semibold, design: .monospaced))
                         .padding(.horizontal, 6)
                         .padding(.vertical, 1.5)
-                        .background(Color.accentColor.opacity(0.15))
-                        .foregroundColor(.accentColor)
+                        .background(isCurrentVersion ? Color.accentColor.opacity(0.15) : Color.green.opacity(0.15))
+                        .foregroundColor(isCurrentVersion ? .accentColor : .green)
                         .clipShape(Capsule())
                 }
                 
@@ -214,13 +219,11 @@ public struct UpdateSheetView: View {
                         .font(.system(size: 11.5))
                     
                     Button(action: {
-                        let downloadUrl = acceleratedUrl.isEmpty ? (release.macOSDownloadUrl ?? "") : acceleratedUrl
-                        let fileName = release.macOSAsset?.name ?? "AwesomeBar \(release.tagName).dmg"
-                        updater.startDownload(urlString: downloadUrl, fileName: fileName)
+                        updater.startSelfUpdate(release: release)
                     }) {
                         HStack(spacing: 4) {
-                            Image(systemName: "arrow.down.circle.fill")
-                            Text("立即下载更新")
+                            Image(systemName: isCurrentVersion ? "arrow.triangle.2.circlepath" : "arrow.down.circle.fill")
+                            Text(isCurrentVersion ? "立即重新安装并重启" : "立即下载安装并重启")
                             if let size = release.macOSAsset?.formattedSize, !size.isEmpty {
                                 Text("(\(size))")
                                     .opacity(0.8)
@@ -258,29 +261,29 @@ public struct UpdateSheetView: View {
                     }
                 }
                 
+            case .extracting(let msg), .restarting(let msg):
+                HStack(spacing: 10) {
+                    ProgressView()
+                        .controlSize(.small)
+                    
+                    Text(msg)
+                        .font(.system(size: 11.5, weight: .medium))
+                        .foregroundColor(.primary)
+                    
+                    Spacer()
+                }
+                .padding(.vertical, 4)
+                
             case .completed:
                 HStack {
                     HStack(spacing: 4) {
                         Image(systemName: "checkmark.circle.fill")
                             .foregroundColor(.green)
-                        Text("下载完成")
+                        Text("安装升级完成，正在重启...")
                             .font(.system(size: 11.5, weight: .medium))
                             .foregroundColor(.green)
                     }
-                    
                     Spacer()
-                    
-                    Button("在访达中显示") {
-                        if let path = progress.localFilePath {
-                            NSWorkspace.shared.activateFileViewerSelecting([path])
-                        }
-                    }
-                    .buttonStyle(.bordered)
-                    
-                    Button("立即打开安装") {
-                        updater.openInstaller()
-                    }
-                    .buttonStyle(.borderedProminent)
                 }
                 
             case .failed(let errMsg):
@@ -297,9 +300,7 @@ public struct UpdateSheetView: View {
                     Spacer()
                     
                     Button("重试") {
-                        let downloadUrl = acceleratedUrl.isEmpty ? (release.macOSDownloadUrl ?? "") : acceleratedUrl
-                        let fileName = release.macOSAsset?.name ?? "AwesomeBar \(release.tagName).dmg"
-                        updater.startDownload(urlString: downloadUrl, fileName: fileName)
+                        updater.startSelfUpdate(release: release)
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.small)
@@ -313,10 +314,8 @@ public struct UpdateSheetView: View {
                     
                     Spacer()
                     
-                    Button("重新下载") {
-                        let downloadUrl = acceleratedUrl.isEmpty ? (release.macOSDownloadUrl ?? "") : acceleratedUrl
-                        let fileName = release.macOSAsset?.name ?? "AwesomeBar \(release.tagName).dmg"
-                        updater.startDownload(urlString: downloadUrl, fileName: fileName)
+                    Button(isCurrentVersion ? "重新安装" : "下载安装") {
+                        updater.startSelfUpdate(release: release)
                     }
                     .buttonStyle(.borderedProminent)
                     .controlSize(.small)

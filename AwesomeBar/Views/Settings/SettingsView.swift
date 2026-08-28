@@ -13,8 +13,8 @@ public struct SettingsView: View {
     @State private var isShowingClearConfirmAlert: Bool = false
     /// 是否弹出全部清空确认警告
     @State private var isShowingClearAllConfirmAlert: Bool = false
-    /// 是否展示更新详情弹窗
-    @State private var isShowingUpdateSheet: Bool = false
+    /// 当前唤起更新弹窗的目标版本
+    @State private var selectedReleaseForSheet: GitHubRelease? = nil
     @Environment(\.colorScheme) private var colorScheme
     
     public init() {}
@@ -237,23 +237,33 @@ public struct SettingsView: View {
                                 }
                             case .hasUpdate(let release, _, _):
                                 Button(action: {
-                                    isShowingUpdateSheet = true
+                                    selectedReleaseForSheet = release
                                 }) {
                                     HStack(spacing: 4) {
-                                        Image(systemName: "sparkles")
-                                        Text("发现新版本 \(release.tagName)")
+                                        Image(systemName: "arrow.down.circle.fill")
+                                        Text("下载安装 (\(release.tagName))")
                                     }
                                     .font(.system(size: 11, weight: .medium))
                                 }
                                 .buttonStyle(.borderedProminent)
                                 .controlSize(.small)
-                            case .alreadyLatest:
-                                HStack(spacing: 4) {
-                                    Image(systemName: "checkmark.circle.fill")
-                                        .foregroundColor(.green)
-                                    Text("已是最新版本")
-                                        .font(.system(size: 11))
-                                        .foregroundColor(.secondary)
+                            case .alreadyLatest(let release, _):
+                                HStack(spacing: 8) {
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "checkmark.circle.fill")
+                                            .foregroundColor(.green)
+                                        Text("已是最新版本")
+                                            .font(.system(size: 11, weight: .medium))
+                                            .foregroundColor(.secondary)
+                                    }
+                                    
+                                    if let rel = release ?? updater.releaseHistory.first {
+                                        Button("重新安装") {
+                                            selectedReleaseForSheet = rel
+                                        }
+                                        .buttonStyle(.bordered)
+                                        .controlSize(.small)
+                                    }
                                 }
                             case .error(let msg):
                                 HStack(spacing: 4) {
@@ -347,7 +357,10 @@ public struct SettingsView: View {
                                         ReleaseHistoryRowView(
                                             release: release,
                                             isCurrentVersion: isCurrent,
-                                            isNewer: isNewer
+                                            isNewer: isNewer,
+                                            onSelectForUpdate: { rel in
+                                                selectedReleaseForSheet = rel
+                                            }
                                         )
                                     }
                                 }
@@ -368,21 +381,19 @@ public struct SettingsView: View {
                 }
             }
         }
-        .sheet(isPresented: $isShowingUpdateSheet) {
-            if case .hasUpdate(let release, let current, let acceleratedUrl) = updater.checkState {
-                UpdateSheetView(
-                    release: release,
-                    currentVersion: current,
-                    acceleratedUrl: acceleratedUrl,
-                    onDismiss: {
-                        isShowingUpdateSheet = false
-                    }
-                )
-            }
+        .sheet(item: $selectedReleaseForSheet) { release in
+            UpdateSheetView(
+                release: release,
+                currentVersion: updater.currentAppVersion,
+                acceleratedUrl: updater.getAcceleratedDownloadUrl(directUrl: release.macOSDownloadUrl ?? ""),
+                onDismiss: {
+                    selectedReleaseForSheet = nil
+                }
+            )
         }
-        .onChange(of: updater.checkState) { newState in
-            if case .hasUpdate = newState {
-                isShowingUpdateSheet = true
+        .onChange(of: updater.checkState) { _, newState in
+            if case .hasUpdate(let release, _, _) = newState {
+                selectedReleaseForSheet = release
             }
         }
         .alert("确定清除普通历史记录吗？", isPresented: $isShowingClearConfirmAlert) {
@@ -444,13 +455,21 @@ struct ReleaseHistoryRowView: View {
     let release: GitHubRelease
     let isCurrentVersion: Bool
     let isNewer: Bool
+    let onSelectForUpdate: (GitHubRelease) -> Void
+    
     @State private var isExpanded: Bool
     @Environment(\.colorScheme) private var colorScheme
     
-    init(release: GitHubRelease, isCurrentVersion: Bool, isNewer: Bool) {
+    init(
+        release: GitHubRelease,
+        isCurrentVersion: Bool,
+        isNewer: Bool,
+        onSelectForUpdate: @escaping (GitHubRelease) -> Void
+    ) {
         self.release = release
         self.isCurrentVersion = isCurrentVersion
         self.isNewer = isNewer
+        self.onSelectForUpdate = onSelectForUpdate
         // 默认展开最新版本或当前版本
         self._isExpanded = State(initialValue: isCurrentVersion || isNewer)
     }
@@ -551,19 +570,40 @@ struct ReleaseHistoryRowView: View {
                         .buttonStyle(.bordered)
                         .controlSize(.mini)
                         
-                        if let asset = release.macOSAsset {
-                            Button(action: {
-                                let downloadUrl = AppUpdaterService.shared.getAcceleratedDownloadUrl(directUrl: asset.browserDownloadUrl)
-                                AppUpdaterService.shared.startDownload(urlString: downloadUrl, fileName: asset.name)
-                            }) {
-                                HStack(spacing: 3) {
-                                    Image(systemName: "arrow.down.circle")
-                                    Text("下载安装包 (\(asset.formattedSize))")
+                        if release.macOSAsset != nil {
+                            if isCurrentVersion {
+                                Button(action: {
+                                    onSelectForUpdate(release)
+                                }) {
+                                    HStack(spacing: 3) {
+                                        Image(systemName: "arrow.triangle.2.circlepath")
+                                        Text("重新安装")
+                                        if let size = release.macOSAsset?.formattedSize, !size.isEmpty {
+                                            Text("(\(size))")
+                                                .opacity(0.8)
+                                        }
+                                    }
+                                    .font(.system(size: 10, weight: .medium))
                                 }
-                                .font(.system(size: 10))
+                                .buttonStyle(.bordered)
+                                .controlSize(.mini)
+                            } else {
+                                Button(action: {
+                                    onSelectForUpdate(release)
+                                }) {
+                                    HStack(spacing: 3) {
+                                        Image(systemName: "arrow.down.circle.fill")
+                                        Text("下载安装")
+                                        if let size = release.macOSAsset?.formattedSize, !size.isEmpty {
+                                            Text("(\(size))")
+                                                .opacity(0.8)
+                                        }
+                                    }
+                                    .font(.system(size: 10, weight: .medium))
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .controlSize(.mini)
                             }
-                            .buttonStyle(.bordered)
-                            .controlSize(.mini)
                         }
                     }
                     .padding(.top, 4)
