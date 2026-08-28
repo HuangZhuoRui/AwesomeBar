@@ -3,7 +3,7 @@ import AppKit
 import SwiftUI
 import Combine
 
-/// 粘贴板模式专属独立浮动小窗口控制器（生命周期、物理运动学加速度边缘甩动吸附、迷你胶囊提手动态几何收缩、拖拽解除吸附、复制冒出不抢焦点、置顶层级、⌘1-9 快捷键分发与平滑动画管理）
+/// 粘贴板模式专属独立浮动小窗口控制器（生命周期、物理运动学加速度边缘甩动吸附、Q 弹弹性插值动画、动态几何外框收缩、拖拽解除吸附、复制冒出不抢焦点、置顶层级、⌘1-9 快捷键分发）
 public final class StickyNoteWindowController: NSObject, ObservableObject, NSWindowDelegate {
     /// 全局共享单例
     public static let shared = StickyNoteWindowController()
@@ -34,6 +34,16 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
     /// 吸附边缘时露出的精巧迷你胶囊提手尺寸（小巧精致、0 屏幕外溢出）
     public let peekWidth: CGFloat = 24.0
     public let peekHeight: CGFloat = 84.0
+    
+    /// 灵动 Q 弹展开动画曲线 (Apple 风格弹性超调插值，微量回弹更具生命力)
+    private var springExpandTimingFunction: CAMediaTimingFunction {
+        return CAMediaTimingFunction(controlPoints: 0.16, 1.25, 0.32, 1.0)
+    }
+    
+    /// 灵动 Q 弹吸附收缩曲线 (磁吸弹性回弹)
+    private var springCollapseTimingFunction: CAMediaTimingFunction {
+        return CAMediaTimingFunction(controlPoints: 0.20, 1.20, 0.35, 1.0)
+    }
     
     /// 粘贴板浮窗当前是否处于可见状态
     @Published public var isVisible: Bool = false
@@ -181,7 +191,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         }
     }
     
-    /// 执行吸附平滑动画（动态将物理窗口收缩为仅 peekWidth x peekHeight 的小巧迷你胶囊，居中贴边）
+    /// 执行吸附平滑动画（动态将物理窗口收缩为仅 peekWidth x peekHeight 的小巧迷你胶囊，Q 弹磁吸贴边）
     public func dockTo(side: DockState, screen: NSScreen, currentY: CGFloat, currentHeight: CGFloat = 390.0) {
         guard let panel = stickyPanel else { return }
         let screenFrame = screen.visibleFrame
@@ -205,8 +215,8 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         let targetFrame = NSRect(x: targetX, y: targetY, width: peekWidth, height: peekHeight)
         
         NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.22
-            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            context.duration = 0.28
+            context.timingFunction = springCollapseTimingFunction
             panel.animator().setFrame(targetFrame, display: true)
         }
         
@@ -224,7 +234,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         }
     }
     
-    /// 从吸附边缘临时平滑展开冒出，展示完整内容，几秒后若无交互自动缩回
+    /// 从吸附边缘临时平滑展开冒出，展示完整内容，几秒后若无交互自动缩回（Q 弹舒展）
     public func popOutTemporarily(duration: Double = 3.5) {
         guard let panel = stickyPanel else { return }
         guard let screen = panel.screen ?? NSScreen.main ?? NSScreen.screens.first else { return }
@@ -251,8 +261,8 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         panel.orderFront(nil)
         
         NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.24
-            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            context.duration = 0.32
+            context.timingFunction = springExpandTimingFunction
             panel.animator().setFrame(targetFrame, display: true)
         }
         
@@ -265,7 +275,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         DispatchQueue.main.asyncAfter(deadline: .now() + duration, execute: workItem)
     }
     
-    /// 平滑收回吸附边缘状态（精准缩减窗口物理 frame 为迷你小胶囊）
+    /// 平滑收回吸附边缘状态（Q 弹磁吸缩回为迷你胶囊）
     public func collapseToDock() {
         guard let panel = stickyPanel else { return }
         guard let screen = panel.screen ?? NSScreen.main ?? NSScreen.screens.first else { return }
@@ -288,13 +298,13 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         let targetFrame = NSRect(x: targetX, y: targetY, width: peekWidth, height: peekHeight)
         
         NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.22
-            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            context.duration = 0.28
+            context.timingFunction = springCollapseTimingFunction
             panel.animator().setFrame(targetFrame, display: true)
         }
     }
     
-    /// 手动/快捷键完全展开吸附浮窗
+    /// 手动/快捷键完全展开吸附浮窗（Q 弹展开）
     public func expandFromDock() {
         guard let panel = stickyPanel else { return }
         guard let screen = panel.screen ?? NSScreen.main ?? NSScreen.screens.first else { return }
@@ -319,8 +329,8 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         panel.makeKeyAndOrderFront(nil)
         
         NSAnimationContext.runAnimationGroup { context in
-            context.duration = 0.22
-            context.timingFunction = CAMediaTimingFunction(name: .easeOut)
+            context.duration = 0.32
+            context.timingFunction = springExpandTimingFunction
             panel.animator().setFrame(targetFrame, display: true)
         }
     }

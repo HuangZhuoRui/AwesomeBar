@@ -41,9 +41,14 @@ public struct StickyNoteView: View {
     public var body: some View {
         ZStack {
             if isPeekingDocked {
-                // 边缘吸附露小角时的手柄（精巧 28px 宽贴边手柄，0 屏幕外溢出）
+                // 边缘吸附露小角时的手柄（精巧 24px 宽贴边手柄，0 屏幕外溢出）
                 peekingHandleOverlay
-                    .transition(.opacity)
+                    .scaleEffect(isPeekingDocked ? 1.0 : 0.8)
+                    .opacity(isPeekingDocked ? 1.0 : 0.0)
+                    .transition(.asymmetric(
+                        insertion: .scale(scale: 0.82).combined(with: .opacity),
+                        removal: .scale(scale: 0.82).combined(with: .opacity)
+                    ))
             } else {
                 // 完整主内容视图（包含顶部栏与全部剪贴板滚动条目）
                 VStack(spacing: 0) {
@@ -63,7 +68,12 @@ public struct StickyNoteView: View {
                         itemsScrollView
                     }
                 }
-                .transition(.opacity)
+                .scaleEffect(isPeekingDocked ? 0.92 : 1.0)
+                .opacity(isPeekingDocked ? 0.0 : 1.0)
+                .transition(.asymmetric(
+                    insertion: .scale(scale: 0.94).combined(with: .opacity),
+                    removal: .scale(scale: 0.94).combined(with: .opacity)
+                ))
             }
         }
         .frame(
@@ -72,6 +82,7 @@ public struct StickyNoteView: View {
         )
         .background(LiquidGlassBackground(cornerRadius: isPeekingDocked ? 12 : 20))
         .clipShape(RoundedRectangle(cornerRadius: isPeekingDocked ? 12 : 20, style: .continuous))
+        .animation(.spring(response: 0.32, dampingFraction: 0.76, blendDuration: 0), value: isPeekingDocked)
     }
     
     // MARK: - 辅助子视图：边缘吸附手柄
