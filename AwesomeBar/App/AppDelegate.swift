@@ -18,6 +18,18 @@ public final class AppDelegate: NSObject, NSApplicationDelegate {
         ClipboardMonitor.shared.startMonitoring()
         GlobalHotkeyManager.shared.start()
         
+        // 实时追踪外部前台活动应用（当用户在 QQ、Chrome、微信等输入时持续记录最新目标）
+        NSWorkspace.shared.notificationCenter.addObserver(
+            forName: NSWorkspace.didActivateApplicationNotification,
+            object: nil,
+            queue: .main
+        ) { notification in
+            if let app = notification.userInfo?[NSWorkspace.applicationUserInfoKey] as? NSRunningApplication,
+               app.bundleIdentifier != Bundle.main.bundleIdentifier {
+                PasteSimulator.shared.lastActiveExternalApp = app
+            }
+        }
+        
         // 首次启动时轻度延迟自动展示浮动面板，便于用户直观体验
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.3) {
             FloatingPanelController.shared.show()

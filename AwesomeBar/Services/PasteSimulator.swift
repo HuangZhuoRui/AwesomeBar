@@ -2,10 +2,13 @@ import Foundation
 import AppKit
 import Carbon
 
-/// 剪贴板写回与模拟系统自动粘贴服务（内置高频连击防抖防重复粘贴机制、窗口即刻让焦与互斥锁）
+/// 剪贴板写回与模拟系统自动粘贴服务（内置外部前台应用动态跟踪、高频连击防抖、进程精准直投及多通道按键注入）
 public final class PasteSimulator {
     /// 全局共享单例
     public static let shared = PasteSimulator()
+    
+    /// 实时追踪记录的最近一个前台外部目标应用（如 QQ、Chrome、微信等）
+    public var lastActiveExternalApp: NSRunningApplication?
     
     /// 记录最近一次触发粘贴的时间戳（用于防抖防重复粘贴）
     private var lastPasteTimestamp: Date = Date.distantPast
@@ -15,7 +18,12 @@ public final class PasteSimulator {
     private var isPastingInProgress: Bool = false
     
     /// 私有初始化方法
-    private init() {}
+    private init() {
+        if let app = NSWorkspace.shared.frontmostApplication,
+           app.bundleIdentifier != Bundle.main.bundleIdentifier {
+            self.lastActiveExternalApp = app
+        }
+    }
     
     /// 将目标条目数据写回系统通用剪贴板 NSPasteboard
     /// - Parameter item: 待写回的剪贴板条目
@@ -56,13 +64,12 @@ public final class PasteSimulator {
     /// 复制条目并自动唤醒前台应用模拟按下 Cmd+V（带防抖防重机制，短时间多次点击仅粘贴一次）
     /// - Parameters:
     ///   - item: 待粘贴的剪贴板条目
-    ///   - targetApplication: 目标应用（若为 nil 则自动使用之前记录的前台应用）
+    ///   - targetApplication: 目标应用（若为 nil 则自动使用之前记录的前台外部应用）
     public func pasteItem(item: ClipboardItem, targetApplication: NSRunningApplication? = nil) {
         let now = Date()
         
-        // 核心防重判定：如果在 0.3 秒内重复连点，或当前已有粘贴流程在进行中，阻断多余的重复注入
+        // 核心防抖防重判定：如果在 0.3 秒内重复连点，或当前已有粘贴流程在进行中，阻断多余的重复注入
         if now.timeIntervalSince(lastPasteTimestamp) < 0.3 || isPastingInProgress {
-            // 依然同步最新剪贴板内容，但绝不发送重复的 ⌘V 模拟按键
             copyToClipboard(item: item)
             return
         }
@@ -78,31 +85,41 @@ public final class PasteSimulator {
             return
         }
         
-        // 2. 如果未开启置顶，立即隐藏主浮动面板以迅速将输入焦点让出给目标应用
+        // 2. 如果主面板处于非置顶状态，立即隐藏以迅速让出焦点
         if !AppSettings.shared.isPinnedToTop {
             FloatingPanelController.shared.hide(animated: false)
         }
         
-        // 取消前序尚未完成的任务
+        // 取消前序排队任务
         currentPasteWorkItem?.cancel()
         
         // 智能定位目标前台应用
         let targetApp = targetApplication
+            ?? lastActiveExternalApp
             ?? FloatingPanelController.shared.previousFrontmostApplication
             ?? NSWorkspace.shared.frontmostApplication
+        
+        // 检查辅助功能权限，若未授权则触发系统授权提示
+        if !AccessibilityManager.isAccessibilityTrusted {
+            AccessibilityManager.requestAccessibilityPermission()
+        }
         
         let workItem = DispatchWorkItem { [weak self] in
             guard let self = self else { return }
             
-            // 激活前台应用
+            // 激活前台目标应用
             if let application = targetApp, application.bundleIdentifier != Bundle.main.bundleIdentifier {
-                application.activate(options: [.activateIgnoringOtherApps, .activateAllWindows])
+                if #available(macOS 14.0, *) {
+                    application.activate()
+                } else {
+                    application.activate(options: [.activateIgnoringOtherApps, .activateAllWindows])
+                }
             }
             
-            // 给予系统 100ms 调度窗口，确保目标应用已完全获得焦点与文本光标第一响应者
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.10) { [weak self] in
+            // 给予系统 120ms 调度窗口，确保光标与焦点已完全切回目标应用文本输入框
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) { [weak self] in
                 guard let self = self else { return }
-                self.simulatePasteKeystroke()
+                self.simulatePasteKeystroke(targetPid: targetApp?.processIdentifier)
                 SoundManager.shared.playPasteSound()
                 
                 // 粘贴完成微延迟后释放互斥锁
@@ -116,23 +133,43 @@ public final class PasteSimulator {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
     }
     
-    /// 发送虚拟 Command + V 组合键
-    private func simulatePasteKeystroke() {
+    /// 发送虚拟 Command + V 组合键（多通道保障：精准进程直投 + 全局 Session 广播 + AppleScript 回退）
+    private func simulatePasteKeystroke(targetPid: pid_t? = nil) {
         let eventSource = CGEventSource(stateID: .combinedSessionState)
         let vKeyCode: CGKeyCode = 9 // macOS 键盘 'v' 键虚拟键码为 9
         
-        guard let keyDownEvent = CGEvent(keyboardEventSource: eventSource, virtualKey: vKeyCode, keyDown: true),
-              let keyUpEvent = CGEvent(keyboardEventSource: eventSource, virtualKey: vKeyCode, keyDown: false) else {
-            return
+        if let keyDownEvent = CGEvent(keyboardEventSource: eventSource, virtualKey: vKeyCode, keyDown: true),
+           let keyUpEvent = CGEvent(keyboardEventSource: eventSource, virtualKey: vKeyCode, keyDown: false) {
+            keyDownEvent.flags = .maskCommand
+            keyUpEvent.flags = .maskCommand
+            
+            // 1. 如果有明确的目标进程 PID，直接向该目标进程精确直投按键
+            if let pid = targetPid, pid > 0 {
+                keyDownEvent.postToPid(pid)
+                keyUpEvent.postToPid(pid)
+            }
+            
+            // 2. 向系统 Session 与 HID 总线广播
+            keyDownEvent.post(tap: .cgAnnotatedSessionEventTap)
+            keyUpEvent.post(tap: .cgAnnotatedSessionEventTap)
+            keyDownEvent.post(tap: .cgSessionEventTap)
+            keyUpEvent.post(tap: .cgSessionEventTap)
+            keyDownEvent.post(tap: .cghidEventTap)
+            keyUpEvent.post(tap: .cghidEventTap)
         }
         
-        keyDownEvent.flags = .maskCommand
-        keyUpEvent.flags = .maskCommand
-        
-        // 同时向 session 与 hid 事件总线广播，确保在各种终端/Electron/原生 App 中均能 100% 收到 ⌘V
-        keyDownEvent.post(tap: .cgSessionEventTap)
-        keyUpEvent.post(tap: .cgSessionEventTap)
-        keyDownEvent.post(tap: .cghidEventTap)
-        keyUpEvent.post(tap: .cghidEventTap)
+        // 3. AppleScript 双重保障机制（当底层 CGEvent 未能触发或辅助功能权限受限时）
+        if !AccessibilityManager.isAccessibilityTrusted {
+            simulatePasteViaAppleScript()
+        }
+    }
+    
+    /// AppleScript 模拟粘贴兜底
+    private func simulatePasteViaAppleScript() {
+        let scriptSource = "tell application \"System Events\" to keystroke \"v\" using command down"
+        if let script = NSAppleScript(source: scriptSource) {
+            var error: NSDictionary?
+            script.executeAndReturnError(&error)
+        }
     }
 }

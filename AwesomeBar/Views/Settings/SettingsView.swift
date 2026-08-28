@@ -120,7 +120,41 @@ public struct SettingsView: View {
                             .help("开启后每次唤起将保持在上一次拖拽停留的屏幕位置；关闭则始终在鼠标所在屏幕正中央唤起")
                         
                         Toggle("选中条目后直接自动粘贴 (Cmd+V)", isOn: $applicationSettings.autoPasteOnSelect)
-                            .help("开启后点击项目或按回车将自动回填到当前活动应用")
+                            .help("开启后点击项目或按快捷键将自动回填到当前活动应用")
+                        
+                        Divider()
+                            .opacity(0.3)
+                        
+                        HStack {
+                            VStack(alignment: .leading, spacing: 2) {
+                                Text("系统辅助功能权限 (用于自动执行 Cmd+V 粘贴)")
+                                    .font(.system(size: 12))
+                                Text("如点击卡片未自动粘贴，请在此检查并开启权限")
+                                    .font(.system(size: 10.5))
+                                    .foregroundColor(.secondary)
+                            }
+                            
+                            Spacer()
+                            
+                            if AccessibilityManager.isAccessibilityTrusted {
+                                HStack(spacing: 4) {
+                                    Image(systemName: "checkmark.circle.fill")
+                                        .foregroundColor(.green)
+                                    Text("已授权")
+                                        .font(.system(size: 11, weight: .medium))
+                                        .foregroundColor(.secondary)
+                                }
+                            } else {
+                                Button("去系统设置授权") {
+                                    AccessibilityManager.openAccessibilityPreferences()
+                                }
+                                .buttonStyle(.borderedProminent)
+                                .controlSize(.small)
+                            }
+                        }
+                        
+                        Divider()
+                            .opacity(0.3)
                         
                         Toggle("播放操作反馈音效", isOn: $applicationSettings.playSoundEffects)
                         
