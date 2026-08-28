@@ -203,6 +203,10 @@ public final class AppUpdaterService: NSObject, ObservableObject, URLSessionDown
     
     @Published public var checkState: UpdateCheckState = .idle
     @Published public var downloadProgress: DownloadProgress = DownloadProgress()
+    /// 远端拉取的全部历史发布版本列表
+    @Published public var releaseHistory: [GitHubRelease] = []
+    /// 历史发布版本列表是否正在拉取中
+    @Published public var isLoadingHistory: Bool = false
     
     private var downloadTask: URLSessionDownloadTask?
     private var urlSession: URLSession?
@@ -212,6 +216,12 @@ public final class AppUpdaterService: NSObject, ObservableObject, URLSessionDown
     
     public override init() {
         super.init()
+    }
+    
+    /// 重置检查更新状态（关闭偏好设置后重新打开时恢复为初始按钮态）
+    public func resetCheckState() {
+        self.checkState = .idle
+        self.downloadProgress = DownloadProgress()
     }
     
     /// 当前应用版本号（从 Bundle 读取，如 "1.0"）
@@ -224,7 +234,19 @@ public final class AppUpdaterService: NSObject, ObservableObject, URLSessionDown
         return Bundle.main.infoDictionary?["CFBundleVersion"] as? String ?? "1"
     }
     
-    // MARK: - 版本检测
+    // MARK: - 版本检测与历史版本列表
+    
+    /// 异步拉取全部历史版本列表
+    public func loadReleaseHistory() async {
+        await MainActor.run {
+            self.isLoadingHistory = true
+        }
+        let releases = await fetchReleases()
+        await MainActor.run {
+            self.releaseHistory = releases
+            self.isLoadingHistory = false
+        }
+    }
     
     /// 触发检查更新（在后台异步拉取）
     public func checkForUpdates(isUserInitiated: Bool = true) {
@@ -233,6 +255,7 @@ public final class AppUpdaterService: NSObject, ObservableObject, URLSessionDown
         Task {
             let releases = await fetchReleases()
             await MainActor.run {
+                self.releaseHistory = releases
                 guard let latest = releases.first else {
                     if isUserInitiated {
                         self.checkState = .error(message: "未能获取到版本发布信息，请稍后重试")

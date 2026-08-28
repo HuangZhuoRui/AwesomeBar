@@ -208,7 +208,8 @@ public struct SettingsView: View {
                 
                 // 4. 版本与在线更新
                 settingsSectionContainer(title: "版本与在线更新", icon: "arrow.triangle.2.circlepath.circle") {
-                    VStack(alignment: .leading, spacing: 12) {
+                    VStack(alignment: .leading, spacing: 14) {
+                        // 4.1 当前版本与快速检查栏
                         HStack {
                             VStack(alignment: .leading, spacing: 2) {
                                 HStack(spacing: 6) {
@@ -251,7 +252,7 @@ public struct SettingsView: View {
                                     Image(systemName: "checkmark.circle.fill")
                                         .foregroundColor(.green)
                                     Text("已是最新版本")
-                                        .font(.system(size: 11, weight: .medium))
+                                        .font(.system(size: 11))
                                         .foregroundColor(.secondary)
                                 }
                             case .error(let msg):
@@ -279,12 +280,94 @@ public struct SettingsView: View {
                         
                         Toggle("启动时自动检查更新", isOn: $applicationSettings.automaticallyCheckForUpdates)
                             .font(.system(size: 11.5))
+                        
+                        Divider()
+                            .opacity(0.3)
+                        
+                        // 4.2 历史版本发布与更新日志列表
+                        VStack(alignment: .leading, spacing: 10) {
+                            HStack {
+                                Text("版本发布历史与更新日志")
+                                    .font(.system(size: 11.5, weight: .semibold))
+                                    .foregroundColor(.primary)
+                                
+                                Spacer()
+                                
+                                Button(action: {
+                                    Task {
+                                        await updater.loadReleaseHistory()
+                                    }
+                                }) {
+                                    HStack(spacing: 3) {
+                                        Image(systemName: "arrow.clockwise")
+                                        Text("刷新日志")
+                                    }
+                                    .font(.system(size: 10))
+                                    .foregroundColor(.secondary)
+                                }
+                                .buttonStyle(.plain)
+                            }
+                            
+                            if updater.isLoadingHistory && updater.releaseHistory.isEmpty {
+                                HStack(spacing: 8) {
+                                    ProgressView()
+                                        .controlSize(.small)
+                                    Text("正在同步版本发布日志...")
+                                        .font(.system(size: 11))
+                                        .foregroundColor(.secondary)
+                                }
+                                .padding(.vertical, 8)
+                            } else if updater.releaseHistory.isEmpty {
+                                HStack {
+                                    Text("暂未拉取到远端发布记录")
+                                        .font(.system(size: 11))
+                                        .foregroundColor(.secondary)
+                                    
+                                    Spacer()
+                                    
+                                    Button("在 GitHub 查看") {
+                                        if let url = URL(string: "https://github.com/\(updater.repoOwner)/\(updater.repoName)/releases") {
+                                            NSWorkspace.shared.open(url)
+                                        }
+                                    }
+                                    .buttonStyle(.bordered)
+                                    .controlSize(.mini)
+                                }
+                                .padding(10)
+                                .background(
+                                    RoundedRectangle(cornerRadius: 8, style: .continuous)
+                                        .fill(colorScheme == .dark ? Color.white.opacity(0.03) : Color.black.opacity(0.02))
+                                )
+                            } else {
+                                VStack(spacing: 8) {
+                                    ForEach(updater.releaseHistory) { release in
+                                        let isCurrent = release.tagName.lowercased() == "v\(updater.currentAppVersion)".lowercased() || release.tagName.lowercased() == updater.currentAppVersion.lowercased()
+                                        let isNewer = updater.isNewerVersion(latestTagName: release.tagName, currentVersion: updater.currentAppVersion)
+                                        
+                                        ReleaseHistoryRowView(
+                                            release: release,
+                                            isCurrentVersion: isCurrent,
+                                            isNewer: isNewer
+                                        )
+                                    }
+                                }
+                            }
+                        }
                     }
                 }
             }
             .padding(18)
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
+        .onAppear {
+            // 每次打开偏好设置窗口时，重置检查更新按钮状态并同步版本历史
+            updater.resetCheckState()
+            if updater.releaseHistory.isEmpty {
+                Task {
+                    await updater.loadReleaseHistory()
+                }
+            }
+        }
         .sheet(isPresented: $isShowingUpdateSheet) {
             if case .hasUpdate(let release, let current, let acceleratedUrl) = updater.checkState {
                 UpdateSheetView(
@@ -352,6 +435,180 @@ public struct SettingsView: View {
                 RoundedRectangle(cornerRadius: 12, style: .continuous)
                     .strokeBorder(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.06), lineWidth: 0.8)
             )
+        }
+    }
+}
+
+/// 单个历史版本更新卡片组件
+struct ReleaseHistoryRowView: View {
+    let release: GitHubRelease
+    let isCurrentVersion: Bool
+    let isNewer: Bool
+    @State private var isExpanded: Bool
+    @Environment(\.colorScheme) private var colorScheme
+    
+    init(release: GitHubRelease, isCurrentVersion: Bool, isNewer: Bool) {
+        self.release = release
+        self.isCurrentVersion = isCurrentVersion
+        self.isNewer = isNewer
+        // 默认展开最新版本或当前版本
+        self._isExpanded = State(initialValue: isCurrentVersion || isNewer)
+    }
+    
+    var body: some View {
+        VStack(alignment: .leading, spacing: 8) {
+            // 卡片头部点击展开/折叠
+            Button(action: {
+                withAnimation(.easeInOut(duration: 0.2)) {
+                    isExpanded.toggle()
+                }
+            }) {
+                HStack(spacing: 8) {
+                    Image(systemName: isExpanded ? "chevron.down" : "chevron.right")
+                        .font(.system(size: 9, weight: .bold))
+                        .foregroundColor(.secondary)
+                        .frame(width: 12)
+                    
+                    Text(release.tagName)
+                        .font(.system(size: 12, weight: .bold, design: .monospaced))
+                        .foregroundColor(.primary)
+                    
+                    if !release.name.isEmpty && release.name != release.tagName {
+                        Text(release.name)
+                            .font(.system(size: 11, weight: .medium))
+                            .foregroundColor(.secondary)
+                            .lineLimit(1)
+                    }
+                    
+                    if isCurrentVersion {
+                        Text("当前使用")
+                            .font(.system(size: 9.5, weight: .semibold))
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 1.5)
+                            .background(Color.accentColor.opacity(0.15))
+                            .foregroundColor(.accentColor)
+                            .clipShape(Capsule())
+                    } else if isNewer {
+                        Text("最新更新")
+                            .font(.system(size: 9.5, weight: .semibold))
+                            .padding(.horizontal, 5)
+                            .padding(.vertical, 1.5)
+                            .background(Color.green.opacity(0.15))
+                            .foregroundColor(.green)
+                            .clipShape(Capsule())
+                    }
+                    
+                    Spacer()
+                    
+                    Text(release.formattedDate)
+                        .font(.system(size: 10, design: .monospaced))
+                        .foregroundColor(.secondary.opacity(0.8))
+                }
+                .contentShape(Rectangle())
+            }
+            .buttonStyle(.plain)
+            
+            // 展开状态下的结构化更新日志与附件下载
+            if isExpanded {
+                VStack(alignment: .leading, spacing: 8) {
+                    let changelog = release.parsedChangelog
+                    
+                    if !changelog.features.isEmpty {
+                        categoryLogSection(title: "新增特性", icon: "sparkles", color: .green, items: changelog.features)
+                    }
+                    
+                    if !changelog.fixes.isEmpty {
+                        categoryLogSection(title: "问题修复", icon: "wrench.and.screwdriver", color: .blue, items: changelog.fixes)
+                    }
+                    
+                    if !changelog.improvements.isEmpty {
+                        categoryLogSection(title: "体验优化", icon: "bolt.fill", color: .purple, items: changelog.improvements)
+                    }
+                    
+                    if !changelog.others.isEmpty {
+                        categoryLogSection(title: "其他变更", icon: "doc.text", color: .secondary, items: changelog.others)
+                    }
+                    
+                    if !changelog.hasCategorized && !release.body.isEmpty {
+                        Text(release.body)
+                            .font(.system(size: 10.5))
+                            .foregroundColor(.secondary)
+                            .lineSpacing(2)
+                    }
+                    
+                    HStack(spacing: 8) {
+                        Button(action: {
+                            if let url = URL(string: "https://github.com/\(AppUpdaterService.shared.repoOwner)/\(AppUpdaterService.shared.repoName)/releases/tag/\(release.tagName)") {
+                                NSWorkspace.shared.open(url)
+                            }
+                        }) {
+                            HStack(spacing: 3) {
+                                Image(systemName: "safari")
+                                Text("在 GitHub 查看 Release")
+                            }
+                            .font(.system(size: 10))
+                        }
+                        .buttonStyle(.bordered)
+                        .controlSize(.mini)
+                        
+                        if let asset = release.macOSAsset {
+                            Button(action: {
+                                let downloadUrl = AppUpdaterService.shared.getAcceleratedDownloadUrl(directUrl: asset.browserDownloadUrl)
+                                AppUpdaterService.shared.startDownload(urlString: downloadUrl, fileName: asset.name)
+                            }) {
+                                HStack(spacing: 3) {
+                                    Image(systemName: "arrow.down.circle")
+                                    Text("下载安装包 (\(asset.formattedSize))")
+                                }
+                                .font(.system(size: 10))
+                            }
+                            .buttonStyle(.bordered)
+                            .controlSize(.mini)
+                        }
+                    }
+                    .padding(.top, 4)
+                }
+                .padding(.leading, 20)
+                .padding(.top, 2)
+            }
+        }
+        .padding(10)
+        .background(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .fill(colorScheme == .dark ? Color.white.opacity(0.04) : Color.black.opacity(0.02))
+        )
+        .overlay(
+            RoundedRectangle(cornerRadius: 10, style: .continuous)
+                .strokeBorder(colorScheme == .dark ? Color.white.opacity(0.08) : Color.black.opacity(0.05), lineWidth: 0.6)
+        )
+    }
+    
+    private func categoryLogSection(title: String, icon: String, color: Color, items: [String]) -> some View {
+        VStack(alignment: .leading, spacing: 4) {
+            HStack(spacing: 4) {
+                Image(systemName: icon)
+                    .font(.system(size: 9, weight: .semibold))
+                    .foregroundColor(color)
+                Text(title)
+                    .font(.system(size: 10, weight: .semibold))
+                    .foregroundColor(color)
+            }
+            
+            VStack(alignment: .leading, spacing: 3) {
+                ForEach(items, id: \.self) { item in
+                    HStack(alignment: .top, spacing: 5) {
+                        Circle()
+                            .fill(color.opacity(0.6))
+                            .frame(width: 3, height: 3)
+                            .padding(.top, 5)
+                        Text(item)
+                            .font(.system(size: 10.5))
+                            .foregroundColor(.primary.opacity(0.85))
+                            .lineSpacing(1.5)
+                    }
+                }
+            }
+            .padding(.leading, 4)
         }
     }
 }
