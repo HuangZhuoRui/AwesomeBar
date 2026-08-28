@@ -2,7 +2,7 @@ import Foundation
 import AppKit
 import Carbon
 
-/// 剪贴板写回与模拟系统自动粘贴服务（内置外部前台应用动态跟踪、高频连击防抖、进程精准直投及多通道按键注入）
+/// 剪贴板写回与模拟系统自动粘贴服务（内置外部前台应用动态跟踪、高频连击防抖、进程精准直投）
 public final class PasteSimulator {
     /// 全局共享单例
     public static let shared = PasteSimulator()
@@ -68,8 +68,8 @@ public final class PasteSimulator {
     public func pasteItem(item: ClipboardItem, targetApplication: NSRunningApplication? = nil) {
         let now = Date()
         
-        // 核心防抖防重判定：如果在 0.3 秒内重复连点，或当前已有粘贴流程在进行中，阻断多余的重复注入
-        if now.timeIntervalSince(lastPasteTimestamp) < 0.3 || isPastingInProgress {
+        // 核心防抖防重判定：如果在 0.35 秒内重复连点，或当前已有粘贴流程在进行中，阻断多余的重复注入
+        if now.timeIntervalSince(lastPasteTimestamp) < 0.35 || isPastingInProgress {
             copyToClipboard(item: item)
             return
         }
@@ -99,7 +99,7 @@ public final class PasteSimulator {
             ?? FloatingPanelController.shared.previousFrontmostApplication
             ?? NSWorkspace.shared.frontmostApplication
         
-        // 检查辅助功能权限，若未授权则触发系统授权提示
+        // 若辅助功能尚未授权，触发提示
         if !AccessibilityManager.isAccessibilityTrusted {
             AccessibilityManager.requestAccessibilityPermission()
         }
@@ -119,11 +119,11 @@ public final class PasteSimulator {
             // 给予系统 120ms 调度窗口，确保光标与焦点已完全切回目标应用文本输入框
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) { [weak self] in
                 guard let self = self else { return }
-                self.simulatePasteKeystroke(targetPid: targetApp?.processIdentifier)
+                self.simulateSinglePasteKeystroke(targetPid: targetApp?.processIdentifier)
                 SoundManager.shared.playPasteSound()
                 
-                // 粘贴完成微延迟后释放互斥锁
-                DispatchQueue.main.asyncAfter(deadline: .now() + 0.10) { [weak self] in
+                // 粘贴完成后延迟释放互斥锁
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.12) { [weak self] in
                     self?.isPastingInProgress = false
                 }
             }
@@ -133,43 +133,26 @@ public final class PasteSimulator {
         DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: workItem)
     }
     
-    /// 发送虚拟 Command + V 组合键（多通道保障：精准进程直投 + 全局 Session 广播 + AppleScript 回退）
-    private func simulatePasteKeystroke(targetPid: pid_t? = nil) {
+    /// 发送唯一一次虚拟 Command + V 组合键（单通道精准派发，严禁向多个 tap 重复广播）
+    private func simulateSinglePasteKeystroke(targetPid: pid_t? = nil) {
         let eventSource = CGEventSource(stateID: .combinedSessionState)
         let vKeyCode: CGKeyCode = 9 // macOS 键盘 'v' 键虚拟键码为 9
         
-        if let keyDownEvent = CGEvent(keyboardEventSource: eventSource, virtualKey: vKeyCode, keyDown: true),
-           let keyUpEvent = CGEvent(keyboardEventSource: eventSource, virtualKey: vKeyCode, keyDown: false) {
-            keyDownEvent.flags = .maskCommand
-            keyUpEvent.flags = .maskCommand
-            
-            // 1. 如果有明确的目标进程 PID，直接向该目标进程精确直投按键
-            if let pid = targetPid, pid > 0 {
-                keyDownEvent.postToPid(pid)
-                keyUpEvent.postToPid(pid)
-            }
-            
-            // 2. 向系统 Session 与 HID 总线广播
-            keyDownEvent.post(tap: .cgAnnotatedSessionEventTap)
-            keyUpEvent.post(tap: .cgAnnotatedSessionEventTap)
-            keyDownEvent.post(tap: .cgSessionEventTap)
-            keyUpEvent.post(tap: .cgSessionEventTap)
-            keyDownEvent.post(tap: .cghidEventTap)
-            keyUpEvent.post(tap: .cghidEventTap)
+        guard let keyDownEvent = CGEvent(keyboardEventSource: eventSource, virtualKey: vKeyCode, keyDown: true),
+              let keyUpEvent = CGEvent(keyboardEventSource: eventSource, virtualKey: vKeyCode, keyDown: false) else {
+            return
         }
         
-        // 3. AppleScript 双重保障机制（当底层 CGEvent 未能触发或辅助功能权限受限时）
-        if !AccessibilityManager.isAccessibilityTrusted {
-            simulatePasteViaAppleScript()
-        }
-    }
-    
-    /// AppleScript 模拟粘贴兜底
-    private func simulatePasteViaAppleScript() {
-        let scriptSource = "tell application \"System Events\" to keystroke \"v\" using command down"
-        if let script = NSAppleScript(source: scriptSource) {
-            var error: NSDictionary?
-            script.executeAndReturnError(&error)
+        keyDownEvent.flags = .maskCommand
+        keyUpEvent.flags = .maskCommand
+        
+        // 单一精准投递：如果有 targetPid，直接向该进程精准注入 1 次；否则向 HID 总线投递 1 次
+        if let pid = targetPid, pid > 0 {
+            keyDownEvent.postToPid(pid)
+            keyUpEvent.postToPid(pid)
+        } else {
+            keyDownEvent.post(tap: .cghidEventTap)
+            keyUpEvent.post(tap: .cghidEventTap)
         }
     }
 }
