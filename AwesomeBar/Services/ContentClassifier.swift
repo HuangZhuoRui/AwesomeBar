@@ -1,7 +1,8 @@
 import Foundation
 
 /// 剪贴板内容类型智能分类与模式识别器
-public enum ContentClassifier {
+/// 标记为 nonisolated：纯值类型 / 无状态工具，需在数据库与后台队列等非主线程上下文中自由使用。
+public nonisolated enum ContentClassifier {
     /// 十六进制 HEX 颜色正则表达式模式
     private static let hexColorPattern = "^#([0-9a-fA-F]{3}|[0-9a-fA-F]{4}|[0-9a-fA-F]{6}|[0-9a-fA-F]{8})$"
     

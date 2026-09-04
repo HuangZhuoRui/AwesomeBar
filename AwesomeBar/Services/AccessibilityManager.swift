@@ -11,7 +11,9 @@ public enum AccessibilityManager {
     /// 主动触发系统授权弹窗（若未授权将弹出「AwesomeBar 想要控制此电脑」系统对话框）
     @discardableResult
     public static func requestAccessibilityPermission() -> Bool {
-        let options = [kAXTrustedCheckOptionPrompt.takeUnretainedValue() as String: true] as CFDictionary
+        // 直接使用常量字符串而非 kAXTrustedCheckOptionPrompt：后者是 C 全局可变量，
+        // 在 Swift 6 严格并发检查下不被视为并发安全，其取值本身是稳定的公开约定。
+        let options = ["AXTrustedCheckOptionPrompt": true] as CFDictionary
         return AXIsProcessTrustedWithOptions(options)
     }
     

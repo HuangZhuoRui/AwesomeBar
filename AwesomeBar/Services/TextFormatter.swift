@@ -2,7 +2,8 @@ import Foundation
 import CryptoKit
 
 /// 文本数据格式转换与结构化排版工具集
-public enum TextFormatter {
+/// 标记为 nonisolated：纯值类型 / 无状态工具，需在数据库与后台队列等非主线程上下文中自由使用。
+public nonisolated enum TextFormatter {
     /// 转为全大写字符串
     /// - Parameter text: 原始文本
     /// - Returns: 大写文本

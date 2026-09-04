@@ -1,7 +1,8 @@
 import Foundation
 
 /// 全局快捷键与修饰键触发唤起模式
-public enum HotkeyTriggerMode: String, Codable, CaseIterable, Identifiable {
+/// 标记为 nonisolated：纯值类型 / 无状态工具，需在数据库与后台队列等非主线程上下文中自由使用。
+public nonisolated enum HotkeyTriggerMode: String, Codable, CaseIterable, Identifiable {
     /// 单击物理左侧 Option 键
     case singleOption = "singleOption"
     /// 连按两下物理左侧 Option 键

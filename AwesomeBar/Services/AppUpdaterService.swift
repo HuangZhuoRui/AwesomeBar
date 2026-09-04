@@ -3,7 +3,9 @@ import AppKit
 import Combine
 
 /// 结构化更新日志解析模型（智能识别 Conventional Commits 规范，分类展示特性、修复与优化）
-public struct ParsedChangelog: Equatable {
+///
+/// 标记为 nonisolated：纯解析结果值类型，需在任意并发上下文中构造与读取。
+public nonisolated struct ParsedChangelog: Equatable {
     public let features: [String]
     public let fixes: [String]
     public let improvements: [String]
@@ -83,7 +85,10 @@ public struct ParsedChangelog: Equatable {
 }
 
 /// GitHub Release 附件实体模型
-public struct GitHubAsset: Codable, Identifiable, Equatable {
+///
+/// 标记为 nonisolated：这是纯网络响应值类型，需要能在下载回调等任意并发上下文中自由读取，
+/// 不应被工程默认的 MainActor 隔离绑定到主线程。
+public nonisolated struct GitHubAsset: Codable, Identifiable, Equatable {
     public let id: Int
     public let name: String
     public let size: Int64
@@ -104,7 +109,9 @@ public struct GitHubAsset: Codable, Identifiable, Equatable {
 }
 
 /// GitHub Release 发布版本实体模型
-public struct GitHubRelease: Codable, Identifiable, Equatable {
+///
+/// 同 GitHubAsset，标记为 nonisolated 以便在任意并发上下文中解析与读取。
+public nonisolated struct GitHubRelease: Codable, Identifiable, Equatable {
     public let id: Int
     public let tagName: String
     public let name: String
@@ -145,7 +152,8 @@ public struct GitHubRelease: Codable, Identifiable, Equatable {
 }
 
 /// 下载与安装状态枚举
-public enum DownloadStatus: Equatable {
+/// 标记为 nonisolated：作为 DownloadProgress 的成员，需与其一同脱离默认 MainActor 隔离。
+public nonisolated enum DownloadStatus: Equatable {
     case idle
     case downloading
     case extracting(String)
@@ -156,7 +164,9 @@ public enum DownloadStatus: Equatable {
 }
 
 /// 下载进度模型
-public struct DownloadProgress: Equatable {
+///
+/// 标记为 nonisolated：由 URLSession 的非隔离下载回调持续更新，需脱离默认 MainActor 隔离。
+public nonisolated struct DownloadProgress: Equatable {
     public var receivedBytes: Int64 = 0
     public var totalBytes: Int64 = 0
     public var progress: Float = 0.0
@@ -186,7 +196,8 @@ public struct DownloadProgress: Equatable {
 }
 
 /// 检查更新状态
-public enum UpdateCheckState: Equatable {
+/// 标记为 nonisolated：纯状态值类型，供任意并发上下文读取。
+public nonisolated enum UpdateCheckState: Equatable {
     case idle
     case checking
     case hasUpdate(release: GitHubRelease, currentVersion: String, acceleratedUrl: String)

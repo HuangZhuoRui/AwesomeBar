@@ -3,7 +3,11 @@ import AppKit
 import Combine
 
 /// 系统剪贴板内容后台监听服务（实时捕获并向单一响应式数据流管道推送）
-public final class ClipboardMonitor {
+///
+/// 标记为 nonisolated：本服务的轮询定时源运行在专属后台队列 monitoringQueue 上，
+/// 本就不属于主线程。捕获到的条目一律派发回主线程再交给 ClipboardStore，
+/// 因为后者是驱动 SwiftUI 的 ObservableObject，必须在主线程更新。
+public nonisolated final class ClipboardMonitor: @unchecked Sendable {
     /// 全局共享单例
     public static let shared = ClipboardMonitor()
     
@@ -101,7 +105,7 @@ public final class ClipboardMonitor {
                     sourceAppName: applicationName,
                     sourceAppBundleId: bundleIdentifier
                 )
-                ClipboardStore.shared.handleNewCapturedItem(imageItem)
+                DispatchQueue.main.async { ClipboardStore.shared.handleNewCapturedItem(imageItem) }
                 return
             }
             
@@ -114,7 +118,7 @@ public final class ClipboardMonitor {
                 sourceAppName: applicationName,
                 sourceAppBundleId: bundleIdentifier
             )
-            ClipboardStore.shared.handleNewCapturedItem(fileItem)
+            DispatchQueue.main.async { ClipboardStore.shared.handleNewCapturedItem(fileItem) }
             return
         }
         
@@ -132,7 +136,7 @@ public final class ClipboardMonitor {
                     sourceAppName: applicationName,
                     sourceAppBundleId: bundleIdentifier
                 )
-                ClipboardStore.shared.handleNewCapturedItem(textItem)
+                DispatchQueue.main.async { ClipboardStore.shared.handleNewCapturedItem(textItem) }
                 return
             }
         }
@@ -147,7 +151,7 @@ public final class ClipboardMonitor {
                     sourceAppName: applicationName,
                     sourceAppBundleId: bundleIdentifier
                 )
-                ClipboardStore.shared.handleNewCapturedItem(imageItem)
+                DispatchQueue.main.async { ClipboardStore.shared.handleNewCapturedItem(imageItem) }
                 return
             }
         }

@@ -205,12 +205,12 @@ public final class AppSettings: ObservableObject {
             self.mainAppHotkey = .singleOption
         }
         
-        // 2. 加载快捷粘贴板浮窗快捷键绑定（默认 Option + Space）
+        // 2. 加载快捷粘贴板浮窗快捷键绑定（默认按一下右 Option）
         if let data = userDefaults.data(forKey: StorageKeys.stickyNoteHotkey),
            let binding = try? JSONDecoder().decode(HotkeyBinding.self, from: data) {
             self.stickyNoteHotkey = binding
         } else {
-            self.stickyNoteHotkey = .optionSpace
+            self.stickyNoteHotkey = .singleRightOption
         }
         
         self.autoPasteOnSelect = userDefaults.object(forKey: StorageKeys.autoPasteOnSelect) == nil ? true : userDefaults.bool(forKey: StorageKeys.autoPasteOnSelect)

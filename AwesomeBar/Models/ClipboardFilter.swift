@@ -1,7 +1,8 @@
 import Foundation
 
 /// 剪贴板主面板顶部分类过滤标签枚举
-public enum ClipboardFilter: String, CaseIterable, Identifiable {
+/// 标记为 nonisolated：纯值类型 / 无状态工具，需在数据库与后台队列等非主线程上下文中自由使用。
+public nonisolated enum ClipboardFilter: String, CaseIterable, Identifiable {
     /// 显示全部历史条目
     case all = "all"
     /// 仅显示用户手动置顶固定条目

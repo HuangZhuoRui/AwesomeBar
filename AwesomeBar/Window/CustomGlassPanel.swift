@@ -35,11 +35,9 @@ public final class CustomGlassPanel: NSPanel {
         self.isOpaque = false
         self.backgroundColor = .clear
         self.hasShadow = true
-        self.contentView?.wantsLayer = true
-        self.contentView?.layer?.drawsAsynchronously = true
-        self.contentView?.layer?.masksToBounds = true
-        self.contentView?.layer?.cornerRadius = 18.0
-        self.contentView?.layer?.cornerCurve = .continuous
+        // 注意：此处不对 contentView 图层做任何设置。两个调用方（FloatingPanelController 与
+        // StickyNoteWindowController）都会在稍后用自己的 NSHostingView 整体替换 contentView，
+        // 圆角与裁剪一律由各自的 SwiftUI 内容层负责，以免硬裁剪切掉液态玻璃的边缘折射光学效果。
     }
     
     /// 允许作为 Key 窗口以接收键盘焦点与快捷键

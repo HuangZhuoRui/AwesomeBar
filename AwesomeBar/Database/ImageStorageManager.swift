@@ -2,7 +2,8 @@ import Foundation
 import AppKit
 
 /// 剪贴板图片原图与缩略图本地文件存储与内存高速缓存管理器
-public final class ImageStorageManager {
+/// 标记为 nonisolated：纯磁盘图片读写，不持有任何 UI 状态，需在剪贴板后台队列上直接调用。
+public nonisolated final class ImageStorageManager: @unchecked Sendable {
     /// 全局共享单例
     public static let shared = ImageStorageManager()
     

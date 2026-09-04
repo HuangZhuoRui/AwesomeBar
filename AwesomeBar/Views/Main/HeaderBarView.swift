@@ -82,7 +82,19 @@ public struct HeaderBarView: View {
     
     // MARK: - 辅助子视图：液态玻璃圆形按钮组
     
+    @ViewBuilder
     private func actionButtonsGroup(isExpanded: Bool) -> some View {
+        if #available(macOS 26.0, *) {
+            // macOS 26 液态玻璃容器：相邻按钮靠近时玻璃会像水银一样流体融合、分离时自然断开
+            GlassEffectContainer(spacing: 8) {
+                actionButtonsStack(isExpanded: isExpanded)
+            }
+        } else {
+            actionButtonsStack(isExpanded: isExpanded)
+        }
+    }
+
+    private func actionButtonsStack(isExpanded: Bool) -> some View {
         HStack(spacing: 8) {
             // 1. 搜索圆形玻璃按钮
             CircularGlassButton(

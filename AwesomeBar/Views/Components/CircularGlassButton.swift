@@ -41,54 +41,82 @@ public struct CircularGlassButton: View {
     
     public var body: some View {
         Button(action: action) {
-            ZStack {
-                // 1. 纯色背景填充（无渐变）
-                Circle()
-                    .fill(
-                        isActive
-                            ? activeTintColor.opacity(colorScheme == .dark ? 0.25 : 0.12)
-                            : (colorScheme == .dark
-                                ? Color.white.opacity(isHovered ? 0.16 : 0.08)
-                                : Color.black.opacity(isHovered ? 0.08 : 0.04))
-                    )
-                
-                // 2. 纯色精细边缘描边（无渐变）
-                Circle()
-                    .strokeBorder(
-                        isActive
-                            ? activeTintColor.opacity(colorScheme == .dark ? 0.50 : 0.25)
-                            : (colorScheme == .dark
-                                ? Color.white.opacity(isHovered ? 0.35 : 0.14)
-                                : Color.black.opacity(isHovered ? 0.16 : 0.08)),
-                        lineWidth: 1.0
-                    )
-                
-                // 3. 核心功能图标
-                Image(systemName: iconName)
-                    .font(.system(size: iconSize, weight: isActive ? .bold : .medium))
-                    .foregroundColor(
-                        isActive
-                            ? activeTintColor
-                            : (colorScheme == .dark
-                                ? Color.white.opacity(isHovered ? 1.0 : 0.85)
-                                : Color.primary.opacity(isHovered ? 1.0 : 0.75))
-                    )
+            if #available(macOS 26.0, *) {
+                nativeGlassContent
+            } else {
+                legacyGlassContent
             }
-            .frame(width: size, height: size)
-            .shadow(
-                color: Color.black.opacity(colorScheme == .dark ? 0.15 : 0.04),
-                radius: isHovered ? 3 : 1.5,
-                x: 0,
-                y: 1
-            )
-            .scaleEffect(isHovered ? 1.05 : 1.0)
-            .animation(.spring(response: 0.24, dampingFraction: 0.75), value: isHovered)
-            .animation(.spring(response: 0.28, dampingFraction: 0.8), value: isActive)
         }
         .buttonStyle(.plain)
         .onHover { hovering in
             self.isHovered = hovering
         }
         .help(helpText)
+    }
+
+    // MARK: - macOS 26 原生液态玻璃按钮
+
+    /// 原生液态玻璃按钮内容（.interactive() 提供按压实时形变、高光跟随与弹性回弹）
+    @available(macOS 26.0, *)
+    private var nativeGlassContent: some View {
+        Image(systemName: iconName)
+            .font(.system(size: iconSize, weight: isActive ? .bold : .medium))
+            .foregroundStyle(isActive ? AnyShapeStyle(activeTintColor) : AnyShapeStyle(.primary))
+            .frame(width: size, height: size)
+            .glassEffect(
+                isActive
+                    ? .regular.tint(activeTintColor.opacity(0.28)).interactive()
+                    : .regular.interactive(),
+                in: .circle
+            )
+            .animation(.spring(response: 0.28, dampingFraction: 0.8), value: isActive)
+    }
+
+    // MARK: - macOS 25 及以下传统磨砂回退实现
+
+    private var legacyGlassContent: some View {
+        ZStack {
+            // 1. 纯色背景填充（无渐变）
+            Circle()
+                .fill(
+                    isActive
+                        ? activeTintColor.opacity(colorScheme == .dark ? 0.25 : 0.12)
+                        : (colorScheme == .dark
+                            ? Color.white.opacity(isHovered ? 0.16 : 0.08)
+                            : Color.black.opacity(isHovered ? 0.08 : 0.04))
+                )
+
+            // 2. 纯色精细边缘描边（无渐变）
+            Circle()
+                .strokeBorder(
+                    isActive
+                        ? activeTintColor.opacity(colorScheme == .dark ? 0.50 : 0.25)
+                        : (colorScheme == .dark
+                            ? Color.white.opacity(isHovered ? 0.35 : 0.14)
+                            : Color.black.opacity(isHovered ? 0.16 : 0.08)),
+                    lineWidth: 1.0
+                )
+
+            // 3. 核心功能图标
+            Image(systemName: iconName)
+                .font(.system(size: iconSize, weight: isActive ? .bold : .medium))
+                .foregroundColor(
+                    isActive
+                        ? activeTintColor
+                        : (colorScheme == .dark
+                            ? Color.white.opacity(isHovered ? 1.0 : 0.85)
+                            : Color.primary.opacity(isHovered ? 1.0 : 0.75))
+                )
+        }
+        .frame(width: size, height: size)
+        .shadow(
+            color: Color.black.opacity(colorScheme == .dark ? 0.15 : 0.04),
+            radius: isHovered ? 3 : 1.5,
+            x: 0,
+            y: 1
+        )
+        .scaleEffect(isHovered ? 1.05 : 1.0)
+        .animation(.spring(response: 0.24, dampingFraction: 0.75), value: isHovered)
+        .animation(.spring(response: 0.28, dampingFraction: 0.8), value: isActive)
     }
 }

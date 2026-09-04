@@ -50,32 +50,7 @@ public struct SearchBarView: View {
         }
         .padding(.horizontal, 12)
         .frame(height: 34)
-        .background(
-            ZStack {
-                // 1. 纯色背景填充（无渐变）
-                RoundedRectangle(cornerRadius: 17, style: .continuous)
-                    .fill(
-                        colorScheme == .dark
-                            ? Color.white.opacity(isFieldFocused ? 0.14 : 0.08)
-                            : (isFieldFocused ? Color.white.opacity(0.95) : Color.black.opacity(0.045))
-                    )
-                
-                // 2. 纯色边框描边（无渐变）
-                RoundedRectangle(cornerRadius: 17, style: .continuous)
-                    .strokeBorder(
-                        colorScheme == .dark
-                            ? Color.white.opacity(isFieldFocused ? 0.40 : 0.15)
-                            : (isFieldFocused ? Color.black.opacity(0.18) : Color.black.opacity(0.08)),
-                        lineWidth: 1.0
-                    )
-            }
-        )
-        .shadow(
-            color: Color.black.opacity(colorScheme == .dark ? (isFieldFocused ? 0.25 : 0.12) : (isFieldFocused ? 0.06 : 0.02)),
-            radius: isFieldFocused ? 3 : 1.5,
-            x: 0,
-            y: 1
-        )
+        .modifier(SearchFieldGlassBackground(isFocused: isFieldFocused, colorScheme: colorScheme))
         .animation(.spring(response: 0.28, dampingFraction: 0.8), value: isFieldFocused)
         .onAppear {
             if autoFocus {
@@ -83,6 +58,61 @@ public struct SearchBarView: View {
                     self.isFieldFocused = true
                 }
             }
+        }
+    }
+}
+
+/// 搜索栏胶囊背景（macOS 26 原生液态玻璃，旧系统回退为纯色填充 + 描边）
+private struct SearchFieldGlassBackground: ViewModifier {
+    /// 输入框当前是否持有键盘焦点
+    let isFocused: Bool
+    /// 当前明暗外观
+    let colorScheme: ColorScheme
+
+    func body(content: Content) -> some View {
+        if #available(macOS 26.0, *) {
+            // 玻璃自带材质与边缘光学，焦点态仅以一圈描边强化，确保无障碍下焦点依然清晰可辨
+            content
+                .glassEffect(.regular, in: .capsule)
+                .overlay(
+                    Capsule()
+                        .strokeBorder(
+                            Color.primary.opacity(isFocused ? 0.35 : 0.0),
+                            lineWidth: 1.0
+                        )
+                )
+        } else {
+            content
+                .background(
+                    ZStack {
+                        // 1. 纯色背景填充（无渐变）
+                        RoundedRectangle(cornerRadius: 17, style: .continuous)
+                            .fill(
+                                colorScheme == .dark
+                                    ? Color.white.opacity(isFocused ? 0.14 : 0.08)
+                                    : (isFocused ? Color.white.opacity(0.95) : Color.black.opacity(0.045))
+                            )
+
+                        // 2. 纯色边框描边（无渐变）
+                        RoundedRectangle(cornerRadius: 17, style: .continuous)
+                            .strokeBorder(
+                                colorScheme == .dark
+                                    ? Color.white.opacity(isFocused ? 0.40 : 0.15)
+                                    : (isFocused ? Color.black.opacity(0.18) : Color.black.opacity(0.08)),
+                                lineWidth: 1.0
+                            )
+                    }
+                )
+                .shadow(
+                    color: Color.black.opacity(
+                        colorScheme == .dark
+                            ? (isFocused ? 0.25 : 0.12)
+                            : (isFocused ? 0.06 : 0.02)
+                    ),
+                    radius: isFocused ? 3 : 1.5,
+                    x: 0,
+                    y: 1
+                )
         }
     }
 }

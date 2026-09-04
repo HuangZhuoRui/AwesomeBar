@@ -1,7 +1,8 @@
 import Foundation
 
 /// 剪贴板支持的内容格式类型枚举
-public enum ClipboardContentType: String, Codable, CaseIterable {
+/// 标记为 nonisolated：纯值类型 / 无状态工具，需在数据库与后台队列等非主线程上下文中自由使用。
+public nonisolated enum ClipboardContentType: String, Codable, CaseIterable {
     /// 纯文本格式
     case text = "text"
     /// 富文本格式（含 HTML / RTF）

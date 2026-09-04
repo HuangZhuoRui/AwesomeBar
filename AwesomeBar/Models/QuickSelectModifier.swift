@@ -3,7 +3,8 @@ import AppKit
 import Carbon
 
 /// 历史记录条目数字直选快捷键修饰键模式（支持 ⌃⌘1-9、⇧⌘1-9、⌘1-9、⌥1-9 等自定义配置）
-public enum QuickSelectModifier: String, Codable, CaseIterable, Identifiable {
+/// 标记为 nonisolated：纯值类型 / 无状态工具，需在数据库与后台队列等非主线程上下文中自由使用。
+public nonisolated enum QuickSelectModifier: String, Codable, CaseIterable, Identifiable {
     /// 默认: Control + Command (⌃⌘ 1~9)
     case controlCommand = "controlCommand"
     /// Command + Shift (⇧⌘ 1~9)

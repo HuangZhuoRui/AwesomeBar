@@ -38,9 +38,16 @@ public struct LiquidGlassCard: ViewModifier {
         }
     }
     
+    /// 列表行卡片背景
+    ///
+    /// 这里**刻意不使用**液态玻璃：列表行属于「内容层」，Apple 人机界面指南建议玻璃用于浮在
+    /// 内容之上的控制层。更重要的是，滚动列表里每行都做实时折射采样开销极大；而若按选中态
+    /// 在「玻璃」与「纯色」两个分支间切换，SwiftUI 会判定为不同的视图结构并重建视图树，
+    /// 滚动时随着悬停行不断变化，表现出来就是卡片「原地闪烁」而非平滑滚动。
+    /// 因此这里始终采用同一套纯色卡片结构，仅让颜色与阴影随高亮状态变化。
     public func body(content: Content) -> some View {
         let continuousShape = RoundedRectangle(cornerRadius: cornerRadius, style: .continuous)
-        
+
         return content
             .background(
                 continuousShape

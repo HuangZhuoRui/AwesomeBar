@@ -43,6 +43,8 @@ public struct SettingsView: View {
                                 presets: [
                                     .singleOption,
                                     .doubleOption,
+                                    .singleRightOption,
+                                    .doubleRightOption,
                                     .optionSpace,
                                     .optionV,
                                     .cmdShiftV,
@@ -70,6 +72,8 @@ public struct SettingsView: View {
                             HotkeyRecorderView(
                                 binding: $applicationSettings.stickyNoteHotkey,
                                 presets: [
+                                    .singleRightOption,
+                                    .doubleRightOption,
                                     .optionSpace,
                                     .doubleOption,
                                     .optionB,

@@ -23,6 +23,8 @@ public struct ClipboardRowView: View {
     public let onInspect: () -> Void
     
     @State private var isMouseHovering: Bool = false
+    /// 所在列表是否正在滚动（滚动中不响应悬停，避免视图结构反复切换造成闪烁）
+    @Environment(\.isScrolling) private var isScrolling
     @Environment(\.colorScheme) private var colorScheme
     
     public init(
@@ -165,7 +167,16 @@ public struct ClipboardRowView: View {
         .padding(.vertical, 10)
         .liquidGlassCard(cornerRadius: 14, isHighlighted: isSelected || isMouseHovering)
         .onHover { isHovering in
+            // 滚动期间是内容在鼠标下掠过而非用户主动悬停，忽略之，
+            // 否则每行都会被依次误判为悬停并切换视图结构，造成滚动闪烁
+            guard !isScrolling else { return }
             self.isMouseHovering = isHovering
+        }
+        .onChange(of: isScrolling) {
+            // 一旦开始滚动，立即清掉遗留的悬停态，避免有行「粘」在悬停外观上
+            if isScrolling && isMouseHovering {
+                isMouseHovering = false
+            }
         }
     }
 }

@@ -2,7 +2,11 @@ import Foundation
 import SQLite3
 
 /// SQLite3 原生剪贴板持久化数据库管理器
-public final class DatabaseManager {
+///
+/// 标记为 nonisolated 并声明 @unchecked Sendable：本类自带串行队列 databaseQueue，
+/// 且以 SQLITE_OPEN_FULLMUTEX 打开连接，线程安全由这两者共同保证，
+/// 不依赖工程默认的 MainActor 隔离——它本就应当在后台队列上执行。
+public nonisolated final class DatabaseManager: @unchecked Sendable {
     /// 全局共享单例
     public static let shared = DatabaseManager()
     

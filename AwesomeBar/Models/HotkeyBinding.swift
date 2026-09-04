@@ -2,9 +2,10 @@ import Foundation
 import AppKit
 
 /// 全局快捷键与修饰键唤起绑定模型
-public struct HotkeyBinding: Codable, Equatable, Hashable {
+/// 标记为 nonisolated：纯值类型 / 无状态工具，需在数据库与后台队列等非主线程上下文中自由使用。
+public nonisolated struct HotkeyBinding: Codable, Equatable, Hashable, Sendable {
     /// 触发机制类别
-    public enum TriggerKind: String, Codable {
+    public enum TriggerKind: String, Codable, Sendable {
         /// 单击物理左侧 Option 键
         case singleOption = "singleOption"
         /// 连按两下物理左侧 Option 键

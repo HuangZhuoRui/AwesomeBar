@@ -2,7 +2,8 @@ import Foundation
 import AppKit
 
 /// 剪贴板单条记录核心数据实体模型
-public struct ClipboardItem: Identifiable, Hashable, Codable {
+/// 标记为 nonisolated：纯值类型 / 无状态工具，需在数据库与后台队列等非主线程上下文中自由使用。
+public nonisolated struct ClipboardItem: Identifiable, Hashable, Codable {
     /// 唯一主键标识符
     public let id: UUID
     /// 剪贴板内容类型
@@ -144,6 +145,9 @@ public struct ClipboardItem: Identifiable, Hashable, Codable {
     }
     
     /// 来源应用程序的高清原生图标（内存缓存加速，保证 120Hz 极速丝滑）
+    ///
+    /// 单独标记为 @MainActor：模型本体是 nonisolated 的纯数据，唯独取图标要访问主线程上的图标缓存。
+    @MainActor
     public var sourceAppIcon: NSImage? {
         guard let bundleIdentifier = sourceAppBundleId else { return nil }
         return AppIconCache.shared.icon(for: bundleIdentifier)

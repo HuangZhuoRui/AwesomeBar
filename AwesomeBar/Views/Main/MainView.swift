@@ -39,6 +39,15 @@ public struct MainView: View {
     @State private var slideDirection: HorizontalSlideDirection = .none
     /// 控制卡片逐个上浮滑入与归位的布尔动效开关
     @State private var animateCards: Bool = false
+    /// 列表当前是否正在滚动（滚动中各行忽略悬停，消除滚动闪烁）
+    @State private var isScrolling: Bool = false
+    /// 滚动停止判定的延迟任务
+    @State private var scrollIdleWorkItem: DispatchWorkItem?
+
+    /// 列表滚动坐标空间名称
+    private static let scrollCoordinateSpaceName = "clipboardItemsScroll"
+    /// 距最后一次滚动多久之后判定为已停止（秒）
+    private static let scrollIdleThreshold: TimeInterval = 0.18
     
     @Environment(\.colorScheme) private var colorScheme
     
@@ -412,12 +421,27 @@ public struct MainView: View {
             }
     }
     
+    /// 标记「正在滚动」，并在偏移量停止变化一小段时间后自动恢复为静止
+    private func markScrollActivity() {
+        if !isScrolling {
+            isScrolling = true
+        }
+
+        scrollIdleWorkItem?.cancel()
+        let workItem = DispatchWorkItem {
+            isScrolling = false
+        }
+        scrollIdleWorkItem = workItem
+        DispatchQueue.main.asyncAfter(deadline: .now() + Self.scrollIdleThreshold, execute: workItem)
+    }
+
     private func buildItemsScrollView(itemsList: [ClipboardItem]) -> some View {
         ScrollViewReader { scrollProxy in
             ScrollView {
                 LazyVStack(spacing: 6) {
-                    ForEach(itemsList) { item in
-                        let itemIndex = itemsList.firstIndex(where: { $0.id == item.id }) ?? 0
+                    // 直接携带下标遍历：原先每行都用 firstIndex(where:) 反查自身位置，
+                    // 整体是 O(n²)，且每次重绘都会重算，是滚动掉帧的主要来源之一。
+                    ForEach(Array(itemsList.enumerated()), id: \.element.id) { itemIndex, item in
                         let staggerDelay = Double(min(itemIndex, 7)) * 0.028
                         
                         // 计算起始方向性惯性偏移量
@@ -475,7 +499,21 @@ public struct MainView: View {
                 }
                 .padding(.horizontal, 18)
                 .padding(.vertical, 8)
+                .background(
+                    // 上报滚动偏移量，用于判定「正在滚动」
+                    GeometryReader { proxy in
+                        Color.clear.preference(
+                            key: ScrollOffsetPreferenceKey.self,
+                            value: proxy.frame(in: .named(Self.scrollCoordinateSpaceName)).minY
+                        )
+                    }
+                )
             }
+            .coordinateSpace(name: Self.scrollCoordinateSpaceName)
+            .onPreferenceChange(ScrollOffsetPreferenceKey.self) { _ in
+                markScrollActivity()
+            }
+            .environment(\.isScrolling, isScrolling)
             .mask(
                 LinearGradient(
                     gradient: Gradient(stops: [
