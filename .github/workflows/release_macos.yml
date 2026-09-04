@@ -113,6 +113,9 @@ jobs:
           echo "=== 校验代码签名 ==="
           codesign --verify --deep --strict --verbose=2 "$APP_PATH"
 
+          echo "=== 签名身份详情（确认是否为 Developer ID Application）==="
+          codesign -dvvv "$APP_PATH" 2>&1 | grep -E "Authority|TeamIdentifier|Timestamp"
+
       - name: Notarize App
         if: steps.check_version.outputs.changed == 'true'
         env:
@@ -128,11 +131,27 @@ jobs:
           ditto -c -k --keepParent "$APP_PATH" "$RUNNER_TEMP/notarize.zip"
 
           echo "=== 提交 Apple 公证服务并等待结果 ==="
+          NOTARY_JSON="$RUNNER_TEMP/notary_result.json"
           xcrun notarytool submit "$RUNNER_TEMP/notarize.zip" \
             --key "$KEY_PATH" \
             --key-id "$APPLE_API_KEY_ID" \
             --issuer "$APPLE_API_ISSUER_ID" \
-            --wait
+            --wait \
+            --output-format json | tee "$NOTARY_JSON"
+
+          SUBMISSION_ID=$(jq -r '.id' "$NOTARY_JSON")
+          STATUS=$(jq -r '.status' "$NOTARY_JSON")
+
+          echo "=== 拉取详细公证日志（Submission ID: $SUBMISSION_ID）==="
+          xcrun notarytool log "$SUBMISSION_ID" \
+            --key "$KEY_PATH" \
+            --key-id "$APPLE_API_KEY_ID" \
+            --issuer "$APPLE_API_ISSUER_ID"
+
+          if [ "$STATUS" != "Accepted" ]; then
+            echo "❌ 公证被 Apple 拒绝，状态：$STATUS，详情见上方日志"
+            exit 1
+          fi
 
           echo "=== 将公证票据装订到 App 上 ==="
           xcrun stapler staple "$APP_PATH"
