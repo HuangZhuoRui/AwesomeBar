@@ -165,7 +165,7 @@ public struct ClipboardRowView: View {
         }
         .padding(.horizontal, 14)
         .padding(.vertical, 10)
-        .liquidGlassCard(cornerRadius: 14, isHighlighted: isSelected || isMouseHovering)
+        .liquidGlassCard(cornerRadius: 14, isHighlighted: isSelected)
         .onHover { isHovering in
             // 滚动期间是内容在鼠标下掠过而非用户主动悬停，忽略之，
             // 否则每行都会被依次误判为悬停并切换视图结构，造成滚动闪烁

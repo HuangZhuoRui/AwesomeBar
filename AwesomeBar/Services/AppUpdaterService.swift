@@ -437,7 +437,7 @@ public final class AppUpdaterService: NSObject, ObservableObject, URLSessionDown
             guard let self = self else { return }
             
             DispatchQueue.main.async {
-                self.downloadProgress.status = .extracting("正在解压更新产物...")
+                self.downloadProgress.status = .extracting("正在准备安装...")
             }
             
             let isZip = archiveURL.pathExtension.lowercased() == "zip"
@@ -495,9 +495,9 @@ public final class AppUpdaterService: NSObject, ObservableObject, URLSessionDown
             }
             
             DispatchQueue.main.async {
-                self.downloadProgress.status = .restarting("正在自我替换并重启 AwesomeBar...")
+                self.downloadProgress.status = .restarting("即将重新打开，请稍候...")
             }
-            
+
             // 执行原子自我替换与无缝重新启动
             self.executeRelaunchScript(newAppURL: newApp, tempDir: tempDir)
         }
@@ -515,9 +515,10 @@ public final class AppUpdaterService: NSObject, ObservableObject, URLSessionDown
             sleep 0.1
         done
         
-        # 2. 原地自我替换 App 目录
+        # 2. 原地替换 App 目录（新版本已解压在同一系统卷的临时目录，直接原子改名，
+        #    避免再对整个 App 包做一次逐字节拷贝；仅当跨卷导致改名失败时才回退到拷贝）
         rm -rf "\(currentAppPath)"
-        /usr/bin/ditto "\(newAppURL.path)" "\(currentAppPath)"
+        /bin/mv "\(newAppURL.path)" "\(currentAppPath)" 2>/dev/null || /usr/bin/ditto "\(newAppURL.path)" "\(currentAppPath)"
         /usr/bin/xattr -dr com.apple.quarantine "\(currentAppPath)" 2>/dev/null || true
         
         # 3. 清理临时下载文件夹
