@@ -510,11 +510,20 @@ public final class AppUpdaterService: NSObject, ObservableObject, URLSessionDown
         
         let shellScript = """
         #!/bin/bash
-        # 1. 严格等待旧进程完全退出
+        # 1. 等待旧进程退出：最多等待 5 秒（50 * 0.1s）。
+        #    不能无限期干等——一旦主进程因为任何原因未能优雅退出（例如主线程被阻塞、
+        #    NSApp.terminate 未正常走完流程），这个脚本作为独立于主进程存活的外部控制者，
+        #    有责任在超时后主动介入强制结束它，否则整个升级流程会永久卡死在这一步。
+        WAIT_COUNT=0
         while kill -0 \(pid) 2>/dev/null; do
             sleep 0.1
+            WAIT_COUNT=$((WAIT_COUNT + 1))
+            if [ "$WAIT_COUNT" -ge 50 ]; then
+                kill -9 \(pid) 2>/dev/null || true
+                break
+            fi
         done
-        
+
         # 2. 原地替换 App 目录（新版本已解压在同一系统卷的临时目录，直接原子改名，
         #    避免再对整个 App 包做一次逐字节拷贝；仅当跨卷导致改名失败时才回退到拷贝）
         rm -rf "\(currentAppPath)"
