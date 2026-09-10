@@ -99,11 +99,15 @@ public final class PasteSimulator {
             ?? FloatingPanelController.shared.previousFrontmostApplication
             ?? NSWorkspace.shared.frontmostApplication
         
-        // 若辅助功能尚未授权，触发提示
-        if !AccessibilityManager.isAccessibilityTrusted {
-            AccessibilityManager.requestAccessibilityPermission()
+        // 若辅助功能尚未授权：本次启动只弹一次系统授权对话框，不在每次点击时反复打断用户，
+        // 未授权期间直接静默降级为「仅复制到剪贴板」，用户手动 Cmd+V 即可，
+        // 后续可随时在「设置」里查看状态并前往系统偏好设置授权。
+        guard AccessibilityManager.isAccessibilityTrusted else {
+            AccessibilityManager.requestAccessibilityPermissionOnce()
+            isPastingInProgress = false
+            return
         }
-        
+
         let workItem = DispatchWorkItem { [weak self] in
             guard let self = self else { return }
             

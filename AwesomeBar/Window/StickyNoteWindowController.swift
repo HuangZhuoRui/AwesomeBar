@@ -83,7 +83,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
         panel.isOpaque = false
         panel.backgroundColor = .clear
         panel.hasShadow = true
-        panel.level = AppSettings.shared.isStickyNotePinned ? .floating : .normal
+        panel.level = AppSettings.shared.isStickyNotePinned ? .statusBar : .normal
         panel.collectionBehavior = [.canJoinAllSpaces, .fullScreenAuxiliary]
         panel.isMovableByWindowBackground = false
         panel.titleVisibility = .hidden
@@ -143,7 +143,7 @@ public final class StickyNoteWindowController: NSObject, ObservableObject, NSWin
     private func bindSettingsObservers() {
         AppSettings.shared.$isStickyNotePinned
             .sink { [weak self] isPinned in
-                self?.stickyPanel?.level = isPinned ? .floating : .normal
+                self?.stickyPanel?.level = isPinned ? .statusBar : .normal
             }
             .store(in: &cancellables)
     }
